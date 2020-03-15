@@ -1,0 +1,6 @@
+## Java 设计模式
+
+简述一些适用于 Java 的设计模式和部分代码示例。
+
+- #### [单例模式](https://abadstring.github.io/DesignPattern/Singleton.md)
+
