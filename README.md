@@ -16,5 +16,5 @@
 
 - #### MyBatis ORM 框架
 
-- #### [设计模式](https://abadstring.github.io/DesignPattern/DesignPattern.md)
+- #### [设计模式]https://github.com/aBadString/aBadString.github.io/blob/master/DesignPattern/DesignPattern.md)
 
