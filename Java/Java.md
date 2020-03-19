@@ -2,7 +2,7 @@
 
 讲述 Java 语言基础语法
 
-- #### Java 简介
+- #### [Java 简介](https://github.com/aBadString/aBadString.github.io/blob/master/Java/JavaIntroduction.md)
 
 - #### 变量
 
