@@ -6,6 +6,8 @@
 
 - #### Java 常用核心 Api
 
+- #### [Java 虚拟机](https://github.com/aBadString/aBadString.github.io/blob/master/JVM/JVM.md)
+
 - #### Java Web
 
 - #### Git 版本控制
