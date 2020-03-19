@@ -2,9 +2,9 @@
 
 讲述 Java 语言基础语法
 
-- #### [Java 简介](https://github.com/aBadString/aBadString.github.io/blob/master/Java/JavaIntroduction.md)
+- #### [Java 简介](https://github.com/aBadString/aBadString.github.io/blob/master/Java/Java01-Introduction.md)
 
-- #### 变量
+- #### [变量](https://github.com/aBadString/aBadString.github.io/blob/master/JavaJava02-Variable.md)
 
 - #### 标识符
 
