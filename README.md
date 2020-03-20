@@ -20,3 +20,4 @@
 
 - #### [设计模式](https://github.com/aBadString/aBadString.github.io/blob/master/DesignPattern/DesignPattern.md)
 
+- #### [算法题](https://github.com/aBadString/aBadString.github.io/blob/master/NC/NC.md)
