@@ -45,7 +45,12 @@
 - [5 虚拟机字节码执行引擎](#5-虚拟机字节码执行引擎)
     - [5.1 运行时栈帧结构](#51-运行时栈帧结构)
     - [5.2 方法调用](#52-方法调用)
+        - [5.2.1 解析](#521-解析)
+        - [5.2.2 分派](#522-分派)
     - [5.3 基于栈的指令集和基于寄存器的指令集](#53-基于栈的指令集和基于寄存器的指令集)
+- [6 高效并发](#6-高效并发)
+    - [6.1 volatile](#61-volatile)
+    - [6.2 线程安全](#62-线程安全)
 
 # 1 Java 内存区域
 
@@ -439,11 +444,95 @@ Java虚拟机角度分：两种不同的类加载器：
 
 方法调用并不等于方法执行。方法调用阶段的唯一任务是：确定被调用方法的版本，即调用哪一个方法。
 
-1. 解析：编译器可知，运行期不可变 — 静态方法和私有方法
-2. 分派：
-   - 静态分派：所有依赖静态类型来定位方法执行版本的分派动作，方法重载。静态分派发生在编译器。
-   - 动态分派：方法重写
-   - 单分派与多分派：
+### 5.2.1 解析
+
+解析：如果当方法的调用版本在运行期间是不可改变的，那么在类加载阶段，会把一部分符号引用转化为直接引用。
+
+编译器可知，运行期不可变 — 静态方法和私有方法。这两种方法都不能被重写。
+
+### 5.2.2 分派
+
+- **静态分派**：所有依赖静态类型来定位方法执行版本的分派动作，方法重载。静态分派发生在编译期间。
+
+编译器在决定使用那个重载方法时是通过参数的静态类型来做判断的。
+
+```java
+public class MethodTest {
+    public static void main(String[] args) {
+        int a = 0;
+        method(a);
+    }
+	
+    // 以下五个方法按照调用选择顺序排列
+	//方法1
+    public static void method(int a){
+        System.out.println("执行method(int a)");
+    }
+    //方法2
+    public static void method(long a){
+        System.out.println("执行method(long a)");
+    }
+    //方法3
+    public static void method(Integer a) {
+        System.out.println("执行method(Integer a)");
+    }
+    //方法4
+    public static void method(Object a) {
+        System.out.println("执行method(Object a)");
+    }
+    //方法5
+    public static void method(int...a) {
+        System.out.println("执行method(int...a)");
+    }
+}
+
+
+class A {
+    public static void method(int a){
+        System.out.println("A类中的method()");
+    }
+}
+public class MethodTest2 extends A{
+    //方法4
+    public static void method(Object a) {
+        System.out.println("执行method(Object a)");
+    }
+    //方法5
+    public static void method(int...a) {
+        System.out.println("执行method(int...a)");
+    }
+    public static void main(String[] args) {
+        int a = 0;
+        method(a);
+    }
+}
+```
+
+关于方法重载时的调用选择我们可以得出以下结论：
+
+(1)   精确匹配：对于上述代码中，当有method(int a)存在时调用的肯定就是这个方法；
+
+(2)   自动类型提升：对于基础数据类型，自动转成表示范围更大的类型；当方法1被注释的时候，会去调用method(long a)而不是method(Integer a)；
+
+(3)   自动装箱与拆箱：当方法1，2被注释，就调用方法3；
+
+(4)   根据子类依次向上继承路线匹配：当只有方法4与方法5时，先找int的父类，找到的object类型，匹配之后调用；当继承A类之后，由于本类没有合适的方法，然后就去A类中找，匹配调用（A类中方法参数类型换成long，Integer结果也一样）；
+
+(5)   根据可变参数匹配。
+
+引用自：https://www.jianshu.com/p/306c4bfe3f54
+
+
+
+- **动态分派**：方法重写
+
+通过方法的接收者来决定使用那个方法。
+
+Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的虚函数，**动态绑定**是Java的默认行为。如果 Java 中不希望某个函数具有虚函数特性，可以加上 final 关键字变成非虚函数。
+
+
+
+- **单分派与多分派**：
 
 方法的宗量：方法的接收者与方法的参数统称为方法的宗量。
 
@@ -462,3 +551,22 @@ Java 编译器输出的指令流基本上是一种基于栈的指令集架构。
 ​	优点：可移植性，代码相对更紧凑，编译器实现更简单
 
 ​	缺点：执行速度相对稍慢
+
+# 6 高效并发
+
+## 6.1 volatile
+
+volatile 变量的特性：
+
+1. 保证该变量对所有线程可见
+2. 禁止指令重排序优化
+
+## 6.2 线程安全
+
+按照线程安全的安全程度分：
+
+1. 不可变：final，java.lang.String的对象是不可变对象
+2. 绝对线程安全：不论何种环境下，不需要做任何额外同步措施
+3. 相对线程安全：使用额外的同步手段保证调用的正确性
+4. 线程兼容：对象本身不是线程安全的，可以通过调用段使用同步手段来保证对象安全
+5. 线程对立：不管采用哪种方式，都不能并发的使用。
