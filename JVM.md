@@ -1,4 +1,40 @@
-[TOC]
+- [1 Java 内存区域](#1-java-内存区域)
+    - [1.1 JVM 运行时数据区](#11-jvm-运行时数据区)
+        - [1.1.1 程序计数器 Program Counter Register](#111-程序计数器-program-counter-register)
+        - [1.1.2 虚拟机栈 Java Virtual Machine Stacks](#112-虚拟机栈-java-virtual-machine-stacks)
+        - [1.1.3 本地方法栈 Native Method Stacks](#113-本地方法栈-native-method-stacks)
+        - [1.1.4 堆 Heap](#114-堆-heap)
+        - [1.1.5 方法区 Method Area](#115-方法区-method-area)
+        - [1.1.6 运行时常量池](#116-运行时常量池)
+    - [1.2 对象访问](#12-对象访问)
+- [2 垃圾回收机制 GC](#2-垃圾回收机制-gc)
+    - [2.1 如何判断对象已死](#21-如何判断对象已死)
+        - [2.1.1 引用计数法 Reference Counting（Java 并不是）](#211-引用计数法-reference-countingjava-并不是)
+        - [2.1.2 根搜索算法 GC Roots Tracing](#212-根搜索算法-gc-roots-tracing)
+    - [2.2 引用](#22-引用)
+        - [2.2.1 强引用](#221-强引用)
+        - [2.2.2 软引用](#222-软引用)
+        - [2.2.3 弱引用](#223-弱引用)
+        - [2.2.4 虚引用](#224-虚引用)
+    - [2.3 GC 是如何回收对象](#23-gc-是如何回收对象)
+        - [2.3.1 finalize()方法](#231-finalize方法)
+        - [2.3.2 方法区垃圾回收](#232-方法区垃圾回收)
+    - [2.4 垃圾收集算法](#24-垃圾收集算法)
+        - [2.4.1 标记 — 清除算法](#241-标记--清除算法)
+        - [2.4.2 复制算法](#242-复制算法)
+        - [2.4.3 标记 — 整理算法](#243-标记--整理算法)
+        - [2.4.4 分代收集算法](#244-分代收集算法)
+    - [2.5 垃圾收集器](#25-垃圾收集器)
+        - [2.5.1 Serial](#251-serial)
+        - [2.5.2 ParNew](#252-parnew)
+        - [2.5.3 Parallel Scavenge](#253-parallel-scavenge)
+        - [2.5.4 Serial Old](#254-serial-old)
+        - [2.5.5 Parallel Old](#255-parallel-old)
+        - [2.5.6 CMS](#256-cms)
+        - [2.5.7 G1](#257-g1)
+    - [2.6 内存分配策略](#26-内存分配策略)
+- [3 类文件结构](#3-类文件结构)
+    - [3.1 Class 类文件结构](#31-class-类文件结构)
 
 # 1 Java 内存区域
 
@@ -126,7 +162,7 @@ JDK 1.2 之后，使用 ```PhantomReference``` 类来实现
 
 ## 2.3 GC 是如何回收对象
 
-### 2.3.1 ```finalize()```方法
+### 2.3.1 finalize()方法
 
 当一个对象没有重写```finalize()```方法，或者```finalize()```方法已经被执行过一次 都不会执行```finalize()```方法。
 
