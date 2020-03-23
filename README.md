@@ -4,6 +4,8 @@
 
 - #### [Java 核心语法](https://github.com/aBadString/aBadString.github.io/blob/master/Java.md)
 
+- #### [Java 中级语法](https://github.com/aBadString/aBadString.github.io/blob/master/Java2.md)
+
 - #### Java 常用核心 Api
 
 - #### [Java 虚拟机](https://github.com/aBadString/aBadString.github.io/blob/master/JVM.md)
