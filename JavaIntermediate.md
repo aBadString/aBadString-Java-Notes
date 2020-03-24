@@ -17,10 +17,15 @@
 与反射有关的类：
 
 ```java
+// 类
 java.lang.Class;
+// 构造器
 java.lang.reflect.Constructor;
-java.lang.reflect.Field;        
+// 属性
+java.lang.reflect.Field;
+// 方法
 java.lang.reflect.Method;
+// 访问修饰符
 java.lang.reflect.Modifier;
 ```
 

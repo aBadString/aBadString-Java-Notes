@@ -2,9 +2,9 @@
 
 这个项目用于记录我的 Java 学习笔记，分享一些好的示例代码，记录自己踩过的每一个坑。
 
-- #### [Java 核心语法](https://github.com/aBadString/aBadString.github.io/blob/master/Java.md)
+- #### [Java 核心语法(初级)](https://github.com/aBadString/aBadString.github.io/blob/master/JavaPrimary.md)
 
-- #### [Java 中级语法](https://github.com/aBadString/aBadString.github.io/blob/master/Java2.md)
+- #### [Java 核心语法(中级)](https://github.com/aBadString/aBadString.github.io/blob/master/JavaIntermediate.md)
 
 - #### Java 常用核心 Api
 
