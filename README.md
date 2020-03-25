@@ -6,7 +6,7 @@
 
 - #### [Java 核心语法(中级)](https://github.com/aBadString/aBadString.github.io/blob/master/JavaIntermediate.md)
 
-- #### Java 常用核心 Api
+- #### [Java 常用类和核心 Api](https://github.com/aBadString/aBadString.github.io/blob/master/JavaApi.md)
 
 - #### [Java 虚拟机](https://github.com/aBadString/aBadString.github.io/blob/master/JVM.md)
 
