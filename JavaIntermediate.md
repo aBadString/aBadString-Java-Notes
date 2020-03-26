@@ -10,6 +10,11 @@
     - [2.4 不可变性](#24-不可变性)
 - [3 组合对象](#3-组合对象)
     - [3.1 设计线程安全的类](#31-设计线程安全的类)
+- [4 构建块](#4-构建块)
+    - [4.1 同步容器](#41-同步容器)
+    - [4.2 并发容器](#42-并发容器)
+        - [4.2.1 ConcurrentHashMap](#421-concurrenthashmap)
+        - [4.2.2 CopyOnWriteArrayList](#422-copyonwritearraylist)
 
 # 0 反射
 
@@ -179,3 +184,42 @@ volatile 变量的特性：
 1. 确定对象状态是由哪些变量构成的
 2. 确定限制状态变量的不变约束
 3. 制定一个管理并发访问对象状态的策略
+
+# 4 构建块
+
+## 4.1 同步容器
+
+同步容器类包括：
+
+1. Vector 和 HashTable
+2. jdk 1.2 加入的 同步包装类 (wrapper)，由 Collections.synchronizedXxx 工厂方法创建
+
+这些类通过封装它们的状态，并对每个公共方法进行同步，来实现线程安全。
+
+
+
+会出现的问题：对于复合操作，需要额外的加锁处理。
+
+迭代器 ConcurrentModificationException 并发修改异常
+
+## 4.2 并发容器
+
+jdk 5 提供了几种并发的容器类。
+
+ConcurrentHashMap、CopyOnWriteArrayList
+
+![image-20200326175737230](images/image-20200326175737230.png)
+
+### 4.2.1 ConcurrentHashMap
+
+使用 **分离锁**，它允许更深层次的共享访问。
+
+任意数量的读线程可以并发访问；读者和写者也可以并发访问；有限数量的写线程可以并发修改。
+
+好处：为并发访问带来更高的吞吐量，并且几乎没有损失单个线程访问的性能。
+
+其迭代器不会抛出 ConcurrentModificationException  异常，不需要在迭代中加锁。返回的迭代器具有 **弱一致性**，可以感知 (但不保证) 在迭代器被创建后容器的修改。
+
+### 4.2.2 CopyOnWriteArrayList
+
+![image-20200326192142191](images/image-20200326192142191.png)
