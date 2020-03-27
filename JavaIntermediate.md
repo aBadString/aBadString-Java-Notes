@@ -15,6 +15,15 @@
     - [4.2 并发容器](#42-并发容器)
         - [4.2.1 ConcurrentHashMap](#421-concurrenthashmap)
         - [4.2.2 CopyOnWriteArrayList](#422-copyonwritearraylist)
+- [5 AbustactQueuedSynchronizer](#5-abustactqueuedsynchronizer)
+    - [5.1 同步状态](#51-同步状态)
+    - [5.2 同步队列](#52-同步队列)
+- [6 线程池](#6-线程池)
+    - [6.1 线程池各个参数的作用，如何进行的?](#61-线程池各个参数的作用如何进行的)
+    - [6.2 线程池异常处理](#62-线程池异常处理)
+    - [6.3 线程池的工作队列](#63-线程池的工作队列)
+    - [6.4 几种常用的线程池](#64-几种常用的线程池)
+    - [6.5 线程池状态](#65-线程池状态)
 
 # 0 反射
 
@@ -223,3 +232,207 @@ ConcurrentHashMap、CopyOnWriteArrayList
 ### 4.2.2 CopyOnWriteArrayList
 
 ![image-20200326192142191](images/image-20200326192142191.png)
+
+# 5 AbustactQueuedSynchronizer
+
+AbustactQueuedSynchronizer 是J ava 提供的底层同步工具类，用一个int类型的变量表示同步状态，并提供了一系列的 CAS 操作来管理这个同步状态。
+
+## 5.1 同步状态
+
+AQS 维护了一个 int 类型的变量来表示同步状态。
+
+```java
+// 同步状态
+private volatile int state;
+```
+
+| 方法名                                                       | 描述                         |
+| ------------------------------------------------------------ | ---------------------------- |
+| `protected final int getState()`                             | 获取`state`的值              |
+| `protected final void setState(int newState)`                | 设置`state`的值              |
+| `protected final boolean compareAndSetState(int expect, int update)` | 使用`CAS`方式更新`state`的值 |
+
+独占模式：一个线程在进行某些操作时，其他线程不能执行该操作。
+
+共享模式：可以允许多个线程同时进行某种操作。
+
+通过修改 state 字段代表的同步状态来实现多线程的独占模式或者共享模式。
+
+
+
+需要自定义获取同步状态与释放同步状态的方式
+
+| 方法名                                        | 描述                                                         |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| `protected boolean tryAcquire(int arg)`       | 独占式的获取同步状态，获取成功返回true，否则false            |
+| `protected boolean tryRelease(int arg)`       | 独占式的释放同步状态，释放成功返回true，否则false            |
+| `protected int tryAcquireShared(int arg)`     | 共享式的获取同步状态，获取成功返回true，否则false            |
+| `protected boolean tryReleaseShared(int arg)` | 共享式的释放同步状态，释放成功返回true，否则false            |
+| `protected boolean isHeldExclusively()`       | 在独占模式下，如果当前线程已经获取到同步状态，则返回 true；其他情况则返回 false |
+
+如果我们自定义的同步工具需要在独占模式下工作，那么我们就重写`tryAcquire`、`tryRelease`和`isHeldExclusively`方法;
+
+如果是在共享模式下工作，那么我们就重写`tryAcquireShared`和`tryReleaseShared`方法。
+
+## 5.2 同步队列
+
+AQS 还维护了一个同步队列。
+
+队列的节点定义如下，是一个静态内部类
+
+```java
+static final class Node {
+    volatile int waitStatus;
+    volatile Node prev;     // 指向先前节点
+    volatile Node next;     // 指向后继节点
+    volatile Thread thread; // 每个节点代表一个线程
+    Node nextWaiter;
+    
+    static final int CANCELLED =  1; // 节点对应的线程已经被取消了
+    static final int SIGNAL    = -1; // 表示后边的节点对应的线程处于等待状态
+    static final int CONDITION = -2; // 表示节点在等待队列中
+    static final int PROPAGATE = -3; // 表示下一次共享式同步状态获取将被无条件的传播下去
+}
+```
+
+定义了两个属性，头节点和尾节点
+
+```java
+private transient volatile Node head;
+private transient volatile Node tail;
+```
+
+这个队列其实是一个带头节点的链表，会有一个空的0号节点
+
+# 6 线程池
+
+**线程池：** 用于管理线程的池子。
+
+1. 线程池帮助我们管理线程，避免增加创建线程和销毁线程的资源消耗。
+
+2. 提高程序响应速度。直接从线程池中拿线程的速度肯定快于创建一条线程。
+3. 可以重复利用线程。
+
+## 6.1 线程池各个参数的作用，如何进行的?
+
+ThreadPoolExecutor 构造器
+
+```java
+public ThreadPoolExecutor(
+    int corePoolSize,     // 线程池核心线程数最大值
+    int maximumPoolSize,  // 线程池最大线程数大小
+    long keepAliveTime,   // 程池中非核心线程空闲的存活时间大小
+    TimeUnit unit,        // 线程空闲存活时间单位
+    BlockingQueue<Runnable> workQueue, // 存放任务的阻塞队列
+    ThreadFactory threadFactory,       // 用于设置创建线程的工厂，可以给创建的线程设置有意义的名字，可方便排查问题
+    RejectedExecutionHandler handler   // 线城池的饱和策略事件，主要有四种类型。
+)
+```
+
+线程池执行流程：核心线程 — 任务队列 — 非核心线程 — 拒绝策略
+
+![img](https://user-gold-cdn.xitu.io/2019/7/7/16bca03a5a6fd78f?imageslim) 
+
+四种拒绝策略：
+
+1. AbortPolicy：抛出一个异常，默认的
+2. DiscardPolicy：直接丢弃任务
+3. DiscardOldestPolicy：丢弃队列里最老的任务，将当前这个任务继续提交给线程池
+4. CallerRunsPolicy：交给线程池调用所在的线程进行处理
+
+## 6.2 线程池异常处理
+
+1. try - catch 处理
+2. 通过 Future 对象的 get 方法接收抛出的异常，再处理
+3. 使用自己的ThreadFactory，创建线程时设置线程的 UncaughtExceptionHandler，在 uncaughtException方法中处理异常
+4. 重写 ThreadPoolExecutor 的 afterExecute方法，处理传递的异常引用
+
+## 6.3 线程池的工作队列
+
+1. ArrayBlockingQueue：有界队列，用数组实现的，FIFO
+2. LinkedBlockingQueue：可设置容量队列，基于链表，FIFO，不设置容量则无限扩大，最大为 Integer.MAX_VALUE
+3. DelayQueue：延迟队列，其中的对象到期时才能从队列中取走
+4. PriorityBlockingQueue：优先级队列
+5. SynchronousQueue：同步队列，插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
+
+## 6.4 几种常用的线程池
+
+1. **newFixedThreadPool  固定线程数目的线程池**
+
+   最大线程数目 和 核心线程数目 相等。
+
+   keepAliveTime 非核心线程空闲的存活时间 为 0
+
+   阻塞队列是 LinkedBlockingQueue   可能导致 OOM
+
+   适用于处理CPU密集型的任务，即适用执行长期的任务。
+
+2. **newCachedThreadPool  可缓存线程的线程池**
+
+   核心线程数目为 0   任务直接放入队列
+
+   最大线程数为 Integer.MAX_VALUE
+
+   非核心线程空闲的存活时间 为 60 秒
+
+   阻塞队列是 SynchronousQueue
+
+   用于并发执行大量短期的小任务。
+
+3. **newSingleThreadExecutor  单线程的线程池**
+
+   核心线程数为 1
+
+   最大线程数也为 1
+
+   keepAliveTime为 0
+
+   阻塞队列是 LinkedBlockingQueue
+
+   适用于串行执行任务的场景，一个任务一个任务地执行。
+
+4. **newScheduledThreadPool  定时及周期执行的线程池**
+
+   最大线程数为 Integer.MAX_VALUE
+
+   阻塞队列是 DelayedWorkQueue
+
+   keepAliveTime为 0
+
+   scheduleAtFixedRate() ：按某种速率周期执行
+
+   scheduleWithFixedDelay()：在某个延迟后执行
+
+   周期性执行任务的场景，需要限制线程数量的场景
+
+## 6.5 线程池状态
+
+1. **Running**
+
+   该状态的线程池会接收新任务，并处理阻塞队列中的任务;
+
+   调用线程池的 shutdown() 方法，可以切换到 Shutdown 状态;
+
+   调用线程池的 shutdownNow() 方法，可以切换到 Stop 状态;
+
+2. **Shutdown**
+
+   该状态的线程池不会接收新任务，但会处理阻塞队列中的任务；
+
+   队列为空，并且线程池中执行的任务也为空,进入 Tidying 状态;
+
+3. **Stop**
+
+   该状态的线程不会接收新任务，也不会处理阻塞队列中的任务，而且会中断正在运行的任务；
+
+   线程池中执行的任务为空, 进入 Tidying 状态;
+
+4. **Tidying**
+
+   该状态表明所有的任务已经运行终止，记录的任务数量为0。
+
+   terminated() 执行完毕，进入 Terminated 状态
+
+5. **Terminated**
+
+   该状态表示线程池彻底终止

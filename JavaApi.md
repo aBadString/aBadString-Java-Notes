@@ -116,6 +116,13 @@ public HashMap(Map<? extends K, ? extends V> m) {
 
 ## 2.2 HashMap的内部数据结构
 
+**【1、 HashMap的内部数据结构】**
+
 jdk 1.8 ：内部使用数组 + 链表红黑树
 
 ![img](https://pic3.zhimg.com/80/v2-4ce38fd1c36fc61e70d7687fae997e5a_720w.jpg) 
+
+当链表长度大于 8 时，转为红黑树；当红黑树节点小于 6 时，转为链表。
+
+【2、】
+
