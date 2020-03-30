@@ -10,6 +10,8 @@
 
 - #### [Java 虚拟机](https://github.com/aBadString/aBadString.github.io/blob/master/JVM.md)
 
+- #### [MySQL 数据库](https://github.com/aBadString/aBadString.github.io/blob/master/MySQL.md)
+
 - #### Java Web
 
 - #### Git 版本控制
