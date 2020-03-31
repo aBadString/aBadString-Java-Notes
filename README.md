@@ -12,6 +12,8 @@
 
 - #### [MySQL 数据库](https://github.com/aBadString/aBadString.github.io/blob/master/MySQL.md)
 
+- #### [计算机网络](https://github.com/aBadString/aBadString.github.io/blob/master/Network.md)
+
 - #### Java Web
 
 - #### Git 版本控制
