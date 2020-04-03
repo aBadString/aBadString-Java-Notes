@@ -374,14 +374,29 @@ public ThreadPoolExecutor(
 
 ![img](https://user-gold-cdn.xitu.io/2017/5/20/a99dbdf72c996b0ad3ae2186148b3923?imageslim) 
 
+集合有关的类和接口均在 java.util 包下
+
 **集合有关的接口：**
 
-- java.util.Collection 接口：集合类的根接口，没有这个接口的直接实现类。
-  - java.util.Set 接口：不能包含重复的元素。
-  - java.util.List 接口：有序的集合，可以包含重复的元素，提供了按索引访问的方式。
+- Collection 接口：集合类的根接口，没有这个接口的直接实现类。
+  - List 接口：有序的集合，可以包含重复的元素，提供了按索引访问的方式。
+    - ArrayList
+    - LinkedList
+    - Vector
+  - Set 接口：不能包含重复的元素。
+    - HashSet
+      - LinkedHashSet
+    - TreeSet
+  
+- Map 接口：Map不能包含重复的key，但是可以包含相同的value。
 
-- java.util.Map 接口：Map不能包含重复的key，但是可以包含相同的value。
-- java.util.Iterator 接口：所有的集合类都实现了它，这是一个用于遍历集合中元素的接口。
+  - HashMap
+    - LinkedHashMap
+  - TreeMap
+  - ConcurrentHashMap
+  - Hashtable
+
+- Iterator 接口：所有的集合类都实现了它，这是一个用于遍历集合中元素的接口。
   
   > hasNext() 是否还有下一个元素。
   > next() 返回下一个元素。
@@ -401,14 +416,14 @@ public ThreadPoolExecutor(
 
 **集合有关的抽象类：**
 
-- java.util.AbstractCollection 抽象类 实现 Collection 
+- AbstractCollection 抽象类 实现 Collection 
 
   ```java
   public abstract class AbstractCollection<E>
       implements Collection<E>
   ```
 
-  - java.util.AbstractList 抽象类 继承 AbstractCollection  实现 List
+  - AbstractList 抽象类 继承 AbstractCollection  实现 List
 
     ```java
     public abstract class AbstractList<E> 
@@ -418,13 +433,29 @@ public ThreadPoolExecutor(
 
 **集合有关的具体类：**
 
-**1、ArrayList和LinkedList**
+**1、List**
+
+**ArrayList**
+
+基于数组，默认初始化长度为 10，每次增长当前数组长度的一半
+
+1.8 以后，只有当第一次 add 的时候才会初始化数组。
+
+ArrayList不适合做队列。
+
+
+
+**ArrayList和LinkedList**
 
 ArrayList 和 LinkedList在用法上没有区别，但是在功能上还是有区别的。
 
+ArrayList的底层是数组，LinkedList的底层是双向链表。
+
+**一般来说ArrayList的访问速度是要比LinkedList要快的。一般来说LinkedList的增删速度是要比ArrayList要快的**
+
 LinkedList 经常用在增删操作较多而查询操作很少的情况下，ArrayList则相反。
 
-- java.util.ArrayList 继承 AbstractList 实现 List
+- ArrayList 继承 AbstractList 实现 List
 
   ```java
   public class ArrayList<E> 
@@ -432,13 +463,35 @@ LinkedList 经常用在增删操作较多而查询操作很少的情况下，Arr
       implements List<E>, RandomAccess, Cloneable, java.io.Serializable
   ```
 
-- java.util.LinkedList 继承 AbstractSequentialList 实现 List
+- LinkedList 继承 AbstractSequentialList 实现 List
 
   ```java
   public class LinkedList<E>
       extends AbstractSequentialList<E>
       implements List<E>, Deque<E>, Cloneable, java.io.Serializable
   ```
+
+**ArrayList和Vector**
+
+```java
+public class Vector<E>
+    extends AbstractList<E>
+    implements List<E>, RandomAccess, Cloneable, java.io.Serializable
+```
+
+相同点：
+​	1、都实现了 List 接口
+​	2、都是有序的集合
+​	3、底层都是数组
+​	4、按位置索引取出某个元素
+​	5、允许重复元素
+​	6、允许元素为 null
+
+不同点：
+
+​	1、ArrayList是非同步的；Vector是同步的。可以使用Collections工具类来构建出同步的ArrayList。
+
+​	2、Vector 每次增长原来的一倍，ArrayList 每次增长原来的0.5倍。
 
 **2、Map 集合**
 
@@ -463,4 +516,49 @@ HashMap、ConcurrentHashMap、Hashtable、LinkedHashMap、TreeMap。
 - TreeMap
 
   TreeMap实现SortMap接口，能够把它保存的记录**根据键排序**，默认是按键值的升序排序（自然顺序），也可以**指定排序的比较器**，当用Iterator遍历TreeMap时，得到的记录是排过序的。不允许key值为空，**非同步的**。
+
+
+
+**HashMap和Hashtable的区别**
+
+1、HashMap是非同步的；Hashtable是同步的
+
+2、HashMap允许 最多一个 key 为null，V 随意；Hashtable不允许 K 和 V为null
+
+3、Hashtable有contains方法；HashMap 把Hashtable的contains方法去掉了，改成了containsValue和containsKey
+
+4、继承的父类不同
+
+```java
+public class HashMap<K,V> 
+    extends AbstractMap<K,V>
+    implements Map<K,V>, Cloneable, Serializable 
+
+public class Hashtable<K,V>
+    extends Dictionary<K,V>
+    implements Map<K,V>, Cloneable, java.io.Serializable 
+```
+
+
+
+**3、Set**
+
+Set里的元素是不能重复的，那么用什么方法来区分重复与否呢? 是用==还是equals()
+
+答：都用！== 或者 equals
+
+```java
+// 1. 如果key 相等  
+if (p.hash == hash &&
+    ((k = p.key) == key || (key != null && key.equals(k))))
+    e = p;
+// 2. 修改对应的value
+if (e != null) { // existing mapping for key
+    V oldValue = e.value;
+    if (!onlyIfAbsent || oldValue == null)
+        e.value = value;
+    afterNodeAccess(e);
+    return oldValue;
+}
+```
 
