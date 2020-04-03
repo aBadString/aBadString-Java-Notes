@@ -233,91 +233,7 @@ ConcurrentHashMap、CopyOnWriteArrayList
 
 ![image-20200326192142191](images/image-20200326192142191.png)
 
-# 5 AbustactQueuedSynchronizer
-
-AbustactQueuedSynchronizer 是J ava 提供的底层同步工具类，用一个int类型的变量表示同步状态，并提供了一系列的 CAS 操作来管理这个同步状态。
-
-## 5.1 同步状态
-
-AQS 维护了一个 int 类型的变量来表示同步状态。
-
-```java
-// 同步状态
-private volatile int state;
-```
-
-| 方法名                                                       | 描述                         |
-| ------------------------------------------------------------ | ---------------------------- |
-| `protected final int getState()`                             | 获取`state`的值              |
-| `protected final void setState(int newState)`                | 设置`state`的值              |
-| `protected final boolean compareAndSetState(int expect, int update)` | 使用`CAS`方式更新`state`的值 |
-
-独占模式：一个线程在进行某些操作时，其他线程不能执行该操作。
-
-共享模式：可以允许多个线程同时进行某种操作。
-
-通过修改 state 字段代表的同步状态来实现多线程的独占模式或者共享模式。
-
-
-
-需要自定义获取同步状态与释放同步状态的方式
-
-| 方法名                                        | 描述                                                         |
-| --------------------------------------------- | ------------------------------------------------------------ |
-| `protected boolean tryAcquire(int arg)`       | 独占式的获取同步状态，获取成功返回true，否则false            |
-| `protected boolean tryRelease(int arg)`       | 独占式的释放同步状态，释放成功返回true，否则false            |
-| `protected int tryAcquireShared(int arg)`     | 共享式的获取同步状态，获取成功返回true，否则false            |
-| `protected boolean tryReleaseShared(int arg)` | 共享式的释放同步状态，释放成功返回true，否则false            |
-| `protected boolean isHeldExclusively()`       | 在独占模式下，如果当前线程已经获取到同步状态，则返回 true；其他情况则返回 false |
-
-如果我们自定义的同步工具需要在独占模式下工作，那么我们就重写`tryAcquire`、`tryRelease`和`isHeldExclusively`方法;
-
-如果是在共享模式下工作，那么我们就重写`tryAcquireShared`和`tryReleaseShared`方法。
-
-## 5.2 同步队列
-
-AQS 还维护了一个同步队列。
-
-队列的节点定义如下，是一个静态内部类
-
-```java
-static final class Node {
-    volatile int waitStatus;
-    volatile Node prev;     // 指向先前节点
-    volatile Node next;     // 指向后继节点
-    volatile Thread thread; // 每个节点代表一个线程
-    Node nextWaiter;
-    
-    static final int CANCELLED =  1; // 节点对应的线程已经被取消了
-    static final int SIGNAL    = -1; // 表示后边的节点对应的线程处于等待状态
-    static final int CONDITION = -2; // 表示节点在等待队列中
-    static final int PROPAGATE = -3; // 表示下一次共享式同步状态获取将被无条件的传播下去
-}
-```
-
-定义了两个属性，头节点和尾节点
-
-```java
-private transient volatile Node head;
-private transient volatile Node tail;
-```
-
-这个队列其实是一个带头节点的链表，会有一个空的0号节点
-
-> 强哥的
->AQS通过一个由volatile修饰的int类型的state变量来控制线程获取和释放同步状态的过程。
-> 首先AQS里有两种模式
->  独占模式和共享模式
-> 然后我讲一下AQS独占模式的获取和释放同步状态的过程。
-> 首先我们需要定义获取和释放同步状态的方法，定义好后通过AQS提供的模板方法acquire来获取，这个方法首先调用我们自己定义的tryAcquire方法获取同步状态，如果返回true那么就获取成功，如果不成功。那么会调用addWaiter方法，这个方法主要是通过一个同步队列来调度线程，核心是一个Node双向链表。首先将线程信息封装到一个node结点里面然后插入这个队列的尾部，这个时候如果头尾节点没有初始化会先调用enq方法初始化。如果插入的前一个结点是头节点会再次tryAcquire尝试获取同步状态，主要是希望前面的线程马上就释放同步状态。如果失败就会调用`shouldParkAfterFailedAcquire`方法来修改节点中的`waitStatus`变量信息。（通过循环操作）这里会先将头节点`waitStatus`赋值为-1，然后在将当前节点阻塞。
-> 释放过程的话是release方法调用我们编写的tryRelease方法，先释放同步状态，然后修改同步队列中节点的信息，主要是将头节点的waitStatus设置为0，然后唤醒后面的节点。并且将当前节点设置为头节点，thread设置为null。
-> 这是独占模式下的情况，如果是共享模式的话，主要的区别是state变量的值。在独占模式下只能为0和-1如果是共享模式，由初始值递减当其值为-1的时候在将后面的线程阻塞。
-
-为什么释放的时候从队尾往前找？
-
-因为队列前面的线程等待时间都比较长，很大可能已经取消等待了。从前往后的话需要遍历次数较多。
-
-# 6 线程池
+# 5 线程池
 
 **线程池：** 用于管理线程的池子。
 
@@ -326,7 +242,7 @@ private transient volatile Node tail;
 2. 提高程序响应速度。直接从线程池中拿线程的速度肯定快于创建一条线程。
 3. 可以重复利用线程。
 
-## 6.1 线程池各个参数的作用，如何进行的?
+## 5.1 线程池各个参数的作用，如何进行的?
 
 ThreadPoolExecutor 构造器
 
@@ -353,14 +269,14 @@ public ThreadPoolExecutor(
 3. DiscardOldestPolicy：丢弃队列里最老的任务，将当前这个任务继续提交给线程池
 4. CallerRunsPolicy：交给线程池调用所在的线程进行处理
 
-## 6.2 线程池异常处理
+## 5.2 线程池异常处理
 
 1. try - catch 处理
 2. 通过 Future 对象的 get 方法接收抛出的异常，再处理
 3. 使用自己的ThreadFactory，创建线程时设置线程的 UncaughtExceptionHandler，在 uncaughtException方法中处理异常
 4. 重写 ThreadPoolExecutor 的 afterExecute方法，处理传递的异常引用
 
-## 6.3 线程池的工作队列
+## 5.3 线程池的工作队列
 
 1. ArrayBlockingQueue：有界队列，用数组实现的，FIFO
 2. LinkedBlockingQueue：可设置容量队列，基于链表，FIFO，不设置容量则无限扩大，最大为 Integer.MAX_VALUE
@@ -368,7 +284,7 @@ public ThreadPoolExecutor(
 4. PriorityBlockingQueue：优先级队列
 5. SynchronousQueue：同步队列，插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
 
-## 6.4 几种常用的线程池
+## 5.4 几种常用的线程池
 
 1. **newFixedThreadPool  固定线程数目的线程池**
 
@@ -418,7 +334,7 @@ public ThreadPoolExecutor(
 
    周期性执行任务的场景，需要限制线程数量的场景
 
-## 6.5 线程池状态
+## 5.5 线程池状态
 
 1. **Running**
 
@@ -449,3 +365,100 @@ public ThreadPoolExecutor(
 5. **Terminated**
 
    该状态表示线程池彻底终止
+
+
+
+# 6 集合
+
+![img](https://user-gold-cdn.xitu.io/2017/5/20/a99dbdf72c996b0ad3ae2186148b3923?imageslim) 
+
+**集合有关的接口：**
+
+- java.util.Collection 接口：集合类的根接口，没有这个接口的直接实现类。
+  - java.util.Set 接口：不能包含重复的元素。
+  - java.util.List 接口：有序的集合，可以包含重复的元素，提供了按索引访问的方式。
+
+- java.util.Map 接口：Map不能包含重复的key，但是可以包含相同的value。
+- java.util.Iterator 接口：所有的集合类都实现了它，这是一个用于遍历集合中元素的接口。
+  
+  > hasNext() 是否还有下一个元素。
+  > next() 返回下一个元素。
+  > remove() 删除当前元素。
+
+综上：List（有序可重复）、Set（无序不能重复）、Map（键值对：键唯一，值可重复）
+
+**集合遍历方式：**
+
+1. Iterator：迭代输出，是使用最多的输出方式。
+
+2. ListIterator：是Iterator的子接口，专门用于输出List中的内容。
+
+3. foreach输出：JDK1.5之后提供的新功能，可以输出数组或集合。
+
+4. for循环
+
+**集合有关的抽象类：**
+
+- java.util.AbstractCollection 抽象类 实现 Collection 
+
+  ```java
+  public abstract class AbstractCollection<E>
+      implements Collection<E>
+  ```
+
+  - java.util.AbstractList 抽象类 继承 AbstractCollection  实现 List
+
+    ```java
+    public abstract class AbstractList<E> 
+        extends AbstractCollection<E>
+        implements List<E>
+    ```
+
+**集合有关的具体类：**
+
+**1、ArrayList和LinkedList**
+
+ArrayList 和 LinkedList在用法上没有区别，但是在功能上还是有区别的。
+
+LinkedList 经常用在增删操作较多而查询操作很少的情况下，ArrayList则相反。
+
+- java.util.ArrayList 继承 AbstractList 实现 List
+
+  ```java
+  public class ArrayList<E> 
+      extends AbstractList<E>
+      implements List<E>, RandomAccess, Cloneable, java.io.Serializable
+  ```
+
+- java.util.LinkedList 继承 AbstractSequentialList 实现 List
+
+  ```java
+  public class LinkedList<E>
+      extends AbstractSequentialList<E>
+      implements List<E>, Deque<E>, Cloneable, java.io.Serializable
+  ```
+
+**2、Map 集合**
+
+HashMap、ConcurrentHashMap、Hashtable、LinkedHashMap、TreeMap。
+
+- HashMap
+
+  HashMap是最常用的Map，它根据键的HashCode值存储数据，根据键可以直接获取它的值，具有很快的访问速度 o(1)。遍历时，取得数据的**顺序是完全随机**的。因为键对象不可以重复，所以HashMap最多**只允许一条记录的键为null**，允许多条记录的值为null，是**非同步的**。
+
+- Hashtable
+
+  Hashtable与HashMap类似，是**HashMap的线程安全版**，它支持线程的同步。HashTable是直接在操作方法上加synchronized关键字，锁住整个数组，锁粒度比较大。即任一时刻只有一个线程能写Hashtable，因此也导致了Hashtale在**写入时会比较慢**，它继承自Dictionary类，不同的是**它不允许记录的键或者值为null**，同时效率较低。
+
+- ConcurrentHashMap
+
+  ConcurrentHashMap使用**分段锁**，降低了锁粒度，让并发度大大提高。**线程安全**，并且锁分离。ConcurrentHashMap内部使用段(Segment)来表示这些不同的部分，**每个段其实就是一个小的hash table**，它们有自己的锁。**只要多个修改操作发生在不同的段上，它们就可以并发进行**。
+
+- LinkedHashMap
+
+  LinkedHashMap **是有序的**，内部使用一个**链表**，有头尾节点。LinkedHashMap保存了**记录的插入顺序**，在用Iteraor遍历LinkedHashMap时，先得到的记录肯定是先插入的，在遍历的时候会比HashMap慢，有HashMap的全部特性。
+
+- TreeMap
+
+  TreeMap实现SortMap接口，能够把它保存的记录**根据键排序**，默认是按键值的升序排序（自然顺序），也可以**指定排序的比较器**，当用Iterator遍历TreeMap时，得到的记录是排过序的。不允许key值为空，**非同步的**。
+
