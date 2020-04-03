@@ -1,3 +1,18 @@
+<!-- TOC -->
+
+- [1 String、StringBuffer、StringBuilder](#1-stringstringbufferstringbuilder)
+- [2 HashMap](#2-hashmap)
+- [3 ConcurrentHashMap](#3-concurrenthashmap)
+    - [3.1 jdk 1.7 源码](#31-jdk-17-源码)
+    - [3.2 jdk 1.8 源码](#32-jdk-18-源码)
+- [4 ReentrantLock](#4-reentrantlock)
+- [5 AbustactQueuedSynchronizer](#5-abustactqueuedsynchronizer)
+    - [5.1 同步状态](#51-同步状态)
+    - [5.2 同步队列](#52-同步队列)
+    - [5.3 源码分析](#53-源码分析)
+
+<!-- /TOC -->
+
 # 1 String、StringBuffer、StringBuilder
 
 - String 字符串常量（不可变）

@@ -1,3 +1,6 @@
+
+<!-- TOC -->
+
 - [1 Java 简介](#1-java-简介)
     - [1.1 Java语言版本迭代](#11-java语言版本迭代)
     - [1.2 JDK JRE JVM 三者间的关系](#12-jdk-jre-jvm-三者间的关系)
@@ -37,7 +40,32 @@
         - [6.5.3 类加载的过程](#653-类加载的过程)
     - [6.6 final](#66-final)
     - [6.7 JavaBean](#67-javabean)
+- [7 类的成员](#7-类的成员)
+    - [7.1 属性 Field](#71-属性-field)
+    - [7.2 方法 Method](#72-方法-method)
+        - [7.2.1 方法的参数传递：值传递](#721-方法的参数传递值传递)
+        - [7.2.2 方法重载 overload](#722-方法重载-overload)
+        - [7.2.3 方法重写 override](#723-方法重写-override)
+        - [7.2.4 方法重载与方法重写的区别](#724-方法重载与方法重写的区别)
+        - [7.2.5 可变形参](#725-可变形参)
+    - [7.3 构造器 Constructor](#73-构造器-constructor)
+    - [7.4 代码块](#74-代码块)
+    - [7.5 内部类](#75-内部类)
+        - [7.5.1 匿名子类（匿名内部类）](#751-匿名子类匿名内部类)
+- [8 面向对象三大特征：封装 继承 多态](#8-面向对象三大特征封装-继承-多态)
+    - [8.1 封装性](#81-封装性)
+    - [8.2 继承性](#82-继承性)
+    - [8.3 多态性](#83-多态性)
+    - [8.4 面向对象的第四大特征：抽象性](#84-面向对象的第四大特征抽象性)
+        - [8.4.1  模板方法(TemplateMethod)设计模式](#841--模板方法templatemethod设计模式)
+- [9 Java 常用类](#9-java-常用类)
+    - [9.1 Object 类](#91-object-类)
+        - [9.1.1 equals方法](#911-equals方法)
+        - [9.1.2 hashCode方法](#912-hashcode方法)
+        - [9.1.3 toString方法](#913-tostring方法)
+        - [9.1.4 clone方法](#914-clone方法)
 
+<!-- /TOC -->
 # 1 Java 简介
 
 ## 1.1 Java语言版本迭代
@@ -897,3 +925,824 @@ JavaBean是一种Java语言写成的可重用组件。
 - 有一个无参数的public的构造器；
 - 有属性，且每一个属性具有对应的get、set方法。
 
+
+
+# 7 类的成员
+
+## 7.1 属性 Field
+
+局部变量和成员变量的相同点和不同点：
+
+​    **相同点：**
+
+​		1、都是变量，都要先声明后使用
+​		2、都可以被多次赋值
+​		3、都有其作用域
+​		4、声明方式：变量类型 变量名
+
+​	**不同点：**
+
+​		1、声明位置：
+​			成员变量声明在类内部，方法、构造器等结构外部；
+​			局部变量声明在方法中、方法的形参、构造器中、构造器的形成等。
+
+​		2、默认值
+​			成员变量默认值：
+​			    byte、short、int、long = 0
+​    			float、double = 0.0
+​    			boolean = false
+​    			char = \u0000
+​    			引用类型 = null；
+
+​			局部变量没有默认值。
+
+​		3、权限修饰符
+​			成员变量可以被权限修饰符修饰；
+​			局部变量不能。
+
+​		4、内存
+​			成员变量存储在堆上；
+​			局部变量存储在栈上。
+
+## 7.2 方法 Method
+
+```java
+权限修饰符 返回值类型 方法名(参数列表) {
+	方法体
+}
+```
+
+1、方法可以被权限修饰符所修饰。
+2、使用return语句来返回一个数据；在return 语句处结束方法，返回上一层调用。
+3、调用方法：对象名/类名.方法名(实参列表)。
+4、形参列表中多个参数用逗号（,）分开。
+
+### 7.2.1 方法的参数传递：值传递
+
+**形式参数**：方法声明时参数列表中的参数。
+**实际参数**：方法调用时实际传递给方法的参数。
+
+在Java中，方法的参数传递方式只有一种：值传递。即将实参的值复制一份传递到方法内，实参本身不受影响。按值传递重要特点：传递的是值的拷贝，也就是说传递后就互不相关了。
+
+对于基本类型来说，传递的是实参的副本（值传递），故在方法内修改传递进来的值并不会影响实参本身；
+
+对于引用类型来说，传递进来的是引用变量的副本（也是值传递），因此该副本与实参均是引用变量，他们均可以操作所引用的对象，在方法内通过引用变量对堆区的对象进行操作时均会对该对象有影响。由于传入方法的是实际参数值的副本，因此，参数本身不会受到任何影响！
+
+### 7.2.2 方法重载 overload
+
+**方法重载的定义**
+
+方法重载：同一个类中，方法名相同，**形参列表不同**，则构成方法重载。
+
+不同的形参列表指：形参类型不同，个数不同，顺序不同。
+
+注意：
+
+  	1、只有返回值不同，不是重载，会报错；
+  	2、只有形参的变量名不同，不是重载，会报错；
+  	3、只有权限修饰符不同，不是重载，会报错。
+
+**方法重载时的调用选择**
+
+```java
+public class MethodTest {
+    public static void main(String[] args) {
+        int a = 0;
+        method(a);
+    }
+
+    // 以下五个方法按照调用选择顺序排列
+    //方法1
+    public static void method(int a){
+        System.out.println("执行method(int a)");
+    }
+    //方法2
+    public static void method(long a){
+        System.out.println("执行method(long a)");
+    }
+    //方法3
+    public static void method(Integer a) {
+        System.out.println("执行method(Integer a)");
+    }
+    //方法4
+    public static void method(Object a) {
+        System.out.println("执行method(Object a)");
+    }
+    //方法5
+    public static void method(int...a) {
+        System.out.println("执行method(int...a)");
+    }
+}
+
+
+class A {
+    public static void method(int a){
+        System.out.println("A类中的method()");
+    }
+}
+public class MethodTest2 extends A{
+    //方法4
+    public static void method(Object a) {
+        System.out.println("执行method(Object a)");
+    }
+    //方法5
+    public static void method(int...a) {
+        System.out.println("执行method(int...a)");
+    }
+    public static void main(String[] args) {
+        int a = 0;
+        method(a);
+    }
+}
+```
+
+关于方法重载时的调用选择我们可以得出以下结论：
+
+​	(1)   精确匹配：对于上述代码中，当有method(int a)存在时调用的肯定就是这个方法；
+
+​	(2)   自动类型提升：对于基础数据类型，自动转成表示范围更大的类型；当方法1被注释的时候，会去调用method(long a)而不是method(Integer a)；
+
+​	(3)   自动装箱与拆箱：当方法1，2被注释，就调用方法3；
+
+​	(4)   根据子类依次向上继承路线匹配：当只有方法4与方法5时，先找int的父类，找到的object类型，匹配之后调用；当继承A类之后，由于本类没有合适的方法，然后就去A类中找，匹配调用（A类中方法参数类型换成long，Integer结果也一样）；
+
+​	(5)   根据可变参数匹配。
+
+引用自：https://www.jianshu.com/p/306c4bfe3f54
+
+### 7.2.3 方法重写 override
+
+​		定义：在子类中可以根据需要对从父类中继承而来的方法进行改写，也称为方法的重置、覆盖。在程序执行时，子类的方法将覆盖掉父类的方法。
+
+​		要求：
+
+​	1、重写方法必须和被重写方法具有相同的方法名、形参列表。
+
+​	2、重写方法不能使用比被重写方法更严格的访问权限。
+
+​	3、重写方法的返回值类型要么和被重写方法一致，要么是被重写方法返回值类型的子类。如果是基本数据类型或者void，那么两者必须一样。
+
+​	4、重写方法和被重写方法必须同时为非static的。如果同时为static的，不是方法重写。父类的静态方法可以被子类继承，但是不能重写，静态方法属于静态绑定。
+
+​	5、重写方法抛出的异常不能大于被重写方法的异常。
+
+​	6、父类中被private修饰的方法不可以被子类重写。如果子类中有相同的方法，则会被视作方法重载。
+
+可以使用【@Override】注解来说明当前方法是一个重写方法。
+
+Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的虚函数，**动态绑定**是Java的默认行为。如果 Java 中不希望某个函数具有虚函数特性，可以加上 final 关键字变成非虚函数。
+
+### 7.2.4 方法重载与方法重写的区别
+
+**【方法重载】**：
+
+​	1、同一个类中
+​	2、方法名相同，参数列表不同（参数顺序、个数、类型）
+​	3、方法返回值、访问修饰符任意
+​	4、与方法的参数名无关
+
+**【方法重写】**：
+
+​	1、有继承关系的子类中
+​	2、方法名相同，参数列表相同（参数顺序、个数、类型），方法返回值相同
+​	3、访问修饰符，访问范围需要大于等于父类的访问范围
+​	4、与方法的参数名无关
+
+![image-20200403133223533](images/image-20200403133223533.png)
+
+### 7.2.5 可变形参
+
+1、格式，对于方法的形参，数据类型… 可变形参的参数名。
+
+2、可变形参方法与同名的方法构成重载，与形参是数组的方法不构成重载(会报错)。例如：int sum(int[] array)与int sum(int... array)只能存在一个。
+
+3、可变参数在调用时传入的实参个数从0开始，到无穷都可以。可以有sum()。
+
+4、可变形参与数组的使用是一样的，可变形参的底层就是一个数组。
+
+5、可变形参只能声明在方法形参列表的最后，且只能有一个可变形参。
+
+
+
+## 7.3 构造器 Constructor
+
+```java
+权限修饰符 类名(形参列表) {
+    方法体
+}
+```
+
+作用：1、创建对象；2、给对象进行初始化。
+
+特点：
+
+​	1、构造器的名字和类命必须一致；
+​	2、构造器不具有返回值；
+​	3、不能被static、final、synchronization、abstract、native修饰；
+​	4、可以有return语句，但return不能返回任何值。会认为只是一个与构造器同名的方法罢了
+
+说明：
+
+​	1、构造器只能在创建对象时，在new语句中被调用一次。不能再其他地方**显示调用**。但可以再构造器中使用this()调用其他构造器，使用super()调用父类构造器。
+​	2、如果类中没有定义构造器，那么Java免费送一个访问权限为缺省的无参数的构造器；如果定义了构造器，就不会送了。
+​	3、构造器可以重载。
+​	4、构造器不会被继承给子类。
+
+属性赋值：默认值 —> 显示赋值(声明时赋值) /代码块 —> 构造器 —> set方法或赋值语句。
+
+显示赋值和代码块赋值属于同级的，按照由上到下的顺序执行(见图 9‑1)。
+
+
+
+构造的过程：
+
+​	1、分配对象空间，并将对象中成员进行默认值初始化。
+​	2、执行属性值的显式初始化（这里有一点变化，一会解释，但大体是这样的）。
+​	3、执行构造器的方法体（先执行父类构造器，再执行子类构造器）。
+​	4、将变量关联到堆中的对象上。
+关于构造器，好好看看这个：https://blog.csdn.net/yu422560654/article/details/7399566
+
+![image-20200403133656622](images/image-20200403133656622.png)
+
+![image-20200403133701305](images/image-20200403133701305.png) 
+
+
+
+## 7.4 代码块
+
+![image-20200403133729754](images/image-20200403133729754.png)
+
+```java
+{
+    
+}
+```
+
+代码块只能被static所修饰。
+
+代码块分为静态代码块和非静态代码块。
+
+静态代码块：
+
+​	1、用来对类中的信息进行初始化。
+​	2、静态代码块随着类的加载而执行，只执行一次。
+​	3、静态代码块的执行优先于非静态代码块，因为要先加载类，后创建对象。
+​	4、多个静态代码块按照从上到下的顺序依次执行。
+​	5、静态代码块不能使用非静态的属性和方法，只能使用静态的属性和方法。
+
+非静态代码块：
+
+​	1、 用来对对象进行初始化。
+​	2、 非静态代码块随着对象的创建而执行，每次创建对象都会执行一次。
+​	3、 非静态代码块的执行优先于构造器。
+​	4、 多个非静态代码块按照从上到下的顺序依次执行。
+
+其实还有两种代码块：普通代码块，类的方法的方法体；同步代码块，使用synchronized(){}包裹起来的代码块。
+
+这篇文章https://blog.csdn.net/u012804721/article/details/52439311
+
+
+
+## 7.5 内部类
+
+在一个类A的类体中，声明了另一个类B。那么类B叫做内部类，类A叫做外部类。
+
+```java
+// 外部类
+class A {
+    // 非静态成员内部类
+    class B {
+    }
+    // 静态成员内部类
+    static class C {
+    }
+
+    public void say() {
+        // 局部内部类
+        class D {
+        }
+    }
+}
+```
+
+内部类作为类等成员：
+
+​	1、内部类可以被四种权限修饰符所修饰。
+​	2、内部类可以被static所修饰。
+​	3、内部类可以调用外部类的属性和方法。
+​	4、具有类的一切功能。
+
+(1) 如何创建内部类对象？
+
+- 创建非静态内部类对象：new 外部类名().new 内部类名()
+  ```java
+  A.B b = new A().new B();
+  ```
+或者
+  ```java
+  import priv.song.inner.A.B;
+  B b = new A().new B();
+  ```
+
+- 创建静态内部类对象：new 外部类名.内部类名()
+  ```java
+   A.C c = new A.C();
+  ```
+
+(2) 内部类如何调用外部类的结构（属性和方法）？
+
+- 属性：属性名(无冲突时)，外部类名.this.属性名(有冲突时)
+
+  `name`或者`A.this.name`
+
+- 方法：方法名(无冲突时)，外部类名.this.方法名(有冲突时)
+
+  `func()`或者`A.this.func()`
+
+- 静态内部类不能调用非静态的属性和方法；只能调用静态的属性和方法。调用时不要this关键字即可。同样如果非静态内部类调用静态的属性或方法也不要this关键字。
+
+(3) 如何使用局部内部类（很少）？
+
+  局部内部类不能用static，无论方法是否是static的。
+  获取局部内部类对象：巧用接口或父类，但是不能向下转型
+
+```java
+public class GetInner {
+    public static void main(String[] args) {
+        I i = getAInnerClassObject();
+        i.test();
+    }
+
+    public static I getAInnerClassObject() {
+        // 局部内部类
+        class D implements I {
+            @Override
+            public void test() {
+                System.out.println("D test");
+            }
+        }
+        D d = new D();
+        return d;
+    }
+}
+interface I {
+    void test();
+}
+```
+
+### 7.5.1 匿名子类（匿名内部类）
+
+代码见：模板设计方法
+
+如上：Main类的main方法中创建了一个继承自CodeRunTimeTest类的子类，**该子类没有名字**，叫做匿名子类。而匿名的子类的对象有名字。对于接口也有匿名实现类。
+
+使用匿名类时，必然是在某个类中直接用匿名类创建对象，因此匿名类一定是内部类，所有又叫做匿名内部类。
+
+匿名对象：new CodeRunTimeTest ()，一般用于方法的实参或只调用一次对象的实例方法。**创建的对象没有名字**。而该对象的类有名字CodeRunTimeTest。
+
+匿名子类的匿名对象：https://blog.csdn.net/u013771764/article/details/82937903
+
+```java
+jumpass.addKeyListener
+    (
+    // 匿名内部类 - 键盘适配器
+    // 创建了一个有名(KeyAdapter)抽象类的匿名子类的匿名对象
+    // 作为addKeyListener方法的实参
+    new KeyAdapter()
+    {
+        // 键入某个键时调用此方法
+        public void keyTyped(KeyEvent e) 
+        {
+            // 如果键入的字符是0~9，或者按键是Del键或Backspace键，则
+            // 直接返回读入的键盘字符，否则，设置键入的字符为键位未知（0）
+            if (((e.getKeyChar() <= 0x39) && (e.getKeyChar() >= 0x30))|| (e.getKeyChar() == 127) || (e.getKeyChar() == 8)) 
+            {
+                e.setKeyChar(e.getKeyChar());
+            } 
+            else 
+            {
+                e.setKeyChar((char) 0);
+            }
+        }
+    }
+);
+```
+
+
+
+# 8 面向对象三大特征：封装 继承 多态
+
+## 8.1 封装性
+
+为什么要使用封装性：在创建对象后，可以通过对象名.属性名的方式给属性赋值，直接赋值的话，只有变量类型和范围的约束。但是在实际场景中，往往会有其他的约束。所以我们采用如下方法进行限制：
+​	1、对属性的访问权限进行限制，这样可以防止属性在类的外部被使用；
+​	2、创建对应的set方法，通过set方法来给属性赋值，在方法中对属性的值进行额外的限制。
+
+封装性的体现（狭义上）：
+  1、属性私有化；
+  2、使用set/get方法对属性赋值和取值。
+
+封装性的体现（广义上）：
+  1、权限修饰符；
+  2、类可以被public和（缺省）修饰；
+  3、四种权限修饰符可以修饰类的属性、方法、构造器、内部类。
+
+良好的封装的优点：
+  1、良好的封装能够减少耦合。
+  2、类内部的结构可以自由修改。
+  3、可以对成员变量进行更精确的控制。
+  4、隐藏信息，实现细节。
+
+## 8.2 继承性
+
+```java  
+// SubClass: 子类;  SuperClass: 超类、父类、基类  
+class SubClass extends SuperClass
+```
+
+1、子类继承父类以后，就拥有了父类的所有属性和方法（但能不能访问就不一定了）。
+
+2、子类不会继承父类的构造器。
+
+3、子类继承父类一定要满足“is a”的关系，即子类是一个父类。
+
+4、父类中private的属性和方法不能被子类直接访问，但是可以有get/set方法使用。
+
+5、父类的概念是相对的，父类分为直接父类和间接父类。
+
+6、Java中所有的类都继承Object类。如果一个类没有显示地继承某个类，那么这个类会默认继承Object类。
+
+7、Java中只有单继承，一个类只能继承一个父类。
+
+ 
+
+继承的好处：1、减少了代码的冗余，提高了代码的复用性；2、提高了代码的扩展性；3、为多态提供了前提条件。
+
+父类与子类的关系都基于一句话：子类必须具有父类的一切功能，子类可以用来代替父类。
+**里氏代换原则：任何基类可以出现的地方，子类一定可以出现。**继承的含义是不修改但扩展。
+只有当衍生类可以替换掉基类，软件单位的功能不受到影响时，基类才能真正被复用。
+当一个子类的实例应该能够替换任何其超类的实例时，它们之间才具有is-A关系。
+
+上面这段话可以用来解释方法重写的要求【9.2.3】
+
+可以看看这个讨论：https://group.cnblogs.com/topic/5960.html
+
+## 8.3 多态性
+
+多态性：一类事物的多种形态。
+
+多态性的理解（广义上）：方法的重载、重写；子类对象的多态性。
+
+多态性的理解（狭义上）：子类对象的多态性。
+
+子类对象的多态性：父类的引用指向子类的对象。（参考游戏开发大作业:NPC对象容器）
+
+虚拟方法的调用（动态绑定）：编译看父类，运行看子类。
+
+多态性的前提：继承与方法重写。
+
+
+
+- 在多态的情况下，如何调用子类中的独有的方法？
+
+答：向下转型。
+
+```java
+Person p = new Women();
+Women w = (Women)p;
+w.buy();
+// 可能发生的异常：ClassCastException  —类型转换异常
+```
+
+- 如何防止类型转换异常？
+
+答：instanceof。
+
+```java
+Person p = new Women();
+if(p instanceof Women) {
+Women w = (Women)p;
+w.buy();
+}
+```
+
+
+
+**注意：属性没有多态性！**因为属性不存在重写
+
+```java
+public class Person {
+	String name = "Person";
+void show() {
+		System.out.println("Person.show()");
+	}
+}
+public class Man extends Person {
+	String name = "Man";
+@Override
+void show() {
+		System.out.println("Man.show()");
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Person p = new Man();
+		System.out.println(p.name);
+		p.show();
+		
+		if(p instanceof Man)
+		{
+			Man m = (Man)p;
+			System.out.println(m.name);
+			m.show();
+		}
+	}
+}
+```
+
+结果：
+
+![image-20200403134740251](images/image-20200403134740251.png) 
+
+看看上述代码在C++中的运行情况：
+
+```C++
+#include <iostream>
+class Person 
+{
+public:
+	char* name = "Person";
+	void show();
+};
+void Person::show()
+{
+	std::cout << "Person.show()" << std::endl;
+}
+class Man : public Person 
+{
+public:
+	char* name = "Man";
+	void show();
+};
+void Man::show()
+{
+	std::cout << "Man.show()" << std::endl;
+}
+
+int main()
+{
+	Person *p = new Man();
+	std::cout << p->name << std::endl;
+	p->show();
+
+	Man *m = (Man*)p;
+	std::cout << m->name << std::endl;
+	m->show();
+}
+```
+
+结果： 
+
+![image-20200403134815844](images/image-20200403134815844.png) 
+
+把Person中的方法改成虚方法： ![image-20200403134831337](images/image-20200403134831337.png)
+结果：
+
+![image-20200403134824416](images/image-20200403134824416.png) 
+
+
+
+## 8.4 面向对象的第四大特征：抽象性
+
+abstract修饰的方法：抽象方法
+  1、抽象方法没有方法体。
+  2、抽象方法所在的类必须是抽象类。
+
+abstract修饰的类：抽象类
+  1、抽象类不能够显示的调用其构造器来实例化。
+  2、必须由其子类来重写抽象类的全部抽象方法后，才可以实例化。
+  3、抽象类是有构造器的，并且要由其子类的构造器来隐式调用。
+  4、抽象类中可以有非抽象方法。也可以没有一个抽象方法。但是这样就没有什么意义。
+  5、抽象类的子类可以还是抽象类，只实现了部分方法或完全没有实现。
+
+abstract不能修饰属性、私有方法、静态方法、代码块、构造器、final方法和final类。
+
+abstract不能和final、private、static一起使用。
+
+### 8.4.1  模板方法(TemplateMethod)设计模式
+
+![image-20200403135019574](images/image-20200403135019574.png)
+
+```java
+abstract class CodeRunTimeTest {
+	/*
+	 * 测试方法
+	 */
+	public long countRunTime()
+	{
+		// 1.记录开始运行的时间
+		long start = System.currentTimeMillis();
+		// 2.执行被测代码
+		runCode();
+		// 3.记录运行结束的时间
+		long end = System.currentTimeMillis();
+		// 4.返回时间差
+		return (end - start);
+	}
+	/*
+	 * 被测方法, 由子类重写
+	 * C#中的委托
+	 */
+	protected abstract void runCode();
+}
+
+public class Main {
+	public static void main(String[] args) {
+		// 创建了一个有名抽象类的匿名子类的有名对象
+		CodeRunTimeTest test = new CodeRunTimeTest() {
+			@Override
+			protected void runCode() {
+				System.out.println("重写了被测方法");				
+			}
+		};
+		System.out.println(test.countRunTime());
+	}
+}
+```
+
+
+
+# 9 Java 常用类
+
+## 9.1 Object 类
+
+Object类是所有Java类的根父类。
+
+如果一个类没有显示地继承某个类，那么这个类会默认继承Object类。
+
+Object类有一个空参构造器。
+
+Object类中有12个方法，
+其中 1 个 private，2 个protected，9 个 public；6 个 final 方法；7 个 native 方法；有三个重载方法wait方法。
+finalize 方法由 GC 在清理对象前调用一次，可以看作析构函数。
+
+```java
+public class Object {
+
+    private static native void registerNatives();
+    static {
+        registerNatives();
+    }
+
+    public String toString() {
+        return getClass().getName() + "@" + Integer.toHexString(hashCode());
+    }
+
+    public boolean equals(Object obj) {
+        return (this == obj);
+    }
+        
+    protected void finalize() throws Throwable {
+    }
+    
+    protected native Object clone() throws CloneNotSupportedException;
+    public native int hashCode();
+    
+    public final native Class<?> getClass();
+    
+    public final native void notify();
+    public final native void notifyAll();
+    
+    public final void wait() throws InterruptedException {
+        wait(0);
+    }
+    public final void wait(long timeout, int nanos) throws InterruptedException {
+        if (timeout < 0) {
+            throw new IllegalArgumentException("timeout value is negative");
+        }
+
+        if (nanos < 0 || nanos > 999999) {
+            throw new IllegalArgumentException(
+                "nanosecond timeout value out of range");
+        }
+
+        if (nanos > 0) {
+            timeout++;
+        }
+
+        wait(timeout);
+    }
+    public final native void wait(long timeout) throws InterruptedException;
+}
+```
+
+### 9.1.1 equals方法
+
+**equals()方法需要具有如下特点：**
+
+　　**自反性（reflexive）：**任何非空引用x，x.equals(x)返回为true。
+
+　　**对称性（symmetric）：**任何非空引用x和y，x.equals(y)返回true当且仅当y.equals(x)返回true。
+
+　　**传递性（transitive）：**任何非空引用x和y，如果x.equals(y)返回true，并且y.equals(z)返回true，那么x.equals(z)返回true。
+
+　　**一致性（consistent）：**两个非空引用x和y，x.equals(y)的多次调用应该保持一致的结果，（前提条件是在多次比较之间没有修改x和y用于比较的相关信息）。
+
+　　**约定**：对于任何非空引用x，x.equals(null)应该返回为false。
+
+　　并且覆写equals()方法时，应该同时覆写hashCode()方法，反之亦然。
+
+
+
+【面试题】==与equals的区别。
+​	答：
+​		== : 如果比较的是基本数据类型，那么比较的是变量的值（存在自动类型提升）。如果比较的是引用数据类型，那么比较的也是变量的值（地址值），即比较两个引用是否指向同一个对象。
+​		equals : 是一个方法，可以被重写。在Object类中等同于==。像String、Date等类都重写了equls方法，用来比较内容。
+
+
+
+Object类的equals方法比较两个引用所指向的是不是同一个对象。
+
+String类重写了该方法：比较字符串的内容是否相同。
+
+```java
+public boolean equals(Object anObject) {
+    if (this == anObject) {
+        return true;
+    }
+    if (anObject instanceof String) {
+        String anotherString = (String)anObject;
+        int n = value.length;
+        if (n == anotherString.value.length) {
+            char v1[] = value;
+            char v2[] = anotherString.value;
+            int i = 0;
+            while (n-- != 0) {
+                if (v1[i] != v2[i])
+                    return false;
+                i++;
+            }
+            return true;
+        }
+    }
+    return false;
+}
+```
+
+### 9.1.2 hashCode方法
+
+这个方法返回一个整型值（hash code value），如果两个对象被equals()方法判断为相等，那么它们就应该拥有同样的 hash code。
+
+Object类的hashCode()方法为不同的对象返回不同的值，Object类的hashCode值表示的是对象的地址。
+
+### 9.1.3 toString方法
+
+输出一个引用时，实际上是先默认调用了toString方法得到一个字符串，然后调用重载方法public void System.out.println(String x)。
+
+![image-20200403141045044](images/image-20200403141045044.png) 
+
+### 9.1.4 clone方法
+
+1、重写clone方法的类必须实现 java.lang.Cloneable 接口，否则会抛出CloneNotSupportedException异常。Cloneable接口中不包含任何方法，所以实现它时只要在类声明中加上implements语句即可。
+
+```java
+public interface Cloneable {
+}
+```
+
+2、这个方法是protected修饰的，覆写clone()方法的时候需要写成public，才能让类外部的代码调用。
+
+
+
+- p1 = p  引用赋值，两个引用指向同一对象。
+
+![image-20200403144313786](images/image-20200403144313786.png) 
+
+- p1 = (Person) p.clone()，clone是浅拷贝的
+
+![image-20200403151019992](images/image-20200403151019992.png) 
+
+```java
+@Override
+protected Object clone() throws CloneNotSupportedException {
+    return super.clone();
+}
+```
+
+- 深拷贝
+
+![image-20200403151536701](images/image-20200403151536701.png) 
+
+```java
+@Override
+protected Object clone() throws CloneNotSupportedException {
+    User user = (User)super.clone();
+    user.teacher = (Teacher) this.teacher.clone();
+    return user;
+}
+```
+
+- 不彻底的深拷贝
+
+![image-20200403151718701](images/image-20200403151718701.png) 
