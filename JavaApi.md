@@ -10,6 +10,10 @@
     - [5.1 同步状态](#51-同步状态)
     - [5.2 同步队列](#52-同步队列)
     - [5.3 源码分析](#53-源码分析)
+- [6 TreeMap](#6-treemap)
+    - [6.1 红黑树](#61-红黑树)
+    - [6.2 TreeMap 源码](#62-treemap-源码)
+- [7 HashSet](#7-hashset)
 
 <!-- /TOC -->
 
@@ -1593,7 +1597,7 @@ private void deleteEntry(Entry<K,V> p) {
 
 # 7 HashSet
 
-![HashMap的UML图](images/1) 
+![HashMap的UML图](images/1.png) 
 
 HashSet内部基本使用HashMap来实现。HashMap的key为要存储的元素，value为一个固定的 Object 常量。
 

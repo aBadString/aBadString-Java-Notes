@@ -380,7 +380,7 @@ public ThreadPoolExecutor(
 
 - Collection 接口：集合类的根接口，没有这个接口的直接实现类。
   - List 接口：有序的集合，可以包含重复的元素，提供了按索引访问的方式。
-    - ArrayList
+    - ArrayList - 线程安全 Collections.synchronizedList()
     - LinkedList
     - Vector
   - Set 接口：不能包含重复的元素。
