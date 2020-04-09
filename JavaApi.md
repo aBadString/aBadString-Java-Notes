@@ -1138,7 +1138,7 @@ private void unparkSuccessor(Node node) {
 
 ## 6.2 TreeMap 源码
 
-![img](images/TreeMap)
+![img](images/TreeMap.png)
 
 - TreeMap实现了NavigableMap接口，而NavigableMap接口继承着SortedMap接口，致使我们的**TreeMap是有序的**
 - TreeMap底层是红黑树，它方法的时间复杂度：log(n)

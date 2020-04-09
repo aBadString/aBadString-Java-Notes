@@ -562,3 +562,10 @@ if (e != null) { // existing mapping for key
 }
 ```
 
+
+
+# 7 NIO
+
+Non-blocking I/O 是一种同步非阻塞的I/O模型，也是I/O多路复用的基础，已经被越来越多地应用到大型应用服务器，成为解决高并发与大量连接、I/O处理问题的有效方式。
+
+https://zhuanlan.zhihu.com/p/23488863
