@@ -595,3 +595,30 @@ desc 只作用于其前面的一列。
 select * from t_user order by user_id desc limit 0, 1;
 ```
 
+
+
+## 5.3 过滤数据
+
+order by 子句应该位于 where 子句之后。
+
+```mysql
+=             -- 等于
+<>  !=        -- 不等于
+<  <=  >  >=  -- 小于 小于等于 大于 大于等于
+between and   -- 在指定两个值之间
+is null  is not null
+```
+
+```mysql
+and -- and 优先级高于 or
+or
+in
+```
+
+
+
+```mysql
+select name from t_user
+	where age in (20, 21, 22);
+```
+

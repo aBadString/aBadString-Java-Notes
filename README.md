@@ -21,3 +21,7 @@
 - #### MyBatis ORM 框架
 
 - #### [设计模式](https://github.com/aBadString/aBadString.github.io/blob/master/DesignPattern.md)
+
+- #### [数据结构与算法](https://github.com/aBadString/aBadString.github.io/blob/master/Algorithm.md)
+
+-  #### [Linux](https://github.com/aBadString/aBadString.github.io/blob/master/Linux.md)
