@@ -1746,3 +1746,96 @@ protected Object clone() throws CloneNotSupportedException {
 - 不彻底的深拷贝
 
 ![image-20200403151718701](images/image-20200403151718701.png) 
+
+
+
+# 10 接口
+
+格式：
+
+```java
+[public] interface 接口名称 [extends 其他的接口名, 其他的接口名 … ] { 
+    // 声明常量
+    // 抽象方法 
+}
+```
+
+ 
+
+1、接口和类之间是并列关系。
+
+2、接口不能被实例化，接口没有构造器。
+
+3、接口中只能有常量和抽象方法（jdk1.8之前）。
+
+​	**常量**：**public** **static** **final** **double** ***PI\*** = 3.14; (public static final可以省略，这三者无论怎样组合，最终都会被补全。如：final, static, public, static final, public static, public final。抽象方法和静态方法同理。)
+
+​	**抽象方法**：**public** **abstract** **void** fly(); (public abstract可以省略)
+
+4、jdk1.8新特性：接口中还可以有静态方法和默认方法。
+
+​	**静态方法：****public** **static** **void** show(){} (public可以省略，一定是public的)
+
+​	**默认方法：****public** **default** **void** show(){} (public可以省略，一定是public的)
+
+​	静态方法调用：接口名.静态方法名；默认方法调用：实现类的对象名.默认方法名。(???这不就是抽象类了么。。。)
+
+5、接口和接口之间的关系：接口 extends 接口，可以多继承。
+
+6、类和接口之间的关系：类 implement 接口，可以实现多个接口。
+
+7、一个非抽象类实现接口后，必须重写所有接口的**所有**抽象方法。如果没有全部重写，则需把类声明为抽象类。
+
+8、接口只能被public、abstract修饰：前者控制接口的访问范围：public或者缺省的。abstract可以省略。https://blog.csdn.net/sanpangouba/article/details/87349241
+
+9、接口主要用来定义规范，解除耦合关系。
+
+10、父类和接口中有相同的方法：类优先原则。
+
+11、两个接口中有相同的抽象方法，那么实现类只需重写一次，即同时重写这两个方法。
+
+12、如果两个接口有相同的默认方法，实现类必须重写该方法；若不重写，则编译报错。
+
+ 
+
+在实现类的方法中调用接口的默认方法：接口名.super.默认方法名()。
+
+ ```java
+public class Main {
+	public static void main(String[] args) {
+		new C().say();
+	}
+}
+interface A {
+	public default void say() {
+		System.out.println("A");
+	}
+}
+interface B {
+	public default void say() {
+		System.out.println("B");
+	}
+}
+class C implements A, B {
+	@Override
+	public void say() {
+		A.super.say();
+		B.super.say();
+		System.out.println("C");
+	}
+}
+ ```
+
+结果：
+
+![image-20200526193023725](images/image-20200526193023725.png) 
+
+
+
+接口名 变量名 = new 接口实现类(); // 接口类型的引用可以指向接口实现类的对象。
+
+同样，接口也可以和抽象类一样，有匿名实现类。       
+
+ ![image-20200526193221604](images/image-20200526193221604.png)
+
+![image-20200526193240930](images/image-20200526193240930.png) 
