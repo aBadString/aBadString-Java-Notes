@@ -64,6 +64,7 @@
         - [9.1.2 hashCode方法](#912-hashcode方法)
         - [9.1.3 toString方法](#913-tostring方法)
         - [9.1.4 clone方法](#914-clone方法)
+- [10 接口](#10-接口)
 
 <!-- /TOC -->
 # 1 Java 简介
