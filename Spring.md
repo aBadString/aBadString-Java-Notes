@@ -389,6 +389,8 @@ SpEL 的写法：${表达式}
 
 **@Scope("prototype"): 用于指定作用范围**
 
+**@Lazy: 懒加载, 当需要去使用到对象的时候才初始化**
+
 **@PostConstruct: 用于指定初始化方法**
 
 **@PreDestroy: 用于指定销毁方法**
