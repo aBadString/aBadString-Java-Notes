@@ -713,3 +713,21 @@ pom.xml 文件中可以配置的
     <properties />
 </project>
 ```
+
+
+# 2. Maven 命令
+
+## package、install、deploy的联系与区别
+
+> https://blog.csdn.net/zhaojianting/java/article/details/80324533
+
+仔细查看上面的输出结果截图，可以发现，
+
+mvn clean package 依次执行了clean、resources、compile、testResources、testCompile、test、jar(打包)等７个阶段。  
+mvn clean install 依次执行了clean、resources、compile、testResources、testCompile、test、jar(打包)、install等8个阶段。  
+mvn clean deploy  依次执行了clean、resources、compile、testResources、testCompile、test、jar(打包)、install、deploy等９个阶段。
+
+由上面的分析可知主要区别如下，  
+package 命令完成了项目编译、单元测试、打包功能，但没有把打好的可执行jar包（war包或其它形式的包）布署到本地maven仓库和远程maven私服仓库  
+install 命令完成了项目编译、单元测试、打包功能，同时把打好的可执行jar包（war包或其它形式的包）布署到本地maven仓库，但没有布署到远程maven私服仓库  
+deploy  命令完成了项目编译、单元测试、打包功能，同时把打好的可执行jar包（war包或其它形式的包）布署到本地maven仓库和远程maven私服仓库
