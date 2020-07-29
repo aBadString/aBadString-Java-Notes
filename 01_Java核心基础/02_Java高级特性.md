@@ -90,7 +90,7 @@ java.lang.reflect.Modifier;
 
 线程安全的定义：一个类是线程安全的，是指在被多个线程访问时，类可以持续进行正确的行为。
 
-![image-20200323173052585](/images/image-20200323173052585.png)
+![image-20200323173052585](../images/image-20200323173052585.png)
 
 线程安全的类封装了任何必要的同步，因此客户不需要自己提供。
 
@@ -98,11 +98,11 @@ java.lang.reflect.Modifier;
 
 **原子操作**
 
-![image-20200323180121239](/images/image-20200323180121239.png)
+![image-20200323180121239](../images/image-20200323180121239.png)
 
 ## 1.2 内部锁 synchronized
 
- ![image-20200323180919143](/images/image-20200323180919143.png)
+ ![image-20200323180919143](../images/image-20200323180919143.png)
 
 ```java
 synchronized(lock) {
@@ -116,7 +116,7 @@ synchronized(lock) {
 
 【看看题】
 
-![image-20200323182712945](/images/image-20200323182712945.png)
+![image-20200323182712945](../images/image-20200323182712945.png)
 
 1.synchronzied关键字修饰static方法：该锁由该类持有，相同类只可持有一把锁。
 
@@ -146,9 +146,9 @@ synchronized(lock) {
 
 ## 1.3 重进入 Reentrancy
 
-![image-20200323183058740](/images/image-20200323183058740.png)
+![image-20200323183058740](../images/image-20200323183058740.png)
 
-![image-20200323183106399](/images/image-20200323183106399.png)
+![image-20200323183106399](../images/image-20200323183106399.png)
 
 
 
@@ -188,7 +188,7 @@ volatile 变量的特性：
 
 不可变对象永远是线程安全的。
 
-![image-20200324171629638](/images/image-20200324171629638.png) 
+![image-20200324171629638](../images/image-20200324171629638.png) 
 
 # 3 组合对象
 
@@ -223,7 +223,7 @@ jdk 5 提供了几种并发的容器类。
 
 ConcurrentHashMap、CopyOnWriteArrayList
 
-![image-20200326175737230](/images/image-20200326175737230.png)
+![image-20200326175737230](../images/image-20200326175737230.png)
 
 ### 4.2.1 ConcurrentHashMap
 
@@ -237,7 +237,7 @@ ConcurrentHashMap、CopyOnWriteArrayList
 
 ### 4.2.2 CopyOnWriteArrayList
 
-![image-20200326192142191](/images/image-20200326192142191.png)
+![image-20200326192142191](../images/image-20200326192142191.png)
 
 # 5 线程池
 
