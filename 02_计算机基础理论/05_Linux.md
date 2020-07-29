@@ -1,9 +1,11 @@
-<!-- TOC -->
+<h1 align="center">Linux</h1>
+<!-- @import "[TOC]" {cmd="toc"} -->
+
+<!-- code_chunk_output -->
 
 - [1 Linux进程间通信方式](#1-linux进程间通信方式)
 
-<!-- /TOC -->
-
+<!-- /code_chunk_output -->
 
 # 1 Linux进程间通信方式
 

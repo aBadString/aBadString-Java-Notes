@@ -2,54 +2,34 @@
 
 这个项目用于记录我的 Java 学习笔记，分享一些好的示例代码，记录自己踩过的每一个坑。
 
+- ## Java 核心基础
+    - [Java 基础编程](/01_Java核心基础/01_Java基础编程.md)
+    - [Java 高级特性](/01_Java核心基础/02_Java高级特性.md)
+    - [Java 虚拟机](/01_Java核心基础/03_Java虚拟机.md)
+    - [Java 常用API源码](/01_Java核心基础/04_Java常用API源码.md)
 
 - ## 计算机基础理论
-
-    - #### [计算机网络](/Network.md)
-
-    - #### 数据结构与算法
-
-    - #### 操作系统
-
-    - #### 计算机组成原理
-
-    - #### [Linux](/Linux.md)
-
-
-- ## Java 基础
-
-    - #### [Java 核心语法(初级)](/JavaPrimary.md)
-
-    - #### [Java 核心语法(中级)](/JavaIntermediate.md)
-
-    - #### [Java 常用类和核心 Api](/JavaApi.md)
-
-    - #### [Java 虚拟机](/JVM.md)
-
+    - [数据结构与算法](/02_计算机基础理论/01_数据结构与算法.md)
+    - [计算机网络](/02_计算机基础理论/02_计算机网络.md)
+    - 操作系统
+    - 计算机组成原理
+    - [Linux](/02_计算机基础理论/05_Linux.md)
 
 - ## 数据库基础
+    - [MySQL 数据库](/03_数据库基础/01_MySQL.md)
 
-    - #### [MySQL 数据库](/MySQL.md)
+- ## Java Web 框架
+    - [Spring 框架](/04_JavaWeb框架/01_Spring.md)
+    - [Spring Boot](/04_JavaWeb框架/02_SpringBoot.md)
+    - MyBatis ORM 框架
 
-
-- ## Java Web
-
-    - #### [Spring 框架](/Spring.md)
-
-    - #### [Spring Boot](/SpringBoot.md)
-
-    - #### MyBatis ORM 框架
-
-    - #### [设计模式](/DesignPattern.md)
-
+- ## 软件工程
+    - [设计模式](/05_软件工程/01_设计模式.md)
 
 - ## 开发工具
-
-    - #### [Maven](/Maven.md)
-
-    - #### [Git](/Git.md)
-
-    - #### [Docker](/Docker.md)
+    - [Git](/06_开发工具/01_Git.md)
+    - [Maven](/06_开发工具/02_Maven.md)
+    - [Docker](/06_开发工具/03_Docker.md)
 
 
 <!-- 

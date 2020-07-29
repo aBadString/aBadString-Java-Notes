@@ -1,31 +1,35 @@
-<!-- TOC -->
+<h1 align="center">Java 高级特性</h1>
+<!-- @import "[TOC]" {cmd="toc"} -->
+
+<!-- code_chunk_output -->
 
 - [0 反射](#0-反射)
 - [1 多线程](#1-多线程)
-    - [1.1 线程安全](#11-线程安全)
-    - [1.2 内部锁 synchronized](#12-内部锁-synchronized)
-    - [1.3 重进入 Reentrancy](#13-重进入-reentrancy)
+  - [1.1 线程安全](#11-线程安全)
+  - [1.2 内部锁 synchronized](#12-内部锁-synchronized)
+  - [1.3 重进入 Reentrancy](#13-重进入-reentrancy)
 - [2 同步](#2-同步)
-    - [2.1 非原子的 64 位操作](#21-非原子的-64-位操作)
-    - [2.2 volatile 变量](#22-volatile-变量)
-    - [2.3 发布和逸出](#23-发布和逸出)
-    - [2.4 不可变性](#24-不可变性)
+  - [2.1 非原子的 64 位操作](#21-非原子的-64-位操作)
+  - [2.2 volatile 变量](#22-volatile-变量)
+  - [2.3 发布和逸出](#23-发布和逸出)
+  - [2.4 不可变性](#24-不可变性)
 - [3 组合对象](#3-组合对象)
-    - [3.1 设计线程安全的类](#31-设计线程安全的类)
+  - [3.1 设计线程安全的类](#31-设计线程安全的类)
 - [4 构建块](#4-构建块)
-    - [4.1 同步容器](#41-同步容器)
-    - [4.2 并发容器](#42-并发容器)
-        - [4.2.1 ConcurrentHashMap](#421-concurrenthashmap)
-        - [4.2.2 CopyOnWriteArrayList](#422-copyonwritearraylist)
+  - [4.1 同步容器](#41-同步容器)
+  - [4.2 并发容器](#42-并发容器)
+    - [4.2.1 ConcurrentHashMap](#421-concurrenthashmap)
+    - [4.2.2 CopyOnWriteArrayList](#422-copyonwritearraylist)
 - [5 线程池](#5-线程池)
-    - [5.1 线程池各个参数的作用，如何进行的?](#51-线程池各个参数的作用如何进行的)
-    - [5.2 线程池异常处理](#52-线程池异常处理)
-    - [5.3 线程池的工作队列](#53-线程池的工作队列)
-    - [5.4 几种常用的线程池](#54-几种常用的线程池)
-    - [5.5 线程池状态](#55-线程池状态)
+  - [5.1 线程池各个参数的作用，如何进行的?](#51-线程池各个参数的作用如何进行的)
+  - [5.2 线程池异常处理](#52-线程池异常处理)
+  - [5.3 线程池的工作队列](#53-线程池的工作队列)
+  - [5.4 几种常用的线程池](#54-几种常用的线程池)
+  - [5.5 线程池状态](#55-线程池状态)
 - [6 集合](#6-集合)
+- [7 NIO](#7-nio)
 
-<!-- /TOC -->
+<!-- /code_chunk_output -->
 
 # 0 反射
 
@@ -86,7 +90,7 @@ java.lang.reflect.Modifier;
 
 线程安全的定义：一个类是线程安全的，是指在被多个线程访问时，类可以持续进行正确的行为。
 
-![image-20200323173052585](images/image-20200323173052585.png)
+![image-20200323173052585](/images/image-20200323173052585.png)
 
 线程安全的类封装了任何必要的同步，因此客户不需要自己提供。
 
@@ -94,11 +98,11 @@ java.lang.reflect.Modifier;
 
 **原子操作**
 
-![image-20200323180121239](images/image-20200323180121239.png)
+![image-20200323180121239](/images/image-20200323180121239.png)
 
 ## 1.2 内部锁 synchronized
 
- ![image-20200323180919143](images/image-20200323180919143.png)
+ ![image-20200323180919143](/images/image-20200323180919143.png)
 
 ```java
 synchronized(lock) {
@@ -112,7 +116,7 @@ synchronized(lock) {
 
 【看看题】
 
-![image-20200323182712945](images/image-20200323182712945.png)
+![image-20200323182712945](/images/image-20200323182712945.png)
 
 1.synchronzied关键字修饰static方法：该锁由该类持有，相同类只可持有一把锁。
 
@@ -142,9 +146,9 @@ synchronized(lock) {
 
 ## 1.3 重进入 Reentrancy
 
-![image-20200323183058740](images/image-20200323183058740.png)
+![image-20200323183058740](/images/image-20200323183058740.png)
 
-![image-20200323183106399](images/image-20200323183106399.png)
+![image-20200323183106399](/images/image-20200323183106399.png)
 
 
 
@@ -184,7 +188,7 @@ volatile 变量的特性：
 
 不可变对象永远是线程安全的。
 
-![image-20200324171629638](images/image-20200324171629638.png) 
+![image-20200324171629638](/images/image-20200324171629638.png) 
 
 # 3 组合对象
 
@@ -219,7 +223,7 @@ jdk 5 提供了几种并发的容器类。
 
 ConcurrentHashMap、CopyOnWriteArrayList
 
-![image-20200326175737230](images/image-20200326175737230.png)
+![image-20200326175737230](/images/image-20200326175737230.png)
 
 ### 4.2.1 ConcurrentHashMap
 
@@ -233,7 +237,7 @@ ConcurrentHashMap、CopyOnWriteArrayList
 
 ### 4.2.2 CopyOnWriteArrayList
 
-![image-20200326192142191](images/image-20200326192142191.png)
+![image-20200326192142191](/images/image-20200326192142191.png)
 
 # 5 线程池
 
