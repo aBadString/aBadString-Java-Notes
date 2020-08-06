@@ -94,6 +94,10 @@
     - [14.2.3. 线程的调度](#1423-线程的调度)
   - [14.3. 线程的生命周期](#143-线程的生命周期)
   - [14.4. 线程同步](#144-线程同步)
+    - [14.4.1. 同步代码块](#1441-同步代码块)
+    - [14.4.2. 同步方法](#1442-同步方法)
+    - [14.4.3. 同步锁 (jdk5.0 新增)](#1443-同步锁-jdk50-新增)
+    - [14.4.4. 死锁](#1444-死锁)
   - [14.5. 线程通讯](#145-线程通讯)
 - [15. Java 8 新特性](#15-java-8-新特性)
   - [15.1. 函数式接口](#151-函数式接口)
@@ -2471,7 +2475,196 @@ TIMED_WAITING,
 
 参考：https://blog.csdn.net/Alexshi5/article/details/88045763
 
+![](../images/线程的生命周期.png)
+
 ## 14.4. 线程同步
+
+### 14.4.1. 同步代码块
+
+```java
+synchronization(同步监视器) {
+    // 临界区
+```
+- 临界区：访问共享数据的代码块。同一时刻只允许一个线程进入临界区。
+- 同步监视器：也称为锁，任何一个类的对象都可以充当锁。**多个线程必须共用同一个锁**。
+
+```java
+class WindowRunnable implements Runnable {
+
+    private int ticket = 100;
+    // 多个线程共享同一把锁
+    private Object obj = new Object();
+
+    @Override
+    public void run() {
+        //Object obj = new Object();
+        // 要是 obj 放这里，那每个线程都有不同的锁了，无法同步
+        while (true) {
+            synchronized (obj) {
+                if (ticket > 0) {
+                    System.out.println(Thread.currentThread().getName() + ": " + ticket);
+                    ticket--;
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+}
+class WindowRunnableTest {
+    public static void main(String[] args) {
+        WindowRunnable w = new WindowRunnable();
+
+        Thread w1 = new Thread(w);
+        Thread w2 = new Thread(w);
+        Thread w3 = new Thread(w);
+
+        w1.setName("窗口1");
+        w2.setName("窗口2");
+        w3.setName("窗口3");
+
+        w1.start();
+        w2.start();
+        w3.start();
+    }
+}
+```
+
+```java
+class Window extends Thread {
+
+    private static int ticket = 100;
+    // 这个锁必须是 static 的，因为每个线程都是不同的 Thread 对象
+    private static Object obj = new Object();
+
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (obj) {
+                if (ticket > 0) {
+                    System.out.println(getName() + ": " + ticket);
+                    ticket--;
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+}
+class WindowThreadTest {
+    public static void main(String[] args) {
+        Window w1 = new Window();
+        Window w2 = new Window();
+        Window w3 = new Window();
+
+        w1.setName("窗口1");
+        w2.setName("窗口2");
+        w3.setName("窗口3");
+
+        w1.start();
+        w2.start();
+        w3.start();
+    }
+}
+```
+
+为了方便起见，锁可以直接使用 **this 对象** 或者 **getClass() / 类名.class**
+
+### 14.4.2. 同步方法
+
+如果整个方法都是临界区，不妨把改方法声明为同步方法。
+非静态同步方法的锁是 this；静态方法的锁是当前类。
+
+### 14.4.3. 同步锁 (jdk5.0 新增)
+
+java.util.concurrent.locks.Lock 接口
+```java
+public interface Lock {
+    void lock();
+    void lockInterruptibly() throws InterruptedException;
+    boolean tryLock();
+    boolean tryLock(long time, TimeUnit unit) throws InterruptedException;
+    void unlock();
+    Condition newCondition();
+}
+```
+
+ReentrantLock 实现了 Lock 接口
+通过构造器参数可以指定使用公平锁还是非公平锁，默认非公平锁。
+```java
+class WindowRunnable implements Runnable {
+
+    private int ticket = 100;
+    private Lock lock = new ReentrantLock(true);
+
+    @Override
+    public void run() {
+        while (true) {
+            lock.lock();
+            try {
+                if (ticket > 0) {
+                    System.out.println(Thread.currentThread().getName() + ": " + ticket);
+                    ticket--;
+                } else {
+                    break;
+                }
+            } finally {
+                lock.unlock();
+            }
+        }
+    }
+}
+class WindowRunnableTest {
+    public static void main(String[] args) {
+        WindowRunnable w = new WindowRunnable();
+
+        Thread w1 = new Thread(w);
+        Thread w2 = new Thread(w);
+        Thread w3 = new Thread(w);
+
+        w1.setName("窗口1");
+        w2.setName("窗口2");
+        w3.setName("窗口3");
+
+        w1.start();
+        w2.start();
+        w3.start();
+    }
+}
+```
+
+【面试题】synchronized 和 Lock 的异同？
+答：
+相同：
+1. 可重入锁：Synchronized和ReentrantLook都是可重入锁
+
+不同：
+1. Synchronized 是隐性锁，自动的获取和释放锁；ReentrantLock 是显性锁，需要自己写获取和释放锁的语句。
+2. synchronized 是非公平锁，它无法保证等待的线程获取锁的顺序；ReentrantLook 可以选择是否公平锁。
+3. Synchronized 是不可中断锁，ReentrantLock 可以通过 lockInterruptibly 方法中断等待锁。
+4. 底层实现：
+    Synchronized 使用字节码指令来控制锁：monitorenter和monitorexit。当线程执行遇到monitorenter指令时会尝试获取内置锁，如果获取锁则锁计数器+1，如果没有获取锁则阻塞；当遇到monitorexit指令时锁计数器-1，如果计数器为0则释放锁。
+    ReentrantLock 依靠的是CAS乐观锁，依赖 AbstractQueuedSynchronizer 类，把所有的请求线程构成一个CLH队列。而对该队列的操作均通过Lock-Free（CAS）操作。
+
+参考：https://www.jianshu.com/p/b343a9637f95
+
+### 14.4.4. 死锁
+
+定义：两个或两个以上的进程/线程，在并发运行的情况下，因为竞争多个互斥资源，而造成它们互相等待对方无法释放的资源的现象，这种现象在无外力的作用时不可解除。
+
+**死锁产生的四个必要条件**
+1. 互斥条件：进程要求对所分配的资源进行排它性控制，即在一段时间内某资源仅为一进程所占用。
+2. 请求和保持条件：当进程因请求资源而阻塞时，对已获得的资源保持不放。
+3. 不剥夺条件：进程已获得的资源在未使用完之前，不能剥夺，只能在使用完时由自己释放。
+4. 环路等待条件：在发生死锁时，必然存在一个进程--资源的环形链。
+
+**预防死锁**
+1. 资源一次性分配：一次性分配所有资源，这样就不会再有请求了：（破坏请求条件）
+2. 只要有一个资源得不到分配，也不给这个进程分配其他的资源：（破坏请保持条件）
+3. 可剥夺资源：即当某进程获得了部分资源，但得不到其它资源，则释放已占有的资源（破坏不可剥夺条件）
+4. 资源有序分配法：系统给每类资源赋予一个编号，每一个进程按编号递增的顺序请求资源，释放则相反（破坏环路等待条件）
+
+参考：https://blog.csdn.net/hd12370/article/details/82814348
 
 ## 14.5. 线程通讯
 
