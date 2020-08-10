@@ -60,81 +60,86 @@
   - [8.3. 多态性](#83-多态性)
   - [8.4. 面向对象的第四大特征：抽象性](#84-面向对象的第四大特征抽象性)
     - [8.4.1. 模板方法(TemplateMethod)设计模式](#841-模板方法templatemethod设计模式)
-- [9. Java 常用类](#9-java-常用类)
-  - [9.1. Object 类](#91-object-类)
-    - [9.1.1. equals方法](#911-equals方法)
-    - [9.1.2. hashCode方法](#912-hashcode方法)
-    - [9.1.3. toString方法](#913-tostring方法)
-    - [9.1.4. clone方法](#914-clone方法)
-  - [9.2. 包装类(Wrapper)](#92-包装类wrapper)
-    - [9.2.1. 基本数据类型、包装类、String之间的转换](#921-基本数据类型-包装类-string之间的转换)
-    - [9.2.2. 拆箱与装箱](#922-拆箱与装箱)
-  - [9.3. String类和常量池](#93-string类和常量池)
-    - [9.3.1. String 的不可变性](#931-string-的不可变性)
-    - [9.3.2. String 的几种构造器](#932-string-的几种构造器)
-    - [9.3.3. String 常用 API](#933-string-常用-api)
-    - [9.3.4. String 与其他结构的转换](#934-string-与其他结构的转换)
-    - [9.3.5. StringBuffer 和 StringBuilder](#935-stringbuffer-和-stringbuilder)
-  - [9.4. Date 类](#94-date-类)
-- [10. 接口](#10-接口)
-- [11. 枚举类](#11-枚举类)
-  - [11.1. 自定义枚举类](#111-自定义枚举类)
-  - [11.2. enum关键字](#112-enum关键字)
-  - [11.3. 枚举类中的常用方法](#113-枚举类中的常用方法)
-  - [11.4. 实现接口的枚举类](#114-实现接口的枚举类)
-- [12. 注解](#12-注解)
-  - [12.1. jdk内置的三个常用注解](#121-jdk内置的三个常用注解)
-  - [12.2. 自定义注解](#122-自定义注解)
-  - [12.3. 元注解](#123-元注解)
-- [13. 异常体系结构](#13-异常体系结构)
-  - [13.1. Exception和Error](#131-exception和error)
-  - [13.2. try – catch – finally](#132-try-catch-finally)
-  - [13.3. throws](#133-throws)
-  - [13.4. throw](#134-throw)
-  - [13.5. 自定义异常类](#135-自定义异常类)
-- [14. 多线程](#14-多线程)
-  - [14.1. 程序、进程、线程](#141-程序-进程-线程)
-  - [14.2. 线程的使用](#142-线程的使用)
-    - [14.2.1. 创建线程方法一：继承Thread类](#1421-创建线程方法一继承thread类)
-    - [14.2.2. 创建线程方法二：实现Runnable接口](#1422-创建线程方法二实现runnable接口)
-    - [14.2.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）](#1423-创建线程方法三实现-callable-接口jdk50新增)
-    - [14.2.4. 线程的调度](#1424-线程的调度)
-  - [14.3. 线程的生命周期](#143-线程的生命周期)
-  - [14.4. 线程同步](#144-线程同步)
-    - [14.4.1. 同步代码块](#1441-同步代码块)
-    - [14.4.2. 同步方法](#1442-同步方法)
-    - [14.4.3. 同步锁 (jdk5.0 新增)](#1443-同步锁-jdk50-新增)
-    - [14.4.4. 死锁](#1444-死锁)
-  - [14.5. 线程通讯](#145-线程通讯)
-    - [14.5.1. PV 操作](#1451-pv-操作)
-    - [14.5.2. 两个线程交替打印 1~100](#1452-两个线程交替打印-1~100)
-    - [14.5.3. 生产者消费者问题](#1453-生产者消费者问题)
-  - [14.6. 创建线程方法四：线程池](#146-创建线程方法四线程池)
-    - [14.6.1. 几种常用的线程池](#1461-几种常用的线程池)
-    - [14.6.2. 线程池各个参数的作用，如何进行的?](#1462-线程池各个参数的作用如何进行的)
-    - [14.6.3. 线程池异常处理](#1463-线程池异常处理)
-    - [14.6.4. 线程池的工作队列](#1464-线程池的工作队列)
-    - [14.6.5. 线程池状态](#1465-线程池状态)
-    - [14.6.6. 使用方法](#1466-使用方法)
-- [15. 反射](#15-反射)
-  - [15.1. 动态语言](#151-动态语言)
-  - [15.2. 反射机制](#152-反射机制)
-  - [15.3. Java 反射 API](#153-java-反射-api)
-    - [15.3.1. 获取 Class 对象的三种方法](#1531-获取-class-对象的三种方法)
-    - [15.3.2. Class 类常用方法](#1532-class-类常用方法)
-    - [15.3.3. 创建对象的两种方式](#1533-创建对象的两种方式)
-    - [15.3.4. 调用方法和设置属性](#1534-调用方法和设置属性)
-- [16. 泛型](#16-泛型)
-  - [16.1. 泛型方法](#161-泛型方法)
-- [17. 序列化](#17-序列化)
-  - [17.1. 序列化相关问题](#171-序列化相关问题)
-- [18. 集合](#18-集合)
-  - [18.1. List](#181-list)
-  - [18.2. Set](#182-set)
-  - [18.3. Map 集合](#183-map-集合)
-  - [18.4. 集合遍历方式](#184-集合遍历方式)
-- [19. IO](#19-io)
-- [20. NIO](#20-nio)
+- [9. 接口](#9-接口)
+- [10. 枚举类](#10-枚举类)
+  - [10.1. 自定义枚举类](#101-自定义枚举类)
+  - [10.2. enum关键字](#102-enum关键字)
+  - [10.3. 枚举类中的常用方法](#103-枚举类中的常用方法)
+  - [10.4. 实现接口的枚举类](#104-实现接口的枚举类)
+- [11. 注解](#11-注解)
+  - [11.1. jdk内置的三个常用注解](#111-jdk内置的三个常用注解)
+  - [11.2. 自定义注解](#112-自定义注解)
+  - [11.3. 元注解](#113-元注解)
+- [12. 异常体系结构](#12-异常体系结构)
+  - [12.1. Exception和Error](#121-exception和error)
+  - [12.2. try – catch – finally](#122-try-catch-finally)
+  - [12.3. throws](#123-throws)
+  - [12.4. throw](#124-throw)
+  - [12.5. 自定义异常类](#125-自定义异常类)
+- [13. 多线程](#13-多线程)
+  - [13.1. 程序、进程、线程](#131-程序-进程-线程)
+  - [13.2. 线程的使用](#132-线程的使用)
+    - [13.2.1. 创建线程方法一：继承Thread类](#1321-创建线程方法一继承thread类)
+    - [13.2.2. 创建线程方法二：实现Runnable接口](#1322-创建线程方法二实现runnable接口)
+    - [13.2.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）](#1323-创建线程方法三实现-callable-接口jdk50新增)
+    - [13.2.4. 线程的调度](#1324-线程的调度)
+  - [13.3. 线程的生命周期](#133-线程的生命周期)
+  - [13.4. 线程同步](#134-线程同步)
+    - [13.4.1. 同步代码块](#1341-同步代码块)
+    - [13.4.2. 同步方法](#1342-同步方法)
+    - [13.4.3. 同步锁 (jdk5.0 新增)](#1343-同步锁-jdk50-新增)
+    - [13.4.4. 死锁](#1344-死锁)
+  - [13.5. 线程通讯](#135-线程通讯)
+    - [13.5.1. PV 操作](#1351-pv-操作)
+    - [13.5.2. 两个线程交替打印 1~100](#1352-两个线程交替打印-1~100)
+    - [13.5.3. 生产者消费者问题](#1353-生产者消费者问题)
+  - [13.6. 创建线程方法四：线程池](#136-创建线程方法四线程池)
+    - [13.6.1. 几种常用的线程池](#1361-几种常用的线程池)
+    - [13.6.2. 线程池各个参数的作用，如何进行的?](#1362-线程池各个参数的作用如何进行的)
+    - [13.6.3. 线程池异常处理](#1363-线程池异常处理)
+    - [13.6.4. 线程池的工作队列](#1364-线程池的工作队列)
+    - [13.6.5. 线程池状态](#1365-线程池状态)
+    - [13.6.6. 使用方法](#1366-使用方法)
+- [14. 反射](#14-反射)
+  - [14.1. 动态语言](#141-动态语言)
+  - [14.2. 反射机制](#142-反射机制)
+  - [14.3. Java 反射 API](#143-java-反射-api)
+    - [14.3.1. 获取 Class 对象的三种方法](#1431-获取-class-对象的三种方法)
+    - [14.3.2. Class 类常用方法](#1432-class-类常用方法)
+    - [14.3.3. 创建对象的两种方式](#1433-创建对象的两种方式)
+    - [14.3.4. 调用方法和设置属性](#1434-调用方法和设置属性)
+- [15. 泛型](#15-泛型)
+  - [15.1. 泛型方法](#151-泛型方法)
+- [16. 序列化](#16-序列化)
+  - [16.1. 序列化相关问题](#161-序列化相关问题)
+- [17. 集合](#17-集合)
+  - [17.1. List](#171-list)
+  - [17.2. Set](#172-set)
+  - [17.3. Map 集合](#173-map-集合)
+  - [17.4. 集合遍历方式](#174-集合遍历方式)
+- [18. IO](#18-io)
+- [19. NIO](#19-nio)
+- [20. Java 常用类](#20-java-常用类)
+  - [20.1. Object 类](#201-object-类)
+    - [20.1.1. equals方法](#2011-equals方法)
+    - [20.1.2. hashCode方法](#2012-hashcode方法)
+    - [20.1.3. toString方法](#2013-tostring方法)
+    - [20.1.4. clone方法](#2014-clone方法)
+  - [20.2. 包装类(Wrapper)](#202-包装类wrapper)
+    - [20.2.1. 基本数据类型、包装类、String之间的转换](#2021-基本数据类型-包装类-string之间的转换)
+    - [20.2.2. 拆箱与装箱](#2022-拆箱与装箱)
+  - [20.3. String类和常量池](#203-string类和常量池)
+    - [20.3.1. String 的不可变性](#2031-string-的不可变性)
+    - [20.3.2. String 的几种构造器](#2032-string-的几种构造器)
+    - [20.3.3. String 常用 API](#2033-string-常用-api)
+    - [20.3.4. String 与其他结构的转换](#2034-string-与其他结构的转换)
+    - [20.3.5. StringBuffer 和 StringBuilder](#2035-stringbuffer-和-stringbuilder)
+  - [20.4. 时间有关类](#204-时间有关类)
+    - [20.4.1. java.util.Date](#2041-javautildate)
+    - [20.4.2. java.sql.Date](#2042-javasqldate)
+    - [20.4.3. SimpleDateFormat](#2043-simpledateformat)
+    - [20.4.4. java.util.Calendar 日历类](#2044-javautilcalendar-日历类)
+    - [20.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增）](#2045-localdate-localtime-localdatetimejdk8-新增)
 - [21. Java 8 新特性](#21-java-8-新特性)
   - [21.1. 函数式接口](#211-函数式接口)
   - [21.2. Lambda 表达式](#212-lambda-表达式)
@@ -1660,562 +1665,7 @@ public class Main {
 ```
 
 
-
-# 9. Java 常用类
-
-## 9.1. Object 类
-
-Object类是所有Java类的根父类。
-
-如果一个类没有显示地继承某个类，那么这个类会默认继承Object类。
-
-Object类有一个空参构造器。
-
-Object类中有12个方法，
-其中 1 个 private，2 个protected，9 个 public；6 个 final 方法；7 个 native 方法；有三个重载方法wait方法。
-finalize 方法由 GC 在清理对象前调用一次，可以看作析构函数。
-
-```java
-public class Object {
-
-    private static native void registerNatives();
-    static {
-        registerNatives();
-    }
-
-    public String toString() {
-        return getClass().getName() + "@" + Integer.toHexString(hashCode());
-    }
-    public final native Class<?> getClass();
-
-    public boolean equals(Object obj) {
-        return (this == obj);
-    }
-    public native int hashCode();
-    
-    public final native void notify();
-    public final native void notifyAll();
-    public final void wait() throws InterruptedException {
-        wait(0);
-    }
-    public final void wait(long timeout, int nanos) throws InterruptedException {
-        if (timeout < 0) {
-            throw new IllegalArgumentException("timeout value is negative");
-        }
-
-        if (nanos < 0 || nanos > 999999) {
-            throw new IllegalArgumentException(
-                "nanosecond timeout value out of range");
-        }
-
-        if (nanos > 0) {
-            timeout++;
-        }
-
-        wait(timeout);
-    }
-    public final native void wait(long timeout) throws InterruptedException;
-
-    protected void finalize() throws Throwable {
-    }
-    
-    protected native Object clone() throws CloneNotSupportedException;
-}
-```
-
-### 9.1.1. equals方法
-
-**equals()方法需要具有如下特点：**
-
-　　**自反性（reflexive）：**任何非空引用x，x.equals(x)返回为true。
-
-　　**对称性（symmetric）：**任何非空引用x和y，x.equals(y)返回true当且仅当y.equals(x)返回true。
-
-　　**传递性（transitive）：**任何非空引用x和y，如果x.equals(y)返回true，并且y.equals(z)返回true，那么x.equals(z)返回true。
-
-　　**一致性（consistent）：**两个非空引用x和y，x.equals(y)的多次调用应该保持一致的结果，（前提条件是在多次比较之间没有修改x和y用于比较的相关信息）。
-
-　　**约定**：对于任何非空引用x，x.equals(null)应该返回为false。
-
-　　并且覆写equals()方法时，应该同时覆写hashCode()方法，反之亦然。
-
-
-
-【面试题】== 与equals的区别。
-​    答：
-​        == : 如果比较的是基本数据类型，那么比较的是变量的值（存在自动类型提升）。如果比较的是引用数据类型，那么比较的也是变量的值（地址值），即比较两个引用是否指向同一个对象。
-​        equals : 是一个方法，可以被重写。在Object类中等同于==。像String、Date等类都重写了equls方法，用来比较内容。
-
-
-
-Object类的equals方法比较两个引用所指向的是不是同一个对象。
-
-String类重写了该方法：比较字符串的内容是否相同。
-
-```java
-public boolean equals(Object anObject) {
-    if (this == anObject) {
-        return true;
-    }
-    if (anObject instanceof String) {
-        String anotherString = (String)anObject;
-        int n = value.length;
-        if (n == anotherString.value.length) {
-            char v1[] = value;
-            char v2[] = anotherString.value;
-            int i = 0;
-            while (n-- != 0) {
-                if (v1[i] != v2[i])
-                    return false;
-                i++;
-            }
-            return true;
-        }
-    }
-    return false;
-}
-```
-
-### 9.1.2. hashCode方法
-
-这个方法返回一个整型值（hash code value），如果两个对象被equals()方法判断为相等，那么它们就应该拥有同样的 hash code。
-
-Object类的hashCode()方法为不同的对象返回不同的值，Object类的hashCode值表示的是对象的地址。
-
-### 9.1.3. toString方法
-
-输出一个引用时，实际上是先默认调用了toString方法得到一个字符串，然后调用重载方法public void System.out.println(String x)。
-
-![image-20200403141045044](../images/image-20200403141045044.png) 
-
-### 9.1.4. clone方法
-
-1、���写clone方法的类必须实现 java.lang.Cloneable 接口，否则会抛出CloneNotSupportedException异常。Cloneable接口中不包含任何方法，所以实现它时只要在类声明中加上implements语句即可。
-
-```java
-public interface Cloneable {
-}
-```
-
-2、这个方法是protected修饰的，覆写clone()方法的时候需要写成public，才能让类外部的代码调用。
-
-
-
-- p1 = p  引用赋值，两个引用指向同一对象。
-
-![image-20200403144313786](../images/image-20200403144313786.png) 
-
-- p1 = (Person) p.clone()，clone是浅拷贝的
-
-![image-20200403151019992](../images/image-20200403151019992.png) 
-
-```java
-@Override
-protected Object clone() throws CloneNotSupportedException {
-    return super.clone();
-}
-```
-
-- 深拷贝
-
-![image-20200403151536701](../images/image-20200403151536701.png) 
-
-```java
-@Override
-protected Object clone() throws CloneNotSupportedException {
-    User user = (User)super.clone();
-    user.teacher = (Teacher) this.teacher.clone();
-    return user;
-}
-```
-
-- 不彻底的深拷贝
-
-![image-20200403151718701](../images/image-20200403151718701.png) 
-
-
-## 9.2. 包装类(Wrapper)
-
-![](../images/包装类.png)
-
-### 9.2.1. 基本数据类型、包装类、String之间的转换
- 
-![](../images/基本数据类型和包装类之间的转化.png)
-
-- 基本数据类型 -> 包装类：包装类的构造器，Integer integer = new Integer(a);
-- 包装类 -> 基本数据类型：调用包装类的xxxValue()方法，int a = integer.intValue();
-- 拆箱和装箱：直接赋值，Integer integer = a; int b = integer;
-- String -> 基本数据类型：调用包装类的parseXxx(String)静态方法，int a = Integer.parseInt(str);
-- String -> 包装类：包装类的构造器，Integer integer = new Integer(str);
-- 基本数据类型 -> String：调用String类的valueOf()静态方法，String str = String.valueOf(10);
-- 包装类 -> String：调用包装类的toString()方法，String str = String.valueOf(integer);
-
-### 9.2.2. 拆箱与装箱
-
-拆箱：将包装类直接赋值给基本数据类型。
-装箱：将基本数据类型直接赋值给包装类。底层是调用了valueOf方法。
-
-![](../images/拆箱装箱.png)
-
-注意String转Boolean时有个坑：只有"true"(忽略大小写)转为true，其余(包括null)转为false。这里是源码：
-```java
-public Boolean(String s) {
-    this(parseBoolean(s));
-}
-public static boolean parseBoolean(String s) {
-    return "true".equalsIgnoreCase(s);
-}
-```
-
-包装类可以自动拆箱，然后自动类型提升，然后自动装箱。看看这段代码的输出：
-```java
-@Test
-public void test01() {
-	Object ob = true ? new Integer(1) : new Double(2.0);
-	System.out.println(ob);
-	System.out.println(ob.getClass());
-}
-// 结果：
-// 1.0
-// class java.lang.Double
-```
-这个：神奇的结果。
-```java
-@Test
-public void test02() {
-	Integer i = new Integer(1);
-	Integer j = new Integer(1);
-	System.out.println(i == j);
-	
-	Integer m = 1;
-	Integer n = 1;
-	System.out.println(m == n);
-	
-	Integer x = 128;
-	Integer y = 128;
-	System.out.println(x == y);
-}
-// 结果：
-// false
-// ture
-// false 
-```
-原因：Integer m = 1; 的底层是调用了valueOf方法。当i的值在low (-128)到high (127)之间时，是不会创建对象的。在此区间以外，会创建新对象。
-```java
-public static Integer valueOf(int i) {
-    if (i >= IntegerCache.low && i <= IntegerCache.high)
-        return IntegerCache.cache[i + (-IntegerCache.low)];
-    return new Integer(i);
-}
-```
-类似的，Short也是：
-```java
-public static Short valueOf(short s) {
-    final int offset = 128;
-    int sAsInt = s;
-    if (sAsInt >= -128 && sAsInt <= 127) { // must cache
-        return ShortCache.cache[sAsInt + offset];
-    }
-    return new Short(s);
-}
-```
-
-## 9.3. String类和常量池
-1、String类被final所修饰，所有该类不能被继承。
-2、实现了Serializable接口可以被序列化，被序列化后才能在不同的进程间或前后端进行数据传输。
-3、实现了Compareable接口可以用来比较内容。
-4、实现了CharSequence接口可以用来获取字符串长度，可以获取字符串中的某个字符。
-5、String对象的创建：String s = new String("aaa"); 。
-6、字符串都放在常量池中.
-7、String的底层是一个数组：private final char value[]; 该数组被final所修饰，所以**String是一个不可变的字符序列**。修改字符串时不会在原来的字符串对象上修改，而是会创建一个新的字符串。
-
-### 9.3.1. String 的不可变性
-
-当对字符串引用重新赋值或者改变字符串的内容时，会重新创建一个字符串对象，而不会去改变原来对象的内容。
-
-通过字面量的方式给字符串赋值，字符串对象会创建在方法区的常量池当中，栈中的引用直接引用常量池地址，多个相同内容的字符串共用一个常量池中的对象。
-如果给字符串重新赋值，那么会重写在常量池中创建一个字符串对象，让栈上的引用重新指向改对象，而不会改变原来的字符串对象。
-
-### 9.3.2. String 的几种构造器
-
-```java
-// 这种就是引用间赋值，把地址值拷贝给引用变量
-// 想想在 C 中，字符串字面量代表的就是字符串的首地址值
-String str = "hello";
-
-// this.value = "".value;
-String s1 = new String();
-
-// this.value = original.value;
-// this.hash = original.hash;
-String s2 = new String(String original);
-
-// this.value = Arrays.copyOf(a, a.length)
-String s3 = new String(char[] a);
-
-// this.value = Arrays.copyOfRange(a, startIndex, startIndex+count)
-String s4 = new String(char[] a, int startIndex, int count);
-```
-- 方式一：通过字面量定义的方式。直接在常量区创建对象，将引用指向它
-- 方式二：通过new + 构造器的方式。在常量区和堆中分别创建对象，引用执行堆上的对象。
-```java
-@Test
-public void test01() {
-    String s1 = "aaa";
-    String s2 = "aaa";
-    String s3 = new String("aaa");
-    String s4 = new String("aaa");
-    System.out.println(s1 == s2);
-    System.out.println(s3 == s4);
-}
-```
-【面试题】String s = new String("aaa");在内存中创建了几个对象？
-答：如果"aaa"已经在常量池中创建了，那么创建了1个对象；如果"aaa"没有在常量池中创建过，那么创建了两个对象。堆中一个，常量池中一个。
-![](../images/String构造器.png)
-
-猜猜下面代码的运行结果：
-```java
-@Test
-public void test02() {
-	String s = "hellojava";
-	String s1 = "hello";
-	String s2 = "java";
-	// 编译时就会将字符串拼接，和s没有区别
-	String s3 = "hello" + "java";
-	// 只有有变量参与字符串拼接，
-	// 那么就会调用StringBuilder中的toString方法
-	// 创建一个新的Sting对象。
-	String s4 = s1 + "java";
-	String s5 = "hello" + s2;
-	String s6 = s1 + s2;
-	// 直接去内存中的常量池中获取该字符串对象
-	String s7 = s6.intern();
-	System.out.println(s == s3); // true
-	System.out.println(s == s4); // false
-	System.out.println(s == s5); // false
-	System.out.println(s == s6); // false
-	System.out.println(s4 == s5); // false
-	System.out.println(s4 == s6); // false
-	System.out.println(s == s7); // true
-}
-```
-结论：
-    1.常量与常量的拼接结果在常量池。且常量池中不会存在相同内容的常量。
-    2.只要其中有一个是变量，结果就在堆中。
-    3.如果拼接的结果调用intern()方法，返回值就在常量池中
-
-![](../images/字符串的不可变性.png)
-
-另外，final 常量也是编译器处理，
-```java
-@Test
-public void test4(){
-    String s1 = "javaEEhadoop";
-    String s2 = "javaEE";
-    String s3 = s2 + "hadoop";
-    System.out.println(s1 == s3);//false
-
-    final String s4 = "javaEE";//s4:常量
-    String s5 = s4 + "hadoop";
-    System.out.println(s1 == s5);//true
-}
-```
-
-### 9.3.3. String 常用 API
-**基本：**
-`int length()`：返回字符串的长度： return value.length
-`boolean isEmpty()`：判断是否是空字符串：return value.length == 0
-`String toLowerCase()`：使用默认语言环境，将 String 中的所有字符转换为小写
-`String toUpperCase()`：使用默认语言环境，将 String 中的所有字符转换为大写
-`String trim()`：返回字符串的副本，忽略前导空白和尾部空白
-**比较：**
-`boolean equals(Object obj)`：比较字符串的内容是否相同
-`boolean equalsIgnoreCase(String anotherString)`：与equals方法类似，忽略大小写
-`String concat(String str)`：将指定字符串连接到此字符串的结尾。 等价于用“+”
-`int compareTo(String anotherString)`：比较两个字符串的大小
-**截取子串**
-`char charAt(int index)`： 返回某索引处的字符return value[index]
-`String substring(int beginIndex)`：返回一个新的字符串，它是此字符串的从beginIndex开始截取到最后的一个子字符串。
-`String substring(int beginIndex, int endIndex)`：返回一个新字符串，它是此字符串从beginIndex开始截取到endIndex(不包含)的一个子字符串。
-**获取子串出现的位置：**
-`int indexOf(String str)`：返回指定子字符串在此字符串中第一次出现处的索引
-`int indexOf(String str, int fromIndex)`：返回指定子字符串在此字符串中第一次出现处的索引，从指定的索引开始
-`int lastIndexOf(String str)`：返回指定子字符串在此字符串中最右边出现处的索引
-`int lastIndexOf(String str, int fromIndex)`：返回指定子字符串在此字符串中最后一次出现处的索引，从指定的索引开始反向搜索
-注：indexOf和lastIndexOf方法如果未找到都是返回-1
-**替换：**
-`String replace(char oldChar, char newChar)`：返回一个新的字符串，它是通过用 newChar 替换此字符串中出现的所有 oldChar 得到的。
-`String replace(CharSequence target, CharSequence replacement)`：使用指定的字面值替换序列替换此字符串所有匹配字面值目标序列的子字符串。
-`String replaceAll(String regex, String replacement)`：使用给定的 replacement 替换此字符串所有匹配给定的正则表达式的子字符串。
-`String replaceFirst(String regex, String replacement)`：使用给定的 replacement 替换此字符串匹配给定的正则表达式的第一个子字符串。
-**匹配:**
-`boolean contains(CharSequence s)`：当且仅当此字符串包含指定的 char 值序列时，返回 true
-`boolean endsWith(String suffix)`：测试此字符串是否以指定的后缀结束
-`boolean startsWith(String prefix)`：测试此字符串是否以指定的前缀开始
-`boolean startsWith(String prefix, int toffset)`：测试此字符串从指定索引开始的子字符串是否以指定前缀开始
-`boolean matches(String regex)`：告知此字符串是否匹配给定的正则表达式。
-**切片：**
-`String[] split(String regex)`：根据给定正则表达式的匹配拆分此字符串。
-`String[] split(String regex, int limit)`：根据匹配给定的正则表达式来拆分此字符串，最多不超过limit个，如果超过了，剩下的全部都放到最后一个元素中。
-
-### 9.3.4. String 与其他结构的转换
-
-- **String 与基本数据类型和包装类的转换**
-[9.2.1. 基本数据类型、包装类、String之间的转换](#921-基本数据类型-包装类-string之间的转换)
-
-String --> 基本数据类型、包装类：调用包装类的静态方法：parseXxx(str)
-基本数据类型、包装类 --> String:调用String重载的valueOf(xxx)
-
-- **String 与byte[]的转换**
-编码：String --> byte[]: 调用String 的 getBytes()
-解码：byte[] --> String: 调用String 的构造器
-
-编码：字符串 --> 字节  (看得懂 ---> 看不懂的二进制数据)
-解码：编码的逆过程，字节 --> 字符串 （看不懂的二进制数据 ---> 看得懂）
-
-说明：解码时，要求解码使用的字符集必须与编码时使用的字符集一致，否则会出现乱码。
-
-```java
-@Test
-public void test3() throws UnsupportedEncodingException {
-    String str1 = "abc123中国";
-    byte[] bytes = str1.getBytes();//使用默认的字符集，进行编码。
-    System.out.println(Arrays.toString(bytes));
-
-    byte[] gbks = str1.getBytes("gbk");//使用gbk字符集进行编码。
-    System.out.println(Arrays.toString(gbks));
-
-    System.out.println("******************");
-
-    String str2 = new String(bytes);//使用默认的字符集，进行解码。
-    System.out.println(str2);
-
-    String str3 = new String(gbks);
-    System.out.println(str3);//出现乱码。原因：编码集和解码集不一致！
-
-
-    String str4 = new String(gbks, "gbk");
-    System.out.println(str4);//没有出现乱码。原因：编码集和解码集一致！
-}
-```
-
-- **String 与char[]的转换**
-String --> char[]: 调用 String 的 toCharArray()
-char[] --> String: 调用 String 的构造器
-
-```java
-@Test
-public void test2(){
-    String str1 = "abc123";  //题目： a21cb3
-
-    char[] charArray = str1.toCharArray();
-    for (int i = 0; i < charArray.length; i++) {
-        System.out.println(charArray[i]);
-    }
-
-    char[] arr = new char[]{'h','e','l','l','o'};
-    String str2 = new String(arr);
-    System.out.println(str2);
-}
-```
-
-### 9.3.5. StringBuffer 和 StringBuilder
-
-- String: 不可变的字符序列；底层使用char[]存储
-- StringBuffer: 可变的字符序列；线程安全的，效率低；底层使用char[]存储
-- StringBuilder: 可变的字符序列；线程不安全的，效率高；底层使用char[]存储，jdk5.0新增的
-
-String 是不可变的对象。在每次对 String 类型进行改变的时候其实都等同于生成了一个新的 String 对象，然后将指针指向新的 String 对象，非常耗费性能。
-StringBuffer 则是每次都会对 StringBuffer 对象本身进行操作。
-三者的效率：StringBuilder > StringBuffer > String
-
-**源码分析**
-```java
-// String 空参构造器，会创建一个长度为 0 在 char 数组
-// char[] value = new char[0];
-String str = new String();
-// 带参构造器创建相应大小的数组
-// char[] value = new char[]{'a','b','c'};
-String str1 = new String("abc");
-
-// StringBuffer 空参构造器，创建了一个长度是 16 的数组
-// char[] value = new char[16];
-StringBuffer sb1 = new StringBuffer();。
-System.out.println(sb1.length()); // 0
-sb1.append('a'); // value[0] = 'a';
-sb1.append('b'); // value[1] = 'b';
-System.out.println(sb1.length()); // 2
-// 带参构造器创建相应大小 + 16 的数组
-// char[] value = new char["abc".length() + 16];
-StringBuffer sb2 = new StringBuffer("abc");
-
-// 问题1. System.out.println(sb2.length());//3
-// 问题2. 扩容问题:如果要添加的数据底层数组盛不下了，那就需要扩容底层的数组。
-//        默认情况下，扩容为原来容量的2倍 + 2，同时将原有数组中的元素复制到新的数组中。
-// 指导意义：开发中建议大家使用：StringBuffer(int capacity) 或 StringBuilder(int capacity)
-```
-
-**StringBuffer 常用方法**
-`StringBuffer append(xxx)`：提供了很多的append()方法，用于进行字符串拼接
-`StringBuffer delete(int start, int end)`：删除指定位置的内容
-`StringBuffer replace(int start, int end, String str)`：把[start,end)位置替换为str
-`StringBuffer insert(int offset, xxx)`：在指定位置插入xxx
-`StringBuffer reverse()`：把当前字符序列逆转
-`public int indexOf(String str)`：返回指定子字符串在此字符串中第一次出现处的索引
-`public String substring(int start,int end)`：返回一个从start开始到end索引结束的左闭右开区间的子字符串
-`public int length()`
-`public char charAt(int n )`
-`public void setCharAt(int n ,char ch)`：修改索引 n 位置处的字符串为 ch
-总结：
-增：append(xxx)
-删：delete(int start,int end)
-改：setCharAt(int n ,char ch) / replace(int start, int end, String str)
-查：charAt(int n )
-插：insert(int offset, xxx)
-长度：length();
-遍历：for() + charAt() / toString()
-
-**效率对比**
-```java
-public static void main(String[] args) {
-    // 初始设置
-    long startTime = 0L;
-    long endTime = 0L;
-    String text = "";
-    StringBuffer buffer = new StringBuffer("");
-    StringBuilder builder = new StringBuilder("");
-
-    // 开始对比
-    startTime = System.currentTimeMillis();
-    for (int i = 0; i < 20000; i++) {
-        buffer.append(String.valueOf(i));
-    }
-    endTime = System.currentTimeMillis();
-    System.out.println("StringBuffer的执行时间：" + (endTime - startTime));
-
-    startTime = System.currentTimeMillis();
-    for (int i = 0; i < 20000; i++) {
-        builder.append(String.valueOf(i));
-    }
-    endTime = System.currentTimeMillis();
-    System.out.println("StringBuilder的执行时间：" + (endTime - startTime));
-
-    startTime = System.currentTimeMillis();
-    for (int i = 0; i < 20000; i++) {
-        text = text + i;
-    }
-    endTime = System.currentTimeMillis();
-    System.out.println("String的执行时间：" + (endTime - startTime));
-}
-// StringBuffer的执行时间：9
-// StringBuilder的执行时间：4
-// String的执行时间：1637
-```
-
-## 9.4. Date 类
-
-
-# 10. 接口
+# 9. 接口
 
 格式：
 
@@ -2302,11 +1752,11 @@ class C implements A, B {
 ![image-20200526193240930](../images/image-20200526193240930.png) 
 
 
-# 11. 枚举类
+# 10. 枚举类
 
 枚举类：一个类的对象的数量是可数的有限个数，这样的类叫做枚举类。(单例模式？)
 
-## 11.1. 自定义枚举类
+## 10.1. 自定义枚举类
 
 jdk1.5以前我们这样玩：
 ```java
@@ -2346,7 +1796,7 @@ final class Season {
 // 3 冬天 
 ```
 
-## 11.2. enum关键字
+## 10.2. enum关键字
 
 jdk1.5引入了enum关键字，我们就可以这样玩了：
 ```java
@@ -2375,7 +1825,7 @@ enum Season{
 }
 ```
 
-## 11.3. 枚举类中的常用方法
+## 10.3. 枚举类中的常用方法
 
 enum关键字定义的枚举类会帮我们自动继承Enum类，并创建我们指定名字的那些本类的静态对象。其底层原理和前面的自定义枚举类原理差不多。
 可以看看这篇 https://blog.csdn.net/javazejian/article/details/71333103
@@ -2383,7 +1833,7 @@ enum关键字定义的枚举类会帮我们自动继承Enum类，并创建我们
 values()方法：返回枚举类型的对象数组。该方法可以很方便地遍历所有的枚举值。
 valueOf(String str)方法：可以把一个字符串转化为对应的枚举类对象。要求字符串必须是枚举类对象的名字。如果不是，则会抛出IllegalArgumenException异常
 
-## 11.4. 实现接口的枚举类
+## 10.4. 实现接口的枚举类
 
 枚举类可以用来实现接口。
 它可以像普通的类一样实现接口：
@@ -2447,9 +1897,9 @@ enum Season implements I{
 ```
 
 
-# 12. 注解
+# 11. 注解
 
-## 12.1. jdk内置的三个常用注解
+## 11.1. jdk内置的三个常用注解
  
 @Override：限定重写父类或者接口的方法，该注解只能用于方法。
 @Deprecated：用于表示某个程序结构(类、方法、属性、构造器等)已过时。
@@ -2457,7 +1907,7 @@ enum Season implements I{
 `@SuppressWarnings("unused") : The value of the local variable a is not used`
 
 
-## 12.2. 自定义注解
+## 11.2. 自定义注解
 ```java
 格式：@interface 注解名 {
 }
@@ -2481,7 +1931,7 @@ class SuperClass {
 如一个注解内仅只有一个成员变量且名字为 value 的属性时，应用这个注解时可直接写属性值到括号内。
 注解没有任何属性，或者属性都使用默认值，括号都可以省略。
 
-## 12.3. 元注解
+## 11.3. 元注解
 元注解：可以理解成注解上的注解。元注解是用来给注解进行补充说明的。
  
 - **@Target：目标**。用来指定注解可以使用在说明类型的结构上：属性、方法、类等。
@@ -2530,9 +1980,9 @@ public enum RetentionPolicy {
 如果定义一个注解 @A 时使用了@Inherited 修饰的，那么 @A 被用于修饰一个类 C，则这个注解 @A 将被继承给类 C 的子类。
 
 
-# 13. 异常体系结构
+# 12. 异常体系结构
 
-## 13.1. Exception和Error
+## 12.1. Exception和Error
 异常：在Java语言中，将程序执行过程中发生的不正常情况称为异常。（开发过程中的语法错误和逻辑错误不是异常）
 Error错误：Java虚拟机无法解决的严重问题。如，JVM系统内部错误、资源耗尽等严重情况。比如，StackOverflowError和OOM（什么是OOM？OutOfMemoryError：程序申请内存过大，虚拟机无法满足我们，然后自杀了）。一般不编写针对性代码进行处理。
 Exception异常：其他因编程错误或偶然的外在因素导致的一般性问题，可以使用针对性的代码进行处理。
@@ -2566,7 +2016,7 @@ int[] p = new int[1024 * 1024 * 1024];
             |-- ...
 ```
 
-## 13.2. try – catch – finally
+## 12.2. try – catch – finally
 ``` java
 try {
     可能会发生异常的代码
@@ -2616,14 +2066,14 @@ public class FinallyTest {
 ```
 原因：函数的信息存储在栈帧中，函数的返回值也是放在栈帧的一个位置上。return语句会将返回值放在该位置上，并终止本层函数，返回上一层调用。return了两次，后一次值覆盖了前一次值。
 
-## 13.3. throws
+## 12.3. throws
 格式：方法名(形参列表) throws 异常类型1, 异常类型2, … { 方法体 }
 
 throws并没有真正处理掉异常，而是将异常向上抛出，抛给方法的调用者，由其处理。
 如果父类被重写方法没有抛出异常，那么子类重写方法也不能抛出异常。
 子类重写方法所抛出的异常不大于父类被重写方法所抛出的异常。
 
-## 13.4. throw
+## 12.4. throw
 格式：throw 异常类对象;
 一般throw编译时异常的时候，我们都使用throws将其抛给上层方法处理。
 
@@ -2650,7 +2100,7 @@ static void show () {
 // 哈哈
 ```
 
-## 13.5. 自定义异常类
+## 12.5. 自定义异常类
 
 ```java
 public class MyException extends Exception {
@@ -2661,17 +2111,17 @@ public class MyException extends Exception {
 ![](../images/异常处理总结.png)
 
 
-# 14. 多线程
-## 14.1. 程序、进程、线程
+# 13. 多线程
+## 13.1. 程序、进程、线程
 程序：是为完成特定任务、用某种语言编写的一组指令的有序集合。是指一段静态的代码。
 进程：是一个程序在一个数据集合上的一次运行。是操作系统分配资源的最小单位。进程具有生命周期，是一个动态的过程。
 线程：是进程的一个实体，是进程内部的一条执行路径。是处理器调度的基本单位。
 
 一个Java应用至少有三个线程：main主线程、GC垃圾回收线程、异常处理线程。
 
-## 14.2. 线程的使用
+## 13.2. 线程的使用
 
-### 14.2.1. 创建线程方法一：继承Thread类
+### 13.2.1. 创建线程方法一：继承Thread类
 ```java
 // 1、继承 Thread 类
 class MyThread extends Thread {
@@ -2731,7 +2181,7 @@ new Thread("t1") {
 10、	isAlive()：判断线程是否存活。
 
 
-### 14.2.2. 创建线程方法二：实现Runnable接口
+### 13.2.2. 创建线程方法二：实现Runnable接口
 ```java
 // 1、实现 Runnable 接口
 class MyRunnable implements Runnable {
@@ -2761,7 +2211,7 @@ public class RunnableTest {
 推荐使用实现Runnable接口的方式，因为继承是is-a的关系。一个类不应该is-a线程，正确的应该是一个类具有多线程运行的功能。第二，通过Runnable实现类创建几个线程对象，这些线程共享一个Runnable实现类对象，该对象的成员变量由所有线程共享。
 Thread本身也是实现了Runnable接口：public class Thread implements Runnable
 
-### 14.2.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）
+### 13.2.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）
 
 与 Runnable 相比 Callable 接口：
 1. 相比 run() 方法，call() 方法可以用返回值
@@ -2830,7 +2280,7 @@ public class CallableTest {
 ```
 
 
-### 14.2.4. 线程的调度
+### 13.2.4. 线程的调度
 时间片轮转：时间片到，放弃CPU
 优先级调度：高优先级线程先使用CPU
 Java的调度策略：同级线程先来先服务，使用时间片轮转；高优先级线程优先调度。
@@ -2841,7 +2291,7 @@ NORM_PRIORITY 	5	默认的
 MAX_PRIORITY 	10
 
 
-## 14.3. 线程的生命周期
+## 13.3. 线程的生命周期
 ```java
 public enum State {
 NEW,
@@ -2863,9 +2313,9 @@ TIMED_WAITING,
 
 ![](../images/线程的生命周期.png)
 
-## 14.4. 线程同步
+## 13.4. 线程同步
 
-### 14.4.1. 同步代码块
+### 13.4.1. 同步代码块
 
 ```java
 synchronization(同步监视器) {
@@ -2956,12 +2406,12 @@ class WindowThreadTest {
 
 为了方便起见，锁可以直接使用 **this 对象** 或者 **getClass() / 类名.class**
 
-### 14.4.2. 同步方法
+### 13.4.2. 同步方法
 
 如果整个方法都是临界区，不妨把改方法声明为同步方法。
 非静态同步方法的锁是 this；静态方法的锁是当前类。
 
-### 14.4.3. 同步锁 (jdk5.0 新增)
+### 13.4.3. 同步锁 (jdk5.0 新增)
 
 java.util.concurrent.locks.Lock 接口
 ```java
@@ -3034,7 +2484,7 @@ class WindowRunnableTest {
 
 参考：https://www.jianshu.com/p/b343a9637f95
 
-### 14.4.4. 死锁
+### 13.4.4. 死锁
 
 定义：两个或两个以上的进程/线程，在并发运行的情况下，因为竞争多个互斥资源，而造成它们互相等待对方无法释放的资源的现象，这种现象在无外力的作用时不可解除。
 
@@ -3052,9 +2502,9 @@ class WindowRunnableTest {
 
 参考：https://blog.csdn.net/hd12370/article/details/82814348
 
-## 14.5. 线程通讯
+## 13.5. 线程通讯
 
-### 14.5.1. PV 操作
+### 13.5.1. PV 操作
 
 ```java
 int S = 1;
@@ -3090,7 +2540,7 @@ V（S）；             V（S）；                     V（S）；
 参考：https://www.cnblogs.com/litaoyang/p/6606499.html
 
 
-### 14.5.2. 两个线程交替打印 1~100
+### 13.5.2. 两个线程交替打印 1~100
 
 wait()：执行改方法的线程进入阻塞状态，并释放同步监视器
 notify()：唤醒一个被wait的线程，多个线程按照优先级最高的被唤醒
@@ -3163,7 +2613,7 @@ public class ThreadCommunication {
 }
 ```
 
-### 14.5.3. 生产者消费者问题
+### 13.5.3. 生产者消费者问题
 
 ![](../images/生产者消费者问题.png)
 
@@ -3295,7 +2745,7 @@ public class ProductorCustomer {
 }
 ```
 
-## 14.6. 创建线程方法四：线程池
+## 13.6. 创建线程方法四：线程池
 
 好处：
 1. 便于管理线程
@@ -3312,7 +2762,7 @@ public interface Executor {
 ```
 ExecutorService 是线程池接口，常见实现类有 ThreadPoolExecutor。
 
-### 14.6.1. 几种常用的线程池
+### 13.6.1. 几种常用的线程池
 
 Executors 是一个工具类，线程池工厂，用于创建并返回不同类型的线程池。
 在 java.util.concurrent.Executors 中提供了一些方法去创建四种不同的线程池，这些方法实际上都是调用了 ThreadPoolExecutor 的构造器。返回值是线程池接口 ExecutorService。
@@ -3345,7 +2795,7 @@ scheduleAtFixedRate() ：按某种速率周期执行
 scheduleWithFixedDelay()：在某个延迟后执行
 周期性执行任务的场景，需要限制线程数量的场景
 
-### 14.6.2. 线程池各个参数的作用，如何进行的?
+### 13.6.2. 线程池各个参数的作用，如何进行的?
 
 **ThreadPoolExecutor 构造器**
 ```java
@@ -3371,14 +2821,14 @@ public ThreadPoolExecutor(
 3. DiscardOldestPolicy：丢弃队列里最老的任务，将当前这个任务继续提交给线程池
 4. CallerRunsPolicy：交给线程池调用所在的线程进行处理
 
-### 14.6.3. 线程池异常处理
+### 13.6.3. 线程池异常处理
 
 1. try - catch 处理
 2. 通过 Future 对象的 get 方法接收抛出的异常，再处理
 3. 使用自己的ThreadFactory，创建线程时设置线程的 UncaughtExceptionHandler，在 uncaughtException方法中处理异常
 4. 重写 ThreadPoolExecutor 的 afterExecute方法，处理传递的异常引用
 
-### 14.6.4. 线程池的工作队列
+### 13.6.4. 线程池的工作队列
 
 1. ArrayBlockingQueue：有界队列，用数组实现的，FIFO
 2. LinkedBlockingQueue：可设置容量队列，基于链表，FIFO，不设置容量则无限扩大，最大为 Integer.MAX_VALUE
@@ -3386,7 +2836,7 @@ public ThreadPoolExecutor(
 4. PriorityBlockingQueue：优先级队列
 5. SynchronousQueue：同步队列，插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
 
-### 14.6.5. 线程池状态
+### 13.6.5. 线程池状态
 
 1. **Running**
 该状态的线程池会接收新任务，并处理阻塞队列中的任务;
@@ -3408,7 +2858,7 @@ terminated() 执行完毕，进入 Terminated 状态
 5. **Terminated**
 该状态表示线程池彻底终止
 
-### 14.6.6. 使用方法
+### 13.6.6. 使用方法
 
 execute 用来执行 Runnable 实现类；submit 用来执行 Callable 实现类。
 ```java
@@ -3454,14 +2904,14 @@ public static void main(String[] args) {
 }
 ```
 
-# 15. 反射
+# 14. 反射
 
-## 15.1. 动态语言
+## 14.1. 动态语言
 
 动态语言，是指程序在运行时可以改变其结构：新的函数可以引进，已有的函数可以被删除等结构上的变化。
 比如常见的 JavaScript 就是动态语言，除此之外 Ruby,Python 等也属于动态语言，而 C、C++则不属于动态语言。从反射角度说 JAVA 属于半动态语言。
 
-## 15.2. 反射机制
+## 14.2. 反射机制
 
 反射：运行状态中知道类所有的属性和方法等。
 反射：主要是指程序可以访问，检测和修改它本身状态或行为的一种能力，并能根据自身行为的状态和结果，调整或修改应用所描述行为的状态和相关的语义。
@@ -3475,7 +2925,7 @@ Java 的反射：在运行状态中，对于任意一个类都能够知道这个
 4. 在运行时调用任意一个对象的方法；
 5. 生成动态代理。
 
-## 15.3. Java 反射 API
+## 14.3. Java 反射 API
 
 ```java
 // 类
@@ -3498,7 +2948,7 @@ java.lang.reflect.Modifier;
 （2）使用反射相对来说不安全
 （3）破坏了类的封装性，可以通过反射获取这个类的私有方法和属性
 
-### 15.3.1. 获取 Class 对象的三种方法
+### 14.3.1. 获取 Class 对象的三种方法
 
 1. 调用某个对象的 getClass() 方法，getClass() 在 Object 中
 ```java
@@ -3514,7 +2964,7 @@ Class clazz = Person.class;
 Class clazz = Class.forName("类的全路径"); (最常用)
 ```
 
-### 15.3.2. Class 类常用方法
+### 14.3.2. Class 类常用方法
 
 ```java
 // 获取全限定类名
@@ -3543,7 +2993,7 @@ public Method[] getDeclaredMethods()
 public T newInstance()
 ```
 
-### 15.3.3. 创建对象的两种方式
+### 14.3.3. 创建对象的两种方式
 
 1. 使用 Class 对象的 newInstance()方法来创建该 Class 对象对应类的实例，但是这种方法要求该 Class 对象对应的类有默认的空构造器。
 ```java
@@ -3557,7 +3007,7 @@ Constructor c = clazz.getDeclaredConstructor(String.class, String.class, int.cla
 Person p = (Person) c.newInstance("李四", "男", 20);
 ```
 
-### 15.3.4. 调用方法和设置属性
+### 14.3.4. 调用方法和设置属性
 
 调用方法：使用 Method 类的 invoke 方法
 ```java
@@ -3572,12 +3022,12 @@ public void set(Object obj, Object value)
 第一个参数是一个对象的引用，用来指明设置哪个对象属性。
 
 
-# 16. 泛型
+# 15. 泛型
 
 Java 泛型（generics）是 JDK 5 中引入的一个新特性, 泛型提供了**编译时**类型安全检测机制，该机制允许程序员在**编译时**检测到非法的类型。
 泛型的本质是参数化类型，也就是说所操作的数据类型被指定为一个参数。
 
-## 16.1. 泛型方法
+## 15.1. 泛型方法
 
 - 在方法的返回值前面，在尖括号中可以声明类型参数，多个类型参数用逗号隔开。
 - 类型参数必须先声明后使用。
@@ -3614,7 +3064,7 @@ public static void main( String args[] )
 - `<? extends T>` 表示该通配符所代表的类型是 T 类型的子类。
 - `<? super T>` 表示该通配符所代表的类型是 T 类型的父类。
 
-# 17. 序列化
+# 16. 序列化
 
 **序列化**是把对象改成可以存到磁盘或通过网络发送到其他运行中的 Java 虚拟机的二进制格式的过程, 并可以通过反序列化恢复对象状态。需要实现 `java.io.Serializable` 接口。**序列化保存的时对象的状态，瞬态和静态变量会不会得到序列化**
 
@@ -3622,7 +3072,7 @@ public static void main( String args[] )
 
 序列化可以看作是深拷贝的一种实现。
 
-## 17.1. 序列化相关问题
+## 16.1. 序列化相关问题
 
 【1、Java 中的可序列化接口和可外部接口之间的区别是什么？】
 Externalizable 给我们提供 writeExternal() 和 readExternal() 方法, 这让我们灵活地控制 Java 序列化机制, 而不是依赖于 Java 的默认序列化。 正确实现 Externalizable 接口可以显著提高应用程序的性能。
@@ -3651,7 +3101,7 @@ Externalizable 给我们提供 writeExternal() 和 readExternal() 方法, 这让
 由于序列化仅保留**对象的状态**而不是对象本身，瞬态变量也不包含在 Java 序列化过程中。
 
 
-# 18. 集合
+# 17. 集合
 
 ![img](../images/集合.gif)
 
@@ -3683,7 +3133,7 @@ Externalizable 给我们提供 writeExternal() 和 readExternal() 方法, 这让
 
 综上：List（有序可重复）、Set（无序不能重复）、Map（键值对：键唯一，值可重复）
 
-## 18.1. List
+## 17.1. List
 
 ![](../images/ArrayListVectorLinkedList.png)
 
@@ -3731,7 +3181,7 @@ public class Vector<E>
 ​	1、ArrayList是非同步的；Vector是同步的。可以使用Collections工具类来构建出同步的ArrayList。
 ​	2、Vector 每次增长原来的一倍，ArrayList 每次增长原来的0.5倍。
 
-## 18.2. Set
+## 17.2. Set
 
 HashSet、TreeSet、LinkedHashSet
 所有的 Set 都是基于 Map 实现的。
@@ -3755,7 +3205,7 @@ if (e != null) { // existing mapping for key
 }
 ```
 
-## 18.3. Map 集合
+## 17.3. Map 集合
 
 ![](../images/HashMapHashTableTreeMap.png)
 
@@ -3791,7 +3241,7 @@ public class Hashtable<K,V>
     implements Map<K,V>, Cloneable, java.io.Serializable {}
 ```
 
-## 18.4. 集合遍历方式
+## 17.4. 集合遍历方式
 1. Iterator：迭代输出，是使用最多的输出方式。
 2. ListIterator：是Iterator的子接口，专门用于输出List中的内容。
 3. foreach输出：JDK1.5之后提供的新功能，可以输出数组或集合。
@@ -3865,7 +3315,7 @@ public static void main(String[] args) {
 ```
 
 
-# 19. IO
+# 18. IO
 
 ![](../images/IO.png)
 
@@ -3875,11 +3325,675 @@ InputStream f = new FileInputStream("C:/java/hello");
 OutputStream f = new FileOutputStream("C:/java/hello")
 ```
 
-# 20. NIO
+# 19. NIO
 
 Non-blocking I/O 是一种同步非阻塞的I/O模型，也是I/O多路复用的基础，已经被越来越多地应用到大型应用服务器，成为解决高并发与大量连接、I/O处理问题的有效方式。
 
 https://zhuanlan.zhihu.com/p/23488863
+
+
+# 20. Java 常用类
+
+## 20.1. Object 类
+
+Object类是所有Java类的根父类。
+
+如果一个类没有显示地继承某个类，那么这个类会默认继承Object类。
+
+Object类有一个空参构造器。
+
+Object类中有12个方法，
+其中 1 个 private，2 个protected，9 个 public；6 个 final 方法；7 个 native 方法；有三个重载方法wait方法。
+finalize 方法由 GC 在清理对象前调用一次，可以看作析构函数。
+
+```java
+public class Object {
+
+    private static native void registerNatives();
+    static {
+        registerNatives();
+    }
+
+    public String toString() {
+        return getClass().getName() + "@" + Integer.toHexString(hashCode());
+    }
+    public final native Class<?> getClass();
+
+    public boolean equals(Object obj) {
+        return (this == obj);
+    }
+    public native int hashCode();
+    
+    public final native void notify();
+    public final native void notifyAll();
+    public final void wait() throws InterruptedException {
+        wait(0);
+    }
+    public final void wait(long timeout, int nanos) throws InterruptedException {
+        if (timeout < 0) {
+            throw new IllegalArgumentException("timeout value is negative");
+        }
+
+        if (nanos < 0 || nanos > 999999) {
+            throw new IllegalArgumentException(
+                "nanosecond timeout value out of range");
+        }
+
+        if (nanos > 0) {
+            timeout++;
+        }
+
+        wait(timeout);
+    }
+    public final native void wait(long timeout) throws InterruptedException;
+
+    protected void finalize() throws Throwable {
+    }
+    
+    protected native Object clone() throws CloneNotSupportedException;
+}
+```
+
+### 20.1.1. equals方法
+
+**equals()方法需要具有如下特点：**
+
+　　**自反性（reflexive）：**任何非空引用x，x.equals(x)返回为true。
+
+　　**对称性（symmetric）：**任何非空引用x和y，x.equals(y)返回true当且仅当y.equals(x)返回true。
+
+　　**传递性（transitive）：**任何非空引用x和y，如果x.equals(y)返回true，并且y.equals(z)返回true，那么x.equals(z)返回true。
+
+　　**一致性（consistent）：**两个非空引用x和y，x.equals(y)的多次调用应该保持一致的结果，（前提条件是在多次比较之间没有修改x和y用于比较的相关信息）。
+
+　　**约定**：对于任何非空引用x，x.equals(null)应该返回为false。
+
+　　并且覆写equals()方法时，应该同时覆写hashCode()方法，反之亦然。
+
+
+
+【面试题】== 与equals的区别。
+​    答：
+​        == : 如果比较的是基本数据类型，那么比较的是变量的值（存在自动类型提升）。如果比较的是引用数据类型，那么比较的也是变量的值（地址值），即比较两个引用是否指向同一个对象。
+​        equals : 是一个方法，可以被重写。在Object类中等同于==。像String、Date等类都重写了equls方法，用来比较内容。
+
+
+
+Object类的equals方法比较两个引用所指向的是不是同一个对象。
+
+String类重写了该方法：比较字符串的内容是否相同。
+
+```java
+public boolean equals(Object anObject) {
+    if (this == anObject) {
+        return true;
+    }
+    if (anObject instanceof String) {
+        String anotherString = (String)anObject;
+        int n = value.length;
+        if (n == anotherString.value.length) {
+            char v1[] = value;
+            char v2[] = anotherString.value;
+            int i = 0;
+            while (n-- != 0) {
+                if (v1[i] != v2[i])
+                    return false;
+                i++;
+            }
+            return true;
+        }
+    }
+    return false;
+}
+```
+
+### 20.1.2. hashCode方法
+
+这个方法返回一个整型值（hash code value），如果两个对象被equals()方法判断为相等，那么它们就应该拥有同样的 hash code。
+
+Object类的hashCode()方法为不同的对象返回不同的值，Object类的hashCode值表示的是对象的地址。
+
+### 20.1.3. toString方法
+
+输出一个引用时，实际上是先默认调用了toString方法得到一个字符串，然后调用重载方法public void System.out.println(String x)。
+
+![image-20200403141045044](../images/image-20200403141045044.png) 
+
+### 20.1.4. clone方法
+
+1、想要重写clone方法的类必须实现 java.lang.Cloneable 接口，否则会抛出CloneNotSupportedException异常。Cloneable接口中不包含任何方法，所以实现它时只要在类声明中加上implements语句即可。
+
+```java
+public interface Cloneable {
+}
+```
+
+2、这个方法是protected修饰的，覆写clone()方法的时候需要写成public，才能让类外部的代码调用。
+
+- p1 = p  引用赋值，两个引用指向同一对象。
+
+![image-20200403144313786](../images/image-20200403144313786.png) 
+
+- p1 = (Person) p.clone()，clone是浅拷贝的
+
+![image-20200403151019992](../images/image-20200403151019992.png) 
+
+```java
+@Override
+protected Object clone() throws CloneNotSupportedException {
+    return super.clone();
+}
+```
+
+- 深拷贝
+
+![image-20200403151536701](../images/image-20200403151536701.png) 
+
+```java
+@Override
+protected Object clone() throws CloneNotSupportedException {
+    User user = (User)super.clone();
+    user.teacher = (Teacher) this.teacher.clone();
+    return user;
+}
+```
+
+- 不彻底的深拷贝
+
+![image-20200403151718701](../images/image-20200403151718701.png) 
+
+
+## 20.2. 包装类(Wrapper)
+
+![](../images/包装类.png)
+
+### 20.2.1. 基本数据类型、包装类、String之间的转换
+ 
+![](../images/基本数据类型和包装类之间的转化.png)
+
+- 基本数据类型 -> 包装类：包装类的构造器，Integer integer = new Integer(a);
+- 包装类 -> 基本数据类型：调用包装类的xxxValue()方法，int a = integer.intValue();
+- 拆箱和装箱：直接赋值，Integer integer = a; int b = integer;
+- String -> 基本数据类型：调用包装类的parseXxx(String)静态方法，int a = Integer.parseInt(str);
+- String -> 包装类：包装类的构造器，Integer integer = new Integer(str);
+- 基本数据类型 -> String：调用String类的valueOf()静态方法，String str = String.valueOf(10);
+- 包装类 -> String：调用包装类的toString()方法，String str = String.valueOf(integer);
+
+### 20.2.2. 拆箱与装箱
+
+拆箱：将包装类直接赋值给基本数据类型。
+装箱：将基本数据类型直接赋值给包装类。底层是调用了valueOf方法。
+
+![](../images/拆箱装箱.png)
+
+注意String转Boolean时有个坑：只有"true"(忽略大小写)转为true，其余(包括null)转为false。这里是源码：
+```java
+public Boolean(String s) {
+    this(parseBoolean(s));
+}
+public static boolean parseBoolean(String s) {
+    return "true".equalsIgnoreCase(s);
+}
+```
+
+包装类可以自动拆箱，然后自动类型提升，然后自动装箱。看看这段代码的输出：
+```java
+@Test
+public void test01() {
+	Object ob = true ? new Integer(1) : new Double(2.0);
+	System.out.println(ob);
+	System.out.println(ob.getClass());
+}
+// 结果：
+// 1.0
+// class java.lang.Double
+```
+这个：神奇的结果。
+```java
+@Test
+public void test02() {
+	Integer i = new Integer(1);
+	Integer j = new Integer(1);
+	System.out.println(i == j);
+	
+	Integer m = 1;
+	Integer n = 1;
+	System.out.println(m == n);
+	
+	Integer x = 128;
+	Integer y = 128;
+	System.out.println(x == y);
+}
+// 结果：
+// false
+// ture
+// false 
+```
+原因：Integer m = 1; 的底层是调用了valueOf方法。当i的值在low (-128)到high (127)之间时，是不会创建对象的。在此区间以外，会创建新对象。
+```java
+public static Integer valueOf(int i) {
+    if (i >= IntegerCache.low && i <= IntegerCache.high)
+        return IntegerCache.cache[i + (-IntegerCache.low)];
+    return new Integer(i);
+}
+```
+类似的，Short也是：
+```java
+public static Short valueOf(short s) {
+    final int offset = 128;
+    int sAsInt = s;
+    if (sAsInt >= -128 && sAsInt <= 127) { // must cache
+        return ShortCache.cache[sAsInt + offset];
+    }
+    return new Short(s);
+}
+```
+
+## 20.3. String类和常量池
+1、String类被final所修饰，所有该类不能被继承。
+2、实现了Serializable接口可以被序列化，被序列化后才能在不同的进程间或前后端进行数据传输。
+3、实现了Compareable接口可以用来比较内容。
+4、实现了CharSequence接口可以用来获取字符串长度，可以获取字符串中的某个字符。
+5、String对象的创建：String s = new String("aaa"); 。
+6、字符串都放在常量池中.
+7、String的底层是一个数组：private final char value[]; 该数组被final所修饰，所以**String是一个不可变的字符序列**。修改字符串时不会在原来的字符串对象上修改，而是会创建一个新的字符串。
+
+### 20.3.1. String 的不可变性
+
+当对字符串引用重新赋值或者改变字符串的内容时，会重新创建一个字符串对象，而不会去改变原来对象的内容。
+
+通过字面量的方式给字符串赋值，字符串对象会创建在方法区的常量池当中，栈中的引用直接引用常量池地址，多个相同内容的字符串共用一个常量池中的对象。
+如果给字符串重新赋值，那么会重写在常量池中创建一个字符串对象，让栈上的引用重新指向改对象，而不会改变原来的字符串对象。
+
+### 20.3.2. String 的几种构造器
+
+```java
+// 这种就是引用间赋值，把地址值拷贝给引用变量
+// 想想在 C 中，字符串字面量代表的就是字符串的首地址值
+String str = "hello";
+
+// this.value = "".value;
+String s1 = new String();
+
+// this.value = original.value;
+// this.hash = original.hash;
+String s2 = new String(String original);
+
+// this.value = Arrays.copyOf(a, a.length)
+String s3 = new String(char[] a);
+
+// this.value = Arrays.copyOfRange(a, startIndex, startIndex+count)
+String s4 = new String(char[] a, int startIndex, int count);
+```
+- 方式一：通过字面量定义的方式。直接在常量区创建对象，将引用指向它
+- 方式二：通过new + 构造器的方式。在常量区和堆中分别创建对象，引用执行堆上的对象。
+```java
+@Test
+public void test01() {
+    String s1 = "aaa";
+    String s2 = "aaa";
+    String s3 = new String("aaa");
+    String s4 = new String("aaa");
+    System.out.println(s1 == s2);
+    System.out.println(s3 == s4);
+}
+```
+【面试题】String s = new String("aaa");在内存中创建了几个对象？
+答：如果"aaa"已经在常量池中创建了，那么创建了1个对象；如果"aaa"没有在常量池中创建过，那么创建了两个对象。堆中一个，常量池中一个。
+![](../images/String构造器.png)
+
+猜猜下面代码的运行结果：
+```java
+@Test
+public void test02() {
+	String s = "hellojava";
+	String s1 = "hello";
+	String s2 = "java";
+	// 编译时就会将字符串拼接，和s没有区别
+	String s3 = "hello" + "java";
+	// 只有有变量参与字符串拼接，
+	// 那么就会调用StringBuilder中的toString方法
+	// 创建一个新的Sting对象。
+	String s4 = s1 + "java";
+	String s5 = "hello" + s2;
+	String s6 = s1 + s2;
+	// 直接去内存中的常量池中获取该字符串对象
+	String s7 = s6.intern();
+	System.out.println(s == s3); // true
+	System.out.println(s == s4); // false
+	System.out.println(s == s5); // false
+	System.out.println(s == s6); // false
+	System.out.println(s4 == s5); // false
+	System.out.println(s4 == s6); // false
+	System.out.println(s == s7); // true
+}
+```
+结论：
+    1.常量与常量的拼接结果在常量池。且常量池中不会存在相同内容的常量。
+    2.只要其中有一个是变量，结果就在堆中。
+    3.如果拼接的结果调用intern()方法，返回值就在常量池中
+
+![](../images/字符串的不可变性.png)
+
+另外，final 常量也是编译器处理，
+```java
+@Test
+public void test4(){
+    String s1 = "javaEEhadoop";
+    String s2 = "javaEE";
+    String s3 = s2 + "hadoop";
+    System.out.println(s1 == s3);//false
+
+    final String s4 = "javaEE";//s4:常量
+    String s5 = s4 + "hadoop";
+    System.out.println(s1 == s5);//true
+}
+```
+
+### 20.3.3. String 常用 API
+**基本：**
+`int length()`：返回字符串的长度： return value.length
+`boolean isEmpty()`：判断是否是空字符串：return value.length == 0
+`String toLowerCase()`：使用默认语言环境，将 String 中的所有字符转换为小写
+`String toUpperCase()`：使用默认语言环境，将 String 中的所有字符转换为大写
+`String trim()`：返回字符串的副本，忽略前导空白和尾部空白
+**比较：**
+`boolean equals(Object obj)`：比较字符串的内容是否相同
+`boolean equalsIgnoreCase(String anotherString)`：与equals方法类似，忽略大小写
+`String concat(String str)`：将指定字符串连接到此字符串的结尾。 等价于用“+”
+`int compareTo(String anotherString)`：比较两个字符串的大小
+**截取子串**
+`char charAt(int index)`： 返回某索引处的字符return value[index]
+`String substring(int beginIndex)`：返回一个新的字符串，它是此字符串的从beginIndex开始截取到最后的一个子字符串。
+`String substring(int beginIndex, int endIndex)`：返回一个新字符串，它是此字符串从beginIndex开始截取到endIndex(不包含)的一个子字符串。
+**获取子串出现的位置：**
+`int indexOf(String str)`：返回指定子字符串在此字符串中第一次出现处的索引
+`int indexOf(String str, int fromIndex)`：返回指定子字符串在此字符串中第一次出现处的索引，从指定的索引开始
+`int lastIndexOf(String str)`：返回指定子字符串在此字符串中最右边出现处的索引
+`int lastIndexOf(String str, int fromIndex)`：返回指定子字符串在此字符串中最后一次出现处的索引，从指定的索引开始反向搜索
+注：indexOf和lastIndexOf方法如果未找到都是返回-1
+**替换：**
+`String replace(char oldChar, char newChar)`：返回一个新的字符串，它是通过用 newChar 替换此字符串中出现的所有 oldChar 得到的。
+`String replace(CharSequence target, CharSequence replacement)`：使用指定的字面值替换序列替换此字符串所有匹配字面值目标序列的子字符串。
+`String replaceAll(String regex, String replacement)`：使用给定的 replacement 替换此字符串所有匹配给定的正则表达式的子字符串。
+`String replaceFirst(String regex, String replacement)`：使用给定的 replacement 替换此字符串匹配给定的正则表达式的第一个子字符串。
+**匹配:**
+`boolean contains(CharSequence s)`：当且仅当此字符串包含指定的 char 值序列时，返回 true
+`boolean endsWith(String suffix)`：测试此字符串是否以指定的后缀结束
+`boolean startsWith(String prefix)`：测试此字符串是否以指定的前缀开始
+`boolean startsWith(String prefix, int toffset)`：测试此字符串从指定索引开始的子字符串是否以指定前缀开始
+`boolean matches(String regex)`：告知此字符串是否匹配给定的正则表达式。
+**切片：**
+`String[] split(String regex)`：根据给定正则表达式的匹配拆分此字符串。
+`String[] split(String regex, int limit)`：根据匹配给定的正则表达式来拆分此字符串，最多不超过limit个，如果超过了，剩下的全部都放到最后一个元素中。
+
+### 20.3.4. String 与其他结构的转换
+
+- **String 与基本数据类型和包装类的转换**
+[基本数据类型、包装类、String之间的转换](#921-基本数据类型-包装类-string之间的转换)
+
+String --> 基本数据类型、包装类：调用包装类的静态方法：parseXxx(str)
+基本数据类型、包装类 --> String:调用String重载的valueOf(xxx)
+
+- **String 与byte[]的转换**
+编码：String --> byte[]: 调用String 的 getBytes()
+解码：byte[] --> String: 调用String 的构造器
+
+编码：字符串 --> 字节  (看得懂 ---> 看不懂的二进制数据)
+解码：编码的逆过程，字节 --> 字符串 （看不懂的二进制数据 ---> 看得懂）
+
+说明：解码时，要求解码使用的字符集必须与编码时使用的字符集一致，否则会出现乱码。
+
+```java
+@Test
+public void test3() throws UnsupportedEncodingException {
+    String str1 = "abc123中国";
+    byte[] bytes = str1.getBytes();//使用默认的字符集，进行编码。
+    System.out.println(Arrays.toString(bytes));
+
+    byte[] gbks = str1.getBytes("gbk");//使用gbk字符集进行编码。
+    System.out.println(Arrays.toString(gbks));
+
+    System.out.println("******************");
+
+    String str2 = new String(bytes);//使用默认的字符集，进行解码。
+    System.out.println(str2);
+
+    String str3 = new String(gbks);
+    System.out.println(str3);//出现乱码。原因：编码集和解码集不一致！
+
+
+    String str4 = new String(gbks, "gbk");
+    System.out.println(str4);//没有出现乱码。原因：编码集和解码集一致！
+}
+```
+
+- **String 与char[]的转换**
+String --> char[]: 调用 String 的 toCharArray()
+char[] --> String: 调用 String 的构造器
+
+```java
+@Test
+public void test2(){
+    String str1 = "abc123";  //题目： a21cb3
+
+    char[] charArray = str1.toCharArray();
+    for (int i = 0; i < charArray.length; i++) {
+        System.out.println(charArray[i]);
+    }
+
+    char[] arr = new char[]{'h','e','l','l','o'};
+    String str2 = new String(arr);
+    System.out.println(str2);
+}
+```
+
+### 20.3.5. StringBuffer 和 StringBuilder
+
+- String: 不可变的字符序列；底层使用char[]存储
+- StringBuffer: 可变的字符序列；线程安全的，效率低；底层使用char[]存储
+- StringBuilder: 可变的字符序列；线程不安全的，效率高；底层使用char[]存储，jdk5.0新增的
+
+String 是不可变的对象。在每次对 String 类型进行改变的时候其实都等同于生成了一个新的 String 对象，然后将指针指向新的 String 对象，非常耗费性能。
+StringBuffer 则是每次都会对 StringBuffer 对象本身进行操作。
+三者的效率：StringBuilder > StringBuffer > String
+
+**源码分析**
+```java
+// String 空参构造器，会创建一个长度为 0 在 char 数组
+// char[] value = new char[0];
+String str = new String();
+// 带参构造器创建相应大小的数组
+// char[] value = new char[]{'a','b','c'};
+String str1 = new String("abc");
+
+// StringBuffer 空参构造器，创建了一个长度是 16 的数组
+// char[] value = new char[16];
+StringBuffer sb1 = new StringBuffer();。
+System.out.println(sb1.length()); // 0
+sb1.append('a'); // value[0] = 'a';
+sb1.append('b'); // value[1] = 'b';
+System.out.println(sb1.length()); // 2
+// 带参构造器创建相应大小 + 16 的数组
+// char[] value = new char["abc".length() + 16];
+StringBuffer sb2 = new StringBuffer("abc");
+
+// 问题1. System.out.println(sb2.length());//3
+// 问题2. 扩容问题:如果要添加的数据底层数组盛不下了，那就需要扩容底层的数组。
+//        默认情况下，扩容为原来容量的2倍 + 2，同时将原有数组中的元素复制到新的数组中。
+// 指导意义：开发中建议大家使用：StringBuffer(int capacity) 或 StringBuilder(int capacity)
+```
+
+**StringBuffer 常用方法**
+`StringBuffer append(xxx)`：提供了很多的append()方法，用于进行字符串拼接
+`StringBuffer delete(int start, int end)`：删除指定位置的内容
+`StringBuffer replace(int start, int end, String str)`：把[start,end)位置替换为str
+`StringBuffer insert(int offset, xxx)`：在指定位置插入xxx
+`StringBuffer reverse()`：把当前字符序列逆转
+`public int indexOf(String str)`：返回指定子字符串在此字符串中第一次出现处的索引
+`public String substring(int start,int end)`：返回一个从start开始到end索引结束的左闭右开区间的子字符串
+`public int length()`
+`public char charAt(int n )`
+`public void setCharAt(int n ,char ch)`：修改索引 n 位置处的字符串为 ch
+总结：
+增：append(xxx)
+删：delete(int start,int end)
+改：setCharAt(int n ,char ch) / replace(int start, int end, String str)
+查：charAt(int n )
+插：insert(int offset, xxx)
+长度：length();
+遍历：for() + charAt() / toString()
+
+**效率对比**
+```java
+public static void main(String[] args) {
+    // 初始设置
+    long startTime = 0L;
+    long endTime = 0L;
+    String text = "";
+    StringBuffer buffer = new StringBuffer("");
+    StringBuilder builder = new StringBuilder("");
+
+    // 开始对比
+    startTime = System.currentTimeMillis();
+    for (int i = 0; i < 20000; i++) {
+        buffer.append(String.valueOf(i));
+    }
+    endTime = System.currentTimeMillis();
+    System.out.println("StringBuffer的执行时间：" + (endTime - startTime));
+
+    startTime = System.currentTimeMillis();
+    for (int i = 0; i < 20000; i++) {
+        builder.append(String.valueOf(i));
+    }
+    endTime = System.currentTimeMillis();
+    System.out.println("StringBuilder的执行时间：" + (endTime - startTime));
+
+    startTime = System.currentTimeMillis();
+    for (int i = 0; i < 20000; i++) {
+        text = text + i;
+    }
+    endTime = System.currentTimeMillis();
+    System.out.println("String的执行时间：" + (endTime - startTime));
+}
+// StringBuffer的执行时间：9
+// StringBuilder的执行时间：4
+// String的执行时间：1637
+```
+
+## 20.4. 时间有关类
+
+System 类中的时间 API
+```java
+// 返回当前时间与1970年1月1日0时0分0秒之间以毫秒为单位的时间差。
+// 称为时间戳
+long time = System.currentTimeMillis();
+```
+
+### 20.4.1. java.util.Date
+java.util.Date 有多个重载的构造器，但许多都过时啦，这里介绍两个
+1. Date()：创建一个对应当前时间的Date对象
+2. Date(long date)：创建指定毫秒数的Date对象
+
+toString()：显示当前Date对象 星期 月 日 时:分:秒 标准时间+时差 年。`Mon Aug 10 19:54:10 GMT+08:00 2020`
+getTime()：获取当前Date对象对应的毫秒数（时间戳）。
+
+### 20.4.2. java.sql.Date
+```java
+public class java.sql.Date extends java.util.Date
+```
+继承自 java.util.Date，对应数据库中的 date 类型。
+只有一个没有过时的构造器 Date(long date) 指定毫秒数
+toString()：显示 年-月-日 `1971-02-13`
+
+java.util.Date 转化为 java.sql.Date
+先将 java.util.Date 转化为 时间戳，再用 java.sql.Date 的构造器
+```java
+java.util.Date utilDate = new java.util.Date();
+long date = utilDate.getTime();
+java.sql.Date sqlDate = new java.sql.Date(date);
+```
+
+### 20.4.3. SimpleDateFormat
+
+java.text.SimpleDateFormat 类可以对日期 Date 类的做格式化和解析
+格式化：日期 ---> 字符串
+解析：字符串 ---> 日期，格式化的逆过程
+
+默认构造器，默认格式化规则
+```java
+//实例化SimpleDateFormat:使用默认的构造器
+SimpleDateFormat sdf = new SimpleDateFormat();
+
+//格式化：日期 --->字符串
+Date date = new Date();
+System.out.println("toString:" + date);
+// toString:Mon Aug 10 20:30:41 GMT+08:00 2020
+
+String format = sdf.format(date);
+System.out.println("format: "+format);
+// format: 20-8-10 下午8:30
+
+//解析：字符串 ---> 日期
+String str = "19-12-18 上午11:43";
+Date date1 = sdf.parse(str);
+System.out.println("parse: "+date1);
+// parse: Wed Dec 18 11:43:00 GMT+08:00 2019
+```
+
+带参构造器，自定义格式化规则
+```java
+SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+//格式化
+Date date = new Date();
+String format = sdf1.format(date);
+System.out.println(format);
+// 2020-08-10 08:34:39
+
+//解析:要求字符串必须是符合SimpleDateFormat识别的格式(通过构造器参数体现)；否则，抛异常
+Date date1 = sdf1.parse("2020-02-18 11:48:27");
+System.out.println(date1);
+// Tue Feb 18 11:48:27 GMT+08:00 2020
+```
+
+String ---> java.sql.Date ?
+```java
+SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+java.util.Date utilDate = format.parse("2020-09-08");
+long date = utilDate.getTime();
+java.sql.Date sqlDate = new java.sql.Date(date);
+System.out.println(sqlDate);
+```
+
+### 20.4.4. java.util.Calendar 日历类
+
+Calendar 是一个抽象类，不能被直接实例化。可以使用静态的 getInstance 方法获得一个实例 或者 实例化其子类 GregorianCalendar
+```java
+Calendar
+    |-- java.util.GregorianCalendar 公历
+        |-- sum.util.BuddhistCalendar 佛教的日历
+```
+getInstance 实际上也是创建了一个GregorianCalendar的对象。
+```java
+Calendar calendar = Calendar.getInstance();
+System.out.println(calendar.getClass());
+// class java.util.GregorianCalendar
+```
+
+Calendar 类中有一堆 public final static 修饰的常量：
+YEAR, MONTH(一月是0), DAY_OF_WEEK(这一周的第几天, 周日是第一天), DAY_OF_MONTH(这个月中的第几天), DAY_OF_YEAR(这一年的第几天), HOUR_OF_DAY, MINUTE, SECOND。
+
+int get(int field)：可以获得需要的时间信息。field 取值便是这些常量。
+void set(int field, int value)：设置某个时间信息的值。
+void add(int field, int amount)：给某个时间信息加上 amount，如果amount为负数则表示减。
+final Date getTime()：Calendar --> java.util.Date
+final void setTime(Date date)：java.util.Date --> Calendar
+
+从 set 和 add 方法可见 Calendar 具有可变性。
+
+### 20.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增） 
+
+[Date Time API](#217-date-time-api)
 
 
 # 21. Java 8 新特性
@@ -4208,6 +4322,77 @@ class Mian {
 
 ## 21.7. Date Time API
 加强对日期与时间的处理。
+
+在旧版的 Java 中，日期时间 API 存在诸多问题，其中有：
+- 非线程安全，java.util.Date 是非线程安全的，所有的日期类都是可变的，这是Java日期类最大的问题之一。
+- 设计很差，Java的日期/时间类的定义并不一致，在java.util和java.sql的包中都有日期类，此外用于格式化和解析的类在java.text包中定义。java.util.Date同时包含日期和时间，而java.sql.Date仅包含日期，将其纳入java.sql包并不合理。另外这两个类都有相同的名字，这本身就是一个非常糟糕的设计。
+- 时区处理麻烦，日期类并不提供国际化，没有时区支持，因此Java引入了java.util.Calendar和java.util.TimeZone类，但他们同样存在上述所有的问题。
+
+Java 8 在 java.time 包下提供了很多新的 API。以下为两个比较重要的 API：
+- Local(本地) − 简化了日期时间的处理，没有时区的问题。
+- Zoned(时区) − 通过制定的时区处理日期时间。
+
+LocalDate、LocalTime、LocalDateTime
+1. LocalDateTime相较于LocalDate、LocalTime，使用频率要高
+2. 类似于Calendar
+3. 三者都是线程安全的，具有不可变性。修改时会创建一个新的对象。
+```java
+// now(): 获取当前的日期、时间、日期+时间
+LocalDate localDate = LocalDate.now();
+LocalTime localTime = LocalTime.now();
+LocalDateTime localDateTime = LocalDateTime.now();
+System.out.println(localDate);
+System.out.println(localTime);
+System.out.println(localDateTime);
+// 2020-08-10
+// 21:24:45.121
+// 2020-08-10T21:24:45.121
+
+// of(): 设置指定的年、月、日、时、分、秒。没有偏移量
+LocalDateTime localDateTime1 = LocalDateTime.of(2020, 10, 6, 13, 23, 43);
+System.out.println(localDateTime1);
+// 2020-10-06T13:23:43
+
+//getXxx()：获取相关的属性
+System.out.println(localDateTime.getDayOfMonth());
+System.out.println(localDateTime.getDayOfWeek());
+System.out.println(localDateTime.getMonth());
+System.out.println(localDateTime.getMonthValue());
+System.out.println(localDateTime.getMinute());
+//        10
+//        MONDAY
+//        AUGUST
+//        8
+//        24
+
+// 体现不可变性
+// withXxx(): 设置相关的属性
+LocalDate localDate1 = localDate.withDayOfMonth(22);
+System.out.println(localDate);
+System.out.println(localDate1);
+//        2020-08-10
+//        2020-08-22
+
+LocalDateTime localDateTime2 = localDateTime.withHour(4);
+System.out.println(localDateTime);
+System.out.println(localDateTime2);
+//        2020-08-10T21:24:45.121
+//        2020-08-10T04:24:45.121
+
+// 修改相关属性
+LocalDateTime localDateTime3 = localDateTime.plusMonths(3);
+System.out.println(localDateTime);
+System.out.println(localDateTime3);
+//        2020-08-10T21:24:45.121
+//        2020-11-10T21:24:45.121
+
+LocalDateTime localDateTime4 = localDateTime.minusDays(6);
+System.out.println(localDateTime);
+System.out.println(localDateTime4);
+//        2020-08-10T21:24:45.121
+//        2020-08-04T21:24:45.121
+```
+
 
 ## 21.8. Optional 类
 Optional 类已经成为 Java 8 类库的一部分，用来解决空指针异常。
