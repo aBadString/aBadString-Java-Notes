@@ -11,9 +11,44 @@
 
 <!-- /code_chunk_output -->
 
-# 1. Maven 简介
+# 1. 需要做的配置
 
-## 1.1. 约定配置
+1、修改本地仓库地址
+```xml
+<localRepository>D:/Users/aBadString/.m2/repository</localRepository>
+```
+
+2、给maven 的settings.xml配置文件的proﬁles标签添加
+```xml
+<profile>
+    <id>jdk‐1.8</id>
+    <activation>
+        <activeByDefault>true</activeByDefault>
+        <jdk>1.8</jdk>
+    </activation>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+    </properties>
+</profile>
+```
+
+3、更换阿里云镜像：在maven的conf文件加下的setting.xml文件中找到```<mirrors></mirrors>```标签
+在这个标签中加入阿里云镜像即可
+```xml
+<mirror>
+  <id>alimaven</id>
+  <mirrorOf>central</mirrorOf>
+  <name>aliyun maven</name>
+  <url>http://maven.aliyun.com/nexus/content/repositories/central/</url>
+</mirror>
+```
+
+
+# 2. Maven 简介
+
+## 2.1. 约定配置
 
 | 目录 | 作用 |
 | :-- | :---: |
@@ -26,7 +61,7 @@
 | ${root}/target/test-classes | 测试代码 class文件 |
 
 
-## 1.2. POM (Project Object Model 项目对象模型)
+## 2.2. POM (Project Object Model 项目对象模型)
 
 pom.xml 文件中可以配置的
 - 项目依赖 `dependencies`
@@ -728,9 +763,9 @@ pom.xml 文件中可以配置的
 ```
 
 
-# 2. Maven 命令
+# 3. Maven 命令
 
-## package、install、deploy的联系与区别
+## 3.1. package、install、deploy的联系与区别
 
 > https://blog.csdn.net/zhaojianting/java/article/details/80324533
 

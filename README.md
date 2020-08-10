@@ -30,6 +30,7 @@
     - [Git](06_开发工具/01_Git.md)
     - [Maven](06_开发工具/02_Maven.md)
     - [Docker](06_开发工具/03_Docker.md)
+    - [Shell](06_开发工具/04_Shell.md)
 
 
 <!-- 

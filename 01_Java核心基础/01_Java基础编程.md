@@ -70,6 +70,12 @@
     - [9.2.1. 基本数据类型、包装类、String之间的转换](#921-基本数据类型-包装类-string之间的转换)
     - [9.2.2. 拆箱与装箱](#922-拆箱与装箱)
   - [9.3. String类和常量池](#93-string类和常量池)
+    - [9.3.1. String 的不可变性](#931-string-的不可变性)
+    - [9.3.2. String 的几种构造器](#932-string-的几种构造器)
+    - [9.3.3. String 常用 API](#933-string-常用-api)
+    - [9.3.4. String 与其他结构的转换](#934-string-与其他结构的转换)
+    - [9.3.5. StringBuffer 和 StringBuilder](#935-stringbuffer-和-stringbuilder)
+  - [9.4. Date 类](#94-date-类)
 - [10. 接口](#10-接口)
 - [11. 枚举类](#11-枚举类)
   - [11.1. 自定义枚举类](#111-自定义枚举类)
@@ -91,7 +97,8 @@
   - [14.2. 线程的使用](#142-线程的使用)
     - [14.2.1. 创建线程方法一：继承Thread类](#1421-创建线程方法一继承thread类)
     - [14.2.2. 创建线程方法二：实现Runnable接口](#1422-创建线程方法二实现runnable接口)
-    - [14.2.3. 线程的调度](#1423-线程的调度)
+    - [14.2.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）](#1423-创建线程方法三实现-callable-接口jdk50新增)
+    - [14.2.4. 线程的调度](#1424-线程的调度)
   - [14.3. 线程的生命周期](#143-线程的生命周期)
   - [14.4. 线程同步](#144-线程同步)
     - [14.4.1. 同步代码块](#1441-同步代码块)
@@ -99,17 +106,46 @@
     - [14.4.3. 同步锁 (jdk5.0 新增)](#1443-同步锁-jdk50-新增)
     - [14.4.4. 死锁](#1444-死锁)
   - [14.5. 线程通讯](#145-线程通讯)
-- [15. Java 8 新特性](#15-java-8-新特性)
-  - [15.1. 函数式接口](#151-函数式接口)
-  - [15.2. Lambda 表达式](#152-lambda-表达式)
-  - [15.3. 方法引用](#153-方法引用)
-  - [15.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#154-接口实现类-匿名内部类-lambda表达式-方法引用)
-  - [15.5. 默认方法](#155-默认方法)
-  - [15.6. Stream API](#156-stream-api)
-  - [15.7. Date Time API](#157-date-time-api)
-  - [15.8. Optional 类](#158-optional-类)
-  - [15.9. 新工具](#159-新工具)
-  - [15.10. Nashorn, JavaScript 引擎](#1510-nashorn-javascript-引擎)
+    - [14.5.1. PV 操作](#1451-pv-操作)
+    - [14.5.2. 两个线程交替打印 1~100](#1452-两个线程交替打印-1~100)
+    - [14.5.3. 生产者消费者问题](#1453-生产者消费者问题)
+  - [14.6. 创建线程方法四：线程池](#146-创建线程方法四线程池)
+    - [14.6.1. 几种常用的线程池](#1461-几种常用的线程池)
+    - [14.6.2. 线程池各个参数的作用，如何进行的?](#1462-线程池各个参数的作用如何进行的)
+    - [14.6.3. 线程池异常处理](#1463-线程池异常处理)
+    - [14.6.4. 线程池的工作队列](#1464-线程池的工作队列)
+    - [14.6.5. 线程池状态](#1465-线程池状态)
+    - [14.6.6. 使用方法](#1466-使用方法)
+- [15. 反射](#15-反射)
+  - [15.1. 动态语言](#151-动态语言)
+  - [15.2. 反射机制](#152-反射机制)
+  - [15.3. Java 反射 API](#153-java-反射-api)
+    - [15.3.1. 获取 Class 对象的三种方法](#1531-获取-class-对象的三种方法)
+    - [15.3.2. Class 类常用方法](#1532-class-类常用方法)
+    - [15.3.3. 创建对象的两种方式](#1533-创建对象的两种方式)
+    - [15.3.4. 调用方法和设置属性](#1534-调用方法和设置属性)
+- [16. 泛型](#16-泛型)
+  - [16.1. 泛型方法](#161-泛型方法)
+- [17. 序列化](#17-序列化)
+  - [17.1. 序列化相关问题](#171-序列化相关问题)
+- [18. 集合](#18-集合)
+  - [18.1. List](#181-list)
+  - [18.2. Set](#182-set)
+  - [18.3. Map 集合](#183-map-集合)
+  - [18.4. 集合遍历方式](#184-集合遍历方式)
+- [19. IO](#19-io)
+- [20. NIO](#20-nio)
+- [21. Java 8 新特性](#21-java-8-新特性)
+  - [21.1. 函数式接口](#211-函数式接口)
+  - [21.2. Lambda 表达式](#212-lambda-表达式)
+  - [21.3. 方法引用](#213-方法引用)
+  - [21.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#214-接口实现类-匿名内部类-lambda表达式-方法引用)
+  - [21.5. 默认方法](#215-默认方法)
+  - [21.6. Stream API](#216-stream-api)
+  - [21.7. Date Time API](#217-date-time-api)
+  - [21.8. Optional 类](#218-optional-类)
+  - [21.9. 新工具](#219-新工具)
+  - [21.10. Nashorn, JavaScript 引擎](#2110-nashorn-javascript-引擎)
 
 <!-- /code_chunk_output -->
 
@@ -1191,7 +1227,7 @@ Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的�
 说明：
 
 ​    1、构造器只能在创建对象时，在new语句中被调用一次。不能再其他地方**显示调用**。但可以再构造器中使用this()调用其他构造器，使用super()调用父类构造器。
-​    2、如果类中没有定义构造器，那么Java免费送一个访问权限为缺省的无参数的构造器；如果定义了构造器，就不会送了。
+​    2、如果类中没有定义构造器，那么Java免费送一个访问权限为 <del>缺省</del> ***public*** 的无参数的构造器；如果定义了构造器，就不会送了。
 ​    3、构造器可以重载。
 ​    4、构造器不会被继承给子类。
 
@@ -1273,46 +1309,50 @@ class A {
 ```
 
 内部类作为类等成员：
-
 ​    1、内部类可以被四种权限修饰符所修饰。
 ​    2、内部类可以被static所修饰。
 ​    3、内部类可以调用外部类的属性和方法。
 ​    4、具有类的一切功能。
 
+**非静态内部类(成员内部类)：**
+定义在类内部的非静态类，就是成员内部类。成员内部类不能定义静态方法和变量（final 修饰的除外）。局部内部类也是。
+这是因为成员内部类是非静态的，类初始化的时候先初始化静态成员，如果允许成员内部类定义静态变量，那么成员内部类的静态变量初始化顺序是有歧义的。
+```java
+public class A {
+    class B {
+        private final static int ac = 12;
+    }
+}
+```
+
 (1) 如何创建内部类对象？
-
 - 创建非静态内部类对象：new 外部类名().new 内部类名()
-  ```java
-  A.B b = new A().new B();
-  ```
+```java
+A.B b = new A().new B();
+```
 或者
-  ```java
-  import priv.song.inner.A.B;
-  B b = new A().new B();
-  ```
-
+```java
+import priv.song.inner.A.B;
+B b = new A().new B();
+```
 - 创建静态内部类对象：new 外部类名.内部类名()
-  ```java
-   A.C c = new A.C();
-  ```
+```java
+A.C c = new A.C();
+```
 
 (2) 内部类如何调用外部类的结构（属性和方法）？
 
 - 属性：属性名(无冲突时)，外部类名.this.属性名(有冲突时)
-
-  `name`或者`A.this.name`
+`name`或者`A.this.name`
 
 - 方法：方法名(无冲突时)，外部类名.this.方法名(有冲突时)
-
-  `func()`或者`A.this.func()`
+`func()`或者`A.this.func()`
 
 - 静态内部类不能调用非静态的属性和方法；只能调用静态的属性和方法。调用时不要this关键字即可。同样如果非静态内部类调用静态的属性或方法也不要this关键字。
 
 (3) 如何使用局部内部类（很少）？
-
-  局部内部类不能用static，无论方法是否是static的。
-  获取局部内部类对象：巧用接口或父类，但是不能向下转型
-
+局部内部类不能用static，无论方法是否是static的。
+获取局部内部类对象：巧用接口或父类，但是不能向下转型
 ```java
 public class GetInner {
     public static void main(String[] args) {
@@ -1646,22 +1686,15 @@ public class Object {
     public String toString() {
         return getClass().getName() + "@" + Integer.toHexString(hashCode());
     }
+    public final native Class<?> getClass();
 
     public boolean equals(Object obj) {
         return (this == obj);
     }
-        
-    protected void finalize() throws Throwable {
-    }
-    
-    protected native Object clone() throws CloneNotSupportedException;
     public native int hashCode();
-    
-    public final native Class<?> getClass();
     
     public final native void notify();
     public final native void notifyAll();
-    
     public final void wait() throws InterruptedException {
         wait(0);
     }
@@ -1682,6 +1715,11 @@ public class Object {
         wait(timeout);
     }
     public final native void wait(long timeout) throws InterruptedException;
+
+    protected void finalize() throws Throwable {
+    }
+    
+    protected native Object clone() throws CloneNotSupportedException;
 }
 ```
 
@@ -1752,7 +1790,7 @@ Object类的hashCode()方法为不同的对象返回不同的值，Object类的h
 
 ### 9.1.4. clone方法
 
-1、重写clone方法的类必须实现 java.lang.Cloneable 接口，否则会抛出CloneNotSupportedException异常。Cloneable接口中不包含任何方法，所以实现它时只要在类声明中加上implements语句即可。
+1、���写clone方法的类必须实现 java.lang.Cloneable 接口，否则会抛出CloneNotSupportedException异常。Cloneable接口中不包含任何方法，所以实现它时只要在类声明中加上implements语句即可。
 
 ```java
 public interface Cloneable {
@@ -1889,8 +1927,37 @@ public static Short valueOf(short s) {
 4、实现了CharSequence接口可以用来获取字符串长度，可以获取字符串中的某个字符。
 5、String对象的创建：String s = new String("aaa"); 。
 6、字符串都放在常量池中.
-7、String的底层是一个数组：private final char value[]; 该数组被final所修饰，所以String是一个不可变的字符序列。修改字符串时不会在原来的字符串对象上修改，而是会创建一个新的字符串。
+7、String的底层是一个数组：private final char value[]; 该数组被final所修饰，所以**String是一个不可变的字符序列**。修改字符串时不会在原来的字符串对象上修改，而是会创建一个新的字符串。
 
+### 9.3.1. String 的不可变性
+
+当对字符串引用重新赋值或者改变字符串的内容时，会重新创建一个字符串对象，而不会去改变原来对象的内容。
+
+通过字面量的方式给字符串赋值，字符串对象会创建在方法区的常量池当中，栈中的引用直接引用常量池地址，多个相同内容的字符串共用一个常量池中的对象。
+如果给字符串重新赋值，那么会重写在常量池中创建一个字符串对象，让栈上的引用重新指向改对象，而不会改变原来的字符串对象。
+
+### 9.3.2. String 的几种构造器
+
+```java
+// 这种就是引用间赋值，把地址值拷贝给引用变量
+// 想想在 C 中，字符串字面量代表的就是字符串的首地址值
+String str = "hello";
+
+// this.value = "".value;
+String s1 = new String();
+
+// this.value = original.value;
+// this.hash = original.hash;
+String s2 = new String(String original);
+
+// this.value = Arrays.copyOf(a, a.length)
+String s3 = new String(char[] a);
+
+// this.value = Arrays.copyOfRange(a, startIndex, startIndex+count)
+String s4 = new String(char[] a, int startIndex, int count);
+```
+- 方式一：通过字面量定义的方式。直接在常量区创建对象，将引用指向它
+- 方式二：通过new + 构造器的方式。在常量区和堆中分别创建对象，引用执行堆上的对象。
 ```java
 @Test
 public void test01() {
@@ -1904,7 +1971,9 @@ public void test01() {
 ```
 【面试题】String s = new String("aaa");在内存中创建了几个对象？
 答：如果"aaa"已经在常量池中创建了，那么创建了1个对象；如果"aaa"没有在常量池中创建过，那么创建了两个对象。堆中一个，常量池中一个。
+![](../images/String构造器.png)
 
+猜猜下面代码的运行结果：
 ```java
 @Test
 public void test02() {
@@ -1930,6 +1999,220 @@ public void test02() {
 	System.out.println(s == s7); // true
 }
 ```
+结论：
+    1.常量与常量的拼接结果在常量池。且常量池中不会存在相同内容的常量。
+    2.只要其中有一个是变量，结果就在堆中。
+    3.如果拼接的结果调用intern()方法，返回值就在常量池中
+
+![](../images/字符串的不可变性.png)
+
+另外，final 常量也是编译器处理，
+```java
+@Test
+public void test4(){
+    String s1 = "javaEEhadoop";
+    String s2 = "javaEE";
+    String s3 = s2 + "hadoop";
+    System.out.println(s1 == s3);//false
+
+    final String s4 = "javaEE";//s4:常量
+    String s5 = s4 + "hadoop";
+    System.out.println(s1 == s5);//true
+}
+```
+
+### 9.3.3. String 常用 API
+**基本：**
+`int length()`：返回字符串的长度： return value.length
+`boolean isEmpty()`：判断是否是空字符串：return value.length == 0
+`String toLowerCase()`：使用默认语言环境，将 String 中的所有字符转换为小写
+`String toUpperCase()`：使用默认语言环境，将 String 中的所有字符转换为大写
+`String trim()`：返回字符串的副本，忽略前导空白和尾部空白
+**比较：**
+`boolean equals(Object obj)`：比较字符串的内容是否相同
+`boolean equalsIgnoreCase(String anotherString)`：与equals方法类似，忽略大小写
+`String concat(String str)`：将指定字符串连接到此字符串的结尾。 等价于用“+”
+`int compareTo(String anotherString)`：比较两个字符串的大小
+**截取子串**
+`char charAt(int index)`： 返回某索引处的字符return value[index]
+`String substring(int beginIndex)`：返回一个新的字符串，它是此字符串的从beginIndex开始截取到最后的一个子字符串。
+`String substring(int beginIndex, int endIndex)`：返回一个新字符串，它是此字符串从beginIndex开始截取到endIndex(不包含)的一个子字符串。
+**获取子串出现的位置：**
+`int indexOf(String str)`：返回指定子字符串在此字符串中第一次出现处的索引
+`int indexOf(String str, int fromIndex)`：返回指定子字符串在此字符串中第一次出现处的索引，从指定的索引开始
+`int lastIndexOf(String str)`：返回指定子字符串在此字符串中最右边出现处的索引
+`int lastIndexOf(String str, int fromIndex)`：返回指定子字符串在此字符串中最后一次出现处的索引，从指定的索引开始反向搜索
+注：indexOf和lastIndexOf方法如果未找到都是返回-1
+**替换：**
+`String replace(char oldChar, char newChar)`：返回一个新的字符串，它是通过用 newChar 替换此字符串中出现的所有 oldChar 得到的。
+`String replace(CharSequence target, CharSequence replacement)`：使用指定的字面值替换序列替换此字符串所有匹配字面值目标序列的子字符串。
+`String replaceAll(String regex, String replacement)`：使用给定的 replacement 替换此字符串所有匹配给定的正则表达式的子字符串。
+`String replaceFirst(String regex, String replacement)`：使用给定的 replacement 替换此字符串匹配给定的正则表达式的第一个子字符串。
+**匹配:**
+`boolean contains(CharSequence s)`：当且仅当此字符串包含指定的 char 值序列时，返回 true
+`boolean endsWith(String suffix)`：测试此字符串是否以指定的后缀结束
+`boolean startsWith(String prefix)`：测试此字符串是否以指定的前缀开始
+`boolean startsWith(String prefix, int toffset)`：测试此字符串从指定索引开始的子字符串是否以指定前缀开始
+`boolean matches(String regex)`：告知此字符串是否匹配给定的正则表达式。
+**切片：**
+`String[] split(String regex)`：根据给定正则表达式的匹配拆分此字符串。
+`String[] split(String regex, int limit)`：根据匹配给定的正则表达式来拆分此字符串，最多不超过limit个，如果超过了，剩下的全部都放到最后一个元素中。
+
+### 9.3.4. String 与其他结构的转换
+
+- **String 与基本数据类型和包装类的转换**
+[9.2.1. 基本数据类型、包装类、String之间的转换](#921-基本数据类型-包装类-string之间的转换)
+
+String --> 基本数据类型、包装类：调用包装类的静态方法：parseXxx(str)
+基本数据类型、包装类 --> String:调用String重载的valueOf(xxx)
+
+- **String 与byte[]的转换**
+编码：String --> byte[]: 调用String 的 getBytes()
+解码：byte[] --> String: 调用String 的构造器
+
+编码：字符串 --> 字节  (看得懂 ---> 看不懂的二进制数据)
+解码：编码的逆过程，字节 --> 字符串 （看不懂的二进制数据 ---> 看得懂）
+
+说明：解码时，要求解码使用的字符集必须与编码时使用的字符集一致，否则会出现乱码。
+
+```java
+@Test
+public void test3() throws UnsupportedEncodingException {
+    String str1 = "abc123中国";
+    byte[] bytes = str1.getBytes();//使用默认的字符集，进行编码。
+    System.out.println(Arrays.toString(bytes));
+
+    byte[] gbks = str1.getBytes("gbk");//使用gbk字符集进行编码。
+    System.out.println(Arrays.toString(gbks));
+
+    System.out.println("******************");
+
+    String str2 = new String(bytes);//使用默认的字符集，进行解码。
+    System.out.println(str2);
+
+    String str3 = new String(gbks);
+    System.out.println(str3);//出现乱码。原因：编码集和解码集不一致！
+
+
+    String str4 = new String(gbks, "gbk");
+    System.out.println(str4);//没有出现乱码。原因：编码集和解码集一致！
+}
+```
+
+- **String 与char[]的转换**
+String --> char[]: 调用 String 的 toCharArray()
+char[] --> String: 调用 String 的构造器
+
+```java
+@Test
+public void test2(){
+    String str1 = "abc123";  //题目： a21cb3
+
+    char[] charArray = str1.toCharArray();
+    for (int i = 0; i < charArray.length; i++) {
+        System.out.println(charArray[i]);
+    }
+
+    char[] arr = new char[]{'h','e','l','l','o'};
+    String str2 = new String(arr);
+    System.out.println(str2);
+}
+```
+
+### 9.3.5. StringBuffer 和 StringBuilder
+
+- String: 不可变的字符序列；底层使用char[]存储
+- StringBuffer: 可变的字符序列；线程安全的，效率低；底层使用char[]存储
+- StringBuilder: 可变的字符序列；线程不安全的，效率高；底层使用char[]存储，jdk5.0新增的
+
+String 是不可变的对象。在每次对 String 类型进行改变的时候其实都等同于生成了一个新的 String 对象，然后将指针指向新的 String 对象，非常耗费性能。
+StringBuffer 则是每次都会对 StringBuffer 对象本身进行操作。
+三者的效率：StringBuilder > StringBuffer > String
+
+**源码分析**
+```java
+// String 空参构造器，会创建一个长度为 0 在 char 数组
+// char[] value = new char[0];
+String str = new String();
+// 带参构造器创建相应大小的数组
+// char[] value = new char[]{'a','b','c'};
+String str1 = new String("abc");
+
+// StringBuffer 空参构造器，创建了一个长度是 16 的数组
+// char[] value = new char[16];
+StringBuffer sb1 = new StringBuffer();。
+System.out.println(sb1.length()); // 0
+sb1.append('a'); // value[0] = 'a';
+sb1.append('b'); // value[1] = 'b';
+System.out.println(sb1.length()); // 2
+// 带参构造器创建相应大小 + 16 的数组
+// char[] value = new char["abc".length() + 16];
+StringBuffer sb2 = new StringBuffer("abc");
+
+// 问题1. System.out.println(sb2.length());//3
+// 问题2. 扩容问题:如果要添加的数据底层数组盛不下了，那就需要扩容底层的数组。
+//        默认情况下，扩容为原来容量的2倍 + 2，同时将原有数组中的元素复制到新的数组中。
+// 指导意义：开发中建议大家使用：StringBuffer(int capacity) 或 StringBuilder(int capacity)
+```
+
+**StringBuffer 常用方法**
+`StringBuffer append(xxx)`：提供了很多的append()方法，用于进行字符串拼接
+`StringBuffer delete(int start, int end)`：删除指定位置的内容
+`StringBuffer replace(int start, int end, String str)`：把[start,end)位置替换为str
+`StringBuffer insert(int offset, xxx)`：在指定位置插入xxx
+`StringBuffer reverse()`：把当前字符序列逆转
+`public int indexOf(String str)`：返回指定子字符串在此字符串中第一次出现处的索引
+`public String substring(int start,int end)`：返回一个从start开始到end索引结束的左闭右开区间的子字符串
+`public int length()`
+`public char charAt(int n )`
+`public void setCharAt(int n ,char ch)`：修改索引 n 位置处的字符串为 ch
+总结：
+增：append(xxx)
+删：delete(int start,int end)
+改：setCharAt(int n ,char ch) / replace(int start, int end, String str)
+查：charAt(int n )
+插：insert(int offset, xxx)
+长度：length();
+遍历：for() + charAt() / toString()
+
+**效率对比**
+```java
+public static void main(String[] args) {
+    // 初始设置
+    long startTime = 0L;
+    long endTime = 0L;
+    String text = "";
+    StringBuffer buffer = new StringBuffer("");
+    StringBuilder builder = new StringBuilder("");
+
+    // 开始对比
+    startTime = System.currentTimeMillis();
+    for (int i = 0; i < 20000; i++) {
+        buffer.append(String.valueOf(i));
+    }
+    endTime = System.currentTimeMillis();
+    System.out.println("StringBuffer的执行时间：" + (endTime - startTime));
+
+    startTime = System.currentTimeMillis();
+    for (int i = 0; i < 20000; i++) {
+        builder.append(String.valueOf(i));
+    }
+    endTime = System.currentTimeMillis();
+    System.out.println("StringBuilder的执行时间：" + (endTime - startTime));
+
+    startTime = System.currentTimeMillis();
+    for (int i = 0; i < 20000; i++) {
+        text = text + i;
+    }
+    endTime = System.currentTimeMillis();
+    System.out.println("String的执行时间：" + (endTime - startTime));
+}
+// StringBuffer的执行时间：9
+// StringBuilder的执行时间：4
+// String的执行时间：1637
+```
+
+## 9.4. Date 类
 
 
 # 10. 接口
@@ -2195,6 +2478,9 @@ class SuperClass {
 }
 ```
 
+如一个注解内仅只有一个成员变量且名字为 value 的属性时，应用这个注解时可直接写属性值到括号内。
+注解没有任何属性，或者属性都使用默认值，括号都可以省略。
+
 ## 12.3. 元注解
 元注解：可以理解成注解上的注解。元注解是用来给注解进行补充说明的。
  
@@ -2220,6 +2506,7 @@ public enum ElementType {
     TYPE_USE /** Use of a type @since 1.8 */
 }
 ```
+
 - **@Retention：保留策略**。注解保留到什么时候可以用，源文件, 字节码文件, 运行时。
 一般自定义注解使用RUNTIME。
 ```java
@@ -2236,6 +2523,12 @@ public enum RetentionPolicy {
     RUNTIME /** 注解将被编译器记录在类文件中在运行时被VM保留，因此可以利用反射特性来读取它们。*/
 }
 ```
+
+- **@Documented**。被它修饰的注解会在生产的 javadoc 文件上出现。
+
+- **@Inherited**。标记注解是可以被继承的。
+如果定义一个注解 @A 时使用了@Inherited 修饰的，那么 @A 被用于修饰一个类 C，则这个注解 @A 将被继承给类 C 的子类。
+
 
 # 13. 异常体系结构
 
@@ -2254,18 +2547,23 @@ int[] p = new int[1024 * 1024 * 1024];
 ```java
 |-- Throwable
     |-- Error
-|-- Exception
-    |-- 编译时异常：除了RuntimeException（必须进行处理，否则不能运行）
-      IOException
-|-- FileNotFoundException
-    |-- 运行时异常：RuntimeException
-        |-- NullPointerException
-        |-- IndexOutOfBoundsException
-            |-- ArrayIndexOutOfBoundsException
-            |-- StringIndexOutOfBoundsException
-        |-- IllegalArgumentException
-        |-- ClassCastException
+        |-- java.lang.StackOverflowError
+        |-- java.lang.OutOfMemoryError
+    |-- Exception
+        // 编译时异常：CheckedException（必须进行处理，否则不能通过编译）
+        // 并没有 CheckedException 这个类，只有不是继承自 RuntimeException 的异常类都是编译时异常
+        |-- IOException
+            |-- FileNotFoundException
         |-- ...
+        // 运行时异常（这里真的有RuntimeException这个类）
+        |-- RuntimeException
+            |-- NullPointerException
+            |-- IndexOutOfBoundsException
+                |-- ArrayIndexOutOfBoundsException
+                |-- StringIndexOutOfBoundsException
+            |-- IllegalArgumentException
+            |-- ClassCastException
+            |-- ...
 ```
 
 ## 13.2. try – catch – finally
@@ -2331,7 +2629,26 @@ throws并没有真正处理掉异常，而是将异常向上抛出，抛给方�
 
 【面试题】throw和throws的区别？
 throw：是用来制造异常的，是用来向外抛出异常的。
-throws：是用来捕获异常的，捕获到异常后自己不处理，将异常抛出给方法的调用者。
+throws：是用来声明异常，让调用者知道该方法可能抛出的异常。
+只是可能会抛出声明的类型的异常，并不一定会发生这些类型的异常；还可能抛出未声明到类型的异常。
+
+即使方法没有使用 throws 声明异常，当方法内发生异常时，调用者仍然可以捕获到异常。
+```java
+public static void main(String[] args) {
+    try {
+        show();
+    } catch (Exception e) {
+        System.out.println("抓到异常啦");
+    }
+    System.out.println("哈哈");
+}
+static void show () {
+    int a = 1/ 0;
+}
+// 输出：
+// 抓到异常啦
+// 哈哈
+```
 
 ## 13.5. 自定义异常类
 
@@ -2444,7 +2761,76 @@ public class RunnableTest {
 推荐使用实现Runnable接口的方式，因为继承是is-a的关系。一个类不应该is-a线程，正确的应该是一个类具有多线程运行的功能。第二，通过Runnable实现类创建几个线程对象，这些线程共享一个Runnable实现类对象，该对象的成员变量由所有线程共享。
 Thread本身也是实现了Runnable接口：public class Thread implements Runnable
 
-### 14.2.3. 线程的调度
+### 14.2.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）
+
+与 Runnable 相比 Callable 接口：
+1. 相比 run() 方法，call() 方法可以用返回值
+2. 方法可以抛出异常
+3. 支持范型的返回值
+4. 可以借助 FutureTask 类来获取返回结果
+
+
+```java
+public class FutureTask<V> implements RunnableFuture<V>
+public interface RunnableFuture<V> extends Runnable, Future<V>
+```
+
+```java
+// 1、创建一个 Callable 接口的实现类
+class Num implements Callable<Integer> {
+    // 2、重写 call() 方法
+    @Override
+    public Integer call() throws Exception {
+        int sum = 0;
+        for (int i = 0; i < 100; i++) {
+            if (i % 2 == 0) {
+                System.out.println(i);
+                sum += i;
+            }
+        }
+        return sum;
+    }
+}
+
+public class CallableTest {
+    public static void main(String[] args) {
+        // 3、创建 Callabel实现类的实例对象
+        Callable num = new Num();
+        // 4、创建 FutureTask 实例对象，该对象实现了 Runnalbe 接口
+        FutureTask<Integer> task = new FutureTask<Integer>(num);
+        // 5、创建 Thread 对象，并调用 start() 方法
+        new Thread(task).start();
+
+        System.out.println("1. 主线程继续运行。。。");
+
+        try {
+            // 6、获取 Callable 接口实现类 call() 方法的返回值
+            // get 方法内部有一个 awaitDone 方法，主线程会等待子线程执行完毕，在继续执行
+            Integer o = task.get();
+            System.out.println("sum" + o);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("2. 主线程继续运行。。。");
+    }
+}
+
+// 结果：
+// 0
+// 2
+// 1. 主线程继续运行。。。
+// 4
+// 。。。
+// 98
+// sum2450
+// 2. 主线程继续运行。。。
+```
+
+
+### 14.2.4. 线程的调度
 时间片轮转：时间片到，放弃CPU
 优先级调度：高优先级线程先使用CPU
 Java的调度策略：同级线程先来先服务，使用时间片轮转；高优先级线程优先调度。
@@ -2668,10 +3054,837 @@ class WindowRunnableTest {
 
 ## 14.5. 线程通讯
 
+### 14.5.1. PV 操作
 
-# 15. Java 8 新特性
+```java
+int S = 1;
 
-## 15.1. 函数式接口
+void p() {
+    S--;
+    if (S < 0) {
+        wait();
+    }
+}
+
+void v() {
+    S++;
+    if (S <= 0) {
+        awake();
+    }
+}
+```
+
+进程的同步、互斥、通信的区别，进程与线程同步的区别：https://blog.csdn.net/weixin_41413441/article/details/80548683
+
+**利用信号量和PV操作实现进程互斥的一般模型**
+```text
+S = 1;
+进程P1              进程P2           ……          进程Pn
+……                  ……                           ……
+P（S）；             P（S）；                     P（S）；
+临界区；             临界区；                     临界区；
+V（S）；             V（S）；                     V（S）；
+……                  ……              ……           ……
+```
+
+参考：https://www.cnblogs.com/litaoyang/p/6606499.html
+
+
+### 14.5.2. 两个线程交替打印 1~100
+
+wait()：执行改方法的线程进入阻塞状态，并释放同步监视器
+notify()：唤醒一个被wait的线程，多个线程按照优先级最高的被唤醒
+notifyAll()：唤醒所有被wait的线程
+
+上面这三个方法都必须在 synchronized 块中出现，否则会抛出 java.lang.IllegalMonitorStateException 异常
+并且 synchronized(xxx) 的同步监视器必须和 xxx.wait() 的同步监视器相同
+
+【面试题】sleep 和 wait 的异同？
+相同：
+    1. 两个方法执行都会使当前线程进入阻塞状态
+    2. wait 和 sleep 都可以通过 interrupt() 方法打断线程的暂停状态 
+不同：
+    1. sleep 是 Thread 的 static 方法；wait 是 Object 的 final 方法
+    2. wait 只能在同步代码块中，通过同步监视器来调用；sleep 随时可以通过 Thread 类来调用
+    3. 在同步代码块中，sleep 不会释放锁；wait 会释放锁
+    4. sleep 必须指定时间，wait 可以指定也可以不指定，通过 notify 来唤醒
+
+```java
+class Pint implements Runnable {
+    private int number = 1;
+    private Object obj = new Object();
+
+    @Override
+    public void run() {
+        boolean flag = true;
+        while (flag) {
+            // 刚开始运行时，两个线程去抢夺锁
+            // 抢到锁的先执行
+            synchronized (obj) {
+                if (number <= 100) {
+                    System.out.println(Thread.currentThread().getName() + ":" + number);
+                    number++;
+                } else {
+                    flag = false;
+                }
+
+                // 干完活后，叫醒别人，阻塞自己
+
+                // 线程打印完之后，就唤醒其他线程
+                // 因为当前线程已经拿到锁了，所以其他线程也不会立马进入
+                obj.notify();
+
+                // 如果活都干完了，就直接推出，不需要阻塞了
+                if (!flag) {
+                    break;
+                }
+
+                // 如果还有活，就阻塞自己，等待另一个线程干完活唤醒自己
+                // wait 会释放锁的，此时其他线程就可以进入了
+                try {
+                    obj.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+public class ThreadCommunication {
+    public static void main(String[] args) {
+        Runnable pint = new Pint();
+        Thread t1 = new Thread(pint);
+        Thread t2 = new Thread(pint);
+        t1.setName("线程一");
+        t2.setName("线程二");
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+### 14.5.3. 生产者消费者问题
+
+![](../images/生产者消费者问题.png)
+
+1. 是否是多线程问题？ 是，生产者线程若干，消费者线程若干
+2. 是否有共享数据？ 是，产品
+3. 是否涉及到线程安全问题？ 是，多个生产者同时存放产品，多个消费者同时消费产品
+4. 是否涉及到线程通讯？ 是，产品存放区有空间则唤醒生产者，存放区有产品则唤醒消费者
+
+```java
+/**
+ * 店员，产品缓存区
+ */
+class Clerk {
+
+    private static final int MAX_NUM = 2;
+    private int productNum = 0;
+
+    public synchronized void add() {
+        if (productNum < MAX_NUM) {
+            productNum++;
+            System.out.println(Thread.currentThread().getName() + "提供一个产品，放入" + productNum + "号区");
+            // 唤醒消费者
+            notify();
+        } else {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public synchronized void del() {
+        if (productNum > 0) {
+            System.out.println(Thread.currentThread().getName() + "拿走" + productNum + "号区的一个产品");
+            productNum--;
+            // 唤醒生产者
+            notify();
+        } else {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+/**
+ * 生产者
+ */
+class Producer extends Thread {
+    private Clerk clerk;
+
+    public Producer(Clerk clerk){
+        this.clerk = clerk;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("----"+getName()+"来了----");
+        while (true) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //System.out.println(getName() + ": 生产了一件产品");
+            clerk.add();
+        }
+    }
+}
+
+/**
+ * 消费者
+ */
+class Customer extends Thread {
+    private Clerk clerk;
+
+    public Customer(Clerk clerk){
+        this.clerk = clerk;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("----"+getName()+"来了----");
+        while (true) {
+            clerk.del();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //System.out.println(getName() + ": 消费了一件产品");
+        }
+    }
+}
+
+/**
+ * 生产者消费者问题
+ *
+ * @author aBadString
+ * @date 2020-08-07 13:32:41
+ */
+public class ProductorCustomer {
+    public static void main(String[] args) {
+        Clerk clerk = new Clerk();
+        Producer producer = new Producer(clerk);
+        Customer customer = new Customer(clerk);
+        producer.setName("生产者1");
+        customer.setName("消费者1");
+        Customer customer2 = new Customer(clerk);
+        customer2.setName("消费者2");
+
+
+        customer.start();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        producer.start();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        customer2.start();
+    }
+}
+```
+
+## 14.6. 创建线程方法四：线程池
+
+好处：
+1. 便于管理线程
+2. 提高响应速度，直接从线程池中拿线程的速度肯定快于创建一条线程
+3. 重复利用线程，避免增加创建线程和销毁线程的资源消耗
+
+```java
+public class ThreadPoolExecutor extends AbstractExecutorService {}
+public abstract class AbstractExecutorService implements ExecutorService {}
+public interface ExecutorService extends Executor {}
+public interface Executor {
+    void execute(Runnable command);
+}
+```
+ExecutorService 是线程池接口，常见实现类有 ThreadPoolExecutor。
+
+### 14.6.1. 几种常用的线程池
+
+Executors 是一个工具类，线程池工厂，用于创建并返回不同类型的线程池。
+在 java.util.concurrent.Executors 中提供了一些方法去创建四种不同的线程池，这些方法实际上都是调用了 ThreadPoolExecutor 的构造器。返回值是线程池接口 ExecutorService。
+
+1. **newFixedThreadPool  固定线程数目的线程池**
+最大线程数目 和 核心线程数目 相等。
+keepAliveTime 非核心线程空闲的存活时间 为 0
+阻塞队列是 LinkedBlockingQueue   可能导致 OOM
+适用于处理CPU密集型的任务，即适用执行长期的任务。
+
+2. **newCachedThreadPool  可缓存的线程池**
+最大核心线程数目为 0   任务直接放入队列
+最大线程数为 Integer.MAX_VALUE
+非核心线程空闲的存活时间 为 60 秒
+阻塞队列是 SynchronousQueue
+用于并发执行大量短期的小任务。
+
+3. **newSingleThreadExecutor  单线程的线程池**
+核心线程数为 1
+最大线程数也为 1
+keepAliveTime为 0
+阻塞队列是 LinkedBlockingQueue
+适用于串行执行任务的场景，一个任务一个任务地执行。
+
+4. **newScheduledThreadPool  定时及周期执行的线程池**
+最大线程数为 Integer.MAX_VALUE
+阻塞队列是 DelayedWorkQueue
+keepAliveTime为 0
+scheduleAtFixedRate() ：按某种速率周期执行
+scheduleWithFixedDelay()：在某个延迟后执行
+周期性执行任务的场景，需要限制线程数量的场景
+
+### 14.6.2. 线程池各个参数的作用，如何进行的?
+
+**ThreadPoolExecutor 构造器**
+```java
+public ThreadPoolExecutor(
+    int corePoolSize,     // 线程池核心线程数最大值
+    int maximumPoolSize,  // 线程池最大线程数大小
+    long keepAliveTime,   // 程池中非核心线程空闲的存活时间大小
+    TimeUnit unit,        // 线程空闲存活时间单位
+    BlockingQueue<Runnable> workQueue, // 存放任务的阻塞队列
+    ThreadFactory threadFactory,       // 用于设置创建线程的工厂，可以给创建的线程设置有意义的名字，可方便排查问题
+    RejectedExecutionHandler handler   // 线城池的饱和策略事件，主要有四种类型。
+)
+```
+
+线程池执行流程：核心线程 — 任务队列 — 非核心线程 — 拒绝策略
+
+![img](https://user-gold-cdn.xitu.io/2019/7/7/16bca03a5a6fd78f?imageslim) 
+
+四种拒绝策略：
+
+1. AbortPolicy：抛出一个异常，默认的
+2. DiscardPolicy：直接丢弃任务
+3. DiscardOldestPolicy：丢弃队列里最老的任务，将当前这个任务继续提交给线程池
+4. CallerRunsPolicy：交给线程池调用所在的线程进行处理
+
+### 14.6.3. 线程池异常处理
+
+1. try - catch 处理
+2. 通过 Future 对象的 get 方法接收抛出的异常，再处理
+3. 使用自己的ThreadFactory，创建线程时设置线程的 UncaughtExceptionHandler，在 uncaughtException方法中处理异常
+4. 重写 ThreadPoolExecutor 的 afterExecute方法，处理传递的异常引用
+
+### 14.6.4. 线程池的工作队列
+
+1. ArrayBlockingQueue：有界队列，用数组实现的，FIFO
+2. LinkedBlockingQueue：可设置容量队列，基于链表，FIFO，不设置容量则无限扩大，最大为 Integer.MAX_VALUE
+3. DelayQueue：延迟队列，其中的对象到期时才能从队列中取走
+4. PriorityBlockingQueue：优先级队列
+5. SynchronousQueue：同步队列，插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
+
+### 14.6.5. 线程池状态
+
+1. **Running**
+该状态的线程池会接收新任务，并处理阻塞队列中的任务;
+调用线程池的 shutdown() 方法，可以切换到 Shutdown 状态;
+调用线程池的 shutdownNow() 方法，可以切换到 Stop 状态;
+
+2. **Shutdown**
+该状态的线程池不会接收新任务，但会处理阻塞队列中的任务；
+队列为空，并且线程池中执行的任务也为空,进入 Tidying 状态;
+
+3. **Stop**
+该状态的线程不会接收新任务，也不会处理阻塞队列中的任务，而且会中断正在运行的任务；
+线程池中执行的任务为空, 进入 Tidying 状态;
+
+4. **Tidying**
+该状态表明所有的任务已经运行终止，记录的任务数量为0。
+terminated() 执行完毕，进入 Terminated 状态
+
+5. **Terminated**
+该状态表示线程池彻底终止
+
+### 14.6.6. 使用方法
+
+execute 用来执行 Runnable 实现类；submit 用来执行 Callable 实现类。
+```java
+public static void main(String[] args) {
+    // 1、创建一个线程池
+    ExecutorService pool = Executors.newFixedThreadPool(1);
+
+    // 2、运行一个线程
+    pool.execute(new Runnable() {
+        @Override
+        public void run() {
+            for (int i = 0; i < 100; i++) {
+                if (i % 2 == 0) {
+                    System.out.println(Thread.currentThread().getName() + ": " +i);
+                }
+            }
+        }
+    });
+    Future<Integer> future = pool.submit(new Callable<Integer>() {
+        @Override
+        public Integer call() {
+            int sum = 0;
+            for (int i = 0; i < 100; i++) {
+                if (i % 2 != 0) {
+                    System.out.println(Thread.currentThread().getName() + ": " +i);
+                    sum += i;
+                }
+            }
+            return sum;
+        }
+    });
+
+    try {
+        System.out.println("sum=" + future.get());
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    } catch (ExecutionException e) {
+        e.printStackTrace();
+    }
+
+    // 3、关闭线程池
+    pool.shutdown();
+}
+```
+
+# 15. 反射
+
+## 15.1. 动态语言
+
+动态语言，是指程序在运行时可以改变其结构：新的函数可以引进，已有的函数可以被删除等结构上的变化。
+比如常见的 JavaScript 就是动态语言，除此之外 Ruby,Python 等也属于动态语言，而 C、C++则不属于动态语言。从反射角度说 JAVA 属于半动态语言。
+
+## 15.2. 反射机制
+
+反射：运行状态中知道类所有的属性和方法等。
+反射：主要是指程序可以访问，检测和修改它本身状态或行为的一种能力，并能根据自身行为的状态和结果，调整或修改应用所描述行为的状态和相关的语义。
+
+Java 的反射：在运行状态中，对于任意一个类都能够知道这个类所有的属性和方法；并且对于任意一个对象，都能够调用它的任意一个方法；这种动态获取信息以及动态调用对象方法的功能成为 Java 语言的反射机制。
+
+反射机制主要提供以下功能：
+1. 在运行时判断任意一个对象所属的类；
+2. 在运行时构造任意一个类的对象；
+3. 在运行时判断任意一个类所具有的成员变量和方法；
+4. 在运行时调用任意一个对象的方法；
+5. 生成动态代理。
+
+## 15.3. Java 反射 API
+
+```java
+// 类
+java.lang.Class;
+// 构造器
+java.lang.reflect.Constructor;
+// 属性
+java.lang.reflect.Field;
+// 方法
+java.lang.reflect.Method;
+// 访问修饰符
+java.lang.reflect.Modifier;
+```
+
+**优点：** 
+（1）能够运行时动态获取类的实例，大大提高系统的灵活性和扩展性。
+（2）与Java动态编译相结合，可以实现无比强大的功能 
+**缺点：** 
+（1）使用反射的性能较低
+（2）使用反射相对来说不安全
+（3）破坏了类的封装性，可以通过反射获取这个类的私有方法和属性
+
+### 15.3.1. 获取 Class 对象的三种方法
+
+1. 调用某个对象的 getClass() 方法，getClass() 在 Object 中
+```java
+Person p = new Person();
+Class clazz = p.getClass();
+```
+2. 调用某个类的 class 属性来获取该类对应的 Class 对象
+```java
+Class clazz = Person.class;
+```
+3. 使用 Class 类中的 forName() 静态方法 (最安全/性能最好)
+```java
+Class clazz = Class.forName("类的全路径"); (最常用)
+```
+
+### 15.3.2. Class 类常用方法
+
+```java
+// 获取全限定类名
+public String getName()
+
+// 获取直接父类全限定类名
+public native Class<? super T> getSuperclass()
+// 获取实现的所有接口的全限定类名
+public Class<?>[] getInterfaces()
+
+// 获取所有 public 构造器
+public Constructor<?>[] getConstructors()
+
+
+// 获得某个类的所有的公共（public）的字段，包括父类中的字段
+public Field[] getFields() 
+// 获得某个类的所有声明的字段，即包括public、private和proteced，但是不包括父类的申明字段。
+public Field[] getDeclaredFields()
+
+// 获取某个类的所有 public 方法，包括继承自父类的
+public Method[] getMethods()
+// 获取某个类的所有方法，仅包含自己定义的
+public Method[] getDeclaredMethods()
+
+// 调用空参构造器创建对象
+public T newInstance()
+```
+
+### 15.3.3. 创建对象的两种方式
+
+1. 使用 Class 对象的 newInstance()方法来创建该 Class 对象对应类的实例，但是这种方法要求该 Class 对象对应的类有默认的空构造器。
+```java
+Class clazz = Class.forName("reflection.Person"); 
+Person p = (Person) clazz.newInstance();
+```
+2. 使用 Constructor 对象的 newInstance() 方法来创建 Class 对象对应类的实例，通过这种方法可以选定构造方法创建实例。
+```java
+Class clazz = Class.forName("reflection.Person"); 
+Constructor c = clazz.getDeclaredConstructor(String.class, String.class, int.class);
+Person p = (Person) c.newInstance("李四", "男", 20);
+```
+
+### 15.3.4. 调用方法和设置属性
+
+调用方法：使用 Method 类的 invoke 方法
+```java
+public Object invoke(Object obj, Object... args)
+```
+第一个参数是一个对象的引用，用来指明通过哪个对象调用方法。
+
+设置属性值：使用 Filed 类的 set 方法
+```java
+public void set(Object obj, Object value)
+```
+第一个参数是一个对象的引用，用来指明设置哪个对象属性。
+
+
+# 16. 泛型
+
+Java 泛型（generics）是 JDK 5 中引入的一个新特性, 泛型提供了**编译时**类型安全检测机制，该机制允许程序员在**编译时**检测到非法的类型。
+泛型的本质是参数化类型，也就是说所操作的数据类型被指定为一个参数。
+
+## 16.1. 泛型方法
+
+- 在方法的返回值前面，在尖括号中可以声明类型参数，多个类型参数用逗号隔开。
+- 类型参数必须先声明后使用。
+- 类型参数只能代表引用型类型，不能是基本数据类型。
+
+```java
+// 泛型方法 printArray
+public static < E > void printArray( E[] inputArray )
+{
+    // 输出数组元素
+    for ( E element : inputArray ){
+        System.out.printf( "%s ", element );
+    }
+    System.out.println();
+}
+public static void main( String args[] )
+{
+    // 创建不同类型数组： Integer, Double 和 Character
+    Integer[] intArray = { 1, 2, 3, 4, 5 };
+    Double[] doubleArray = { 1.1, 2.2, 3.3, 4.4 };
+    Character[] charArray = { 'H', 'E', 'L', 'L', 'O' };
+
+    System.out.println( "整型数组元素为:" );
+    printArray( intArray  ); // 传递一个整型数组
+
+    System.out.println( "\n双精度型数组元素为:" );
+    printArray( doubleArray ); // 传递一个双精度型数组
+
+    System.out.println( "\n字符型数组元素为:" );
+    printArray( charArray ); // 传递一个字符型数组
+}
+```
+
+- `<? extends T>` 表示该通配符所代表的类型是 T 类型的子类。
+- `<? super T>` 表示该通配符所代表的类型是 T 类型的父类。
+
+# 17. 序列化
+
+**序列化**是把对象改成可以存到磁盘或通过网络发送到其他运行中的 Java 虚拟机的二进制格式的过程, 并可以通过反序列化恢复对象状态。需要实现 `java.io.Serializable` 接口。**序列化保存的时对象的状态，瞬态和静态变量会不会得到序列化**
+
+序列化一个对象需调用 `ObjectOutputStream.writeObject(saveThisObject)`, 并用 `ObjectInputStream.readObject()` 读取对象
+
+序列化可以看作是深拷贝的一种实现。
+
+## 17.1. 序列化相关问题
+
+【1、Java 中的可序列化接口和可外部接口之间的区别是什么？】
+Externalizable 给我们提供 writeExternal() 和 readExternal() 方法, 这让我们灵活地控制 Java 序列化机制, 而不是依赖于 Java 的默认序列化。 正确实现 Externalizable 接口可以显著提高应用程序的性能。
+
+【2、可序列化的方法有多少？如果没有方法,那么可序列化接口的用途是什么？】
+它没有任何方法, 在 Java 中也称为标记接口。当类实现 `java.io.Serializable` 接口时, 它将在 Java 中变得可序列化, 并指示编译器使用 Java 序列化机制序列化此对象。
+
+【3、如果可序列化类中的一个成员未实现可序列化接口，会发生什么情况？】
+在运行时将引发不可序列化异常 `NotSerializableException`。可以将其设置瞬态(**transient**)变量。
+
+【4、如果类是可序列化的, 但其超类不是, 则反序列化后从超级类继承的实例变量的状态如何？】
+超级类继承的实例变量的值将通过调用构造函数初始化。且一旦**构造函数链**启动, 就不可能停止，因此即使层次结构中更高的类成员变量实现了可序列化接口， 也将通过执行构造函数创建，而不再是反序列化得到。
+
+【5、是否可以自定义序列化过程, 或者是否可以覆盖 Java 中的默认序列化过程？】
+对于序列化一个对象需调用 `ObjectOutputStream.writeObject(saveThisObject)`, 并用 `ObjectInputStream.readObject()` 读取对象。
+如果在类中定义这两种方法, 则 JVM 将调用这两种方法, 而不是应用默认序列化机制。
+需要注意的重要一点是要声明这些方法为私有方法, 以避免被继承、重写或重载。 由于只有 Java 虚拟机可以调用类的私有方法, 你的类的完整性会得到保留, 并且 Java 序列化将正常工作。
+
+【6、假设新类的超级类实现可序列化接口, 如何避免新类被序列化？】
+为了避免 Java 序列化,你需要在类中实现 `writeObject()` 和 `readObject()` 方法, 并且需要从该方法引发不序列化异常`NotSerializableException`。 
+这是自定义 Java 序列化过程的另一个好处。
+
+【7、在 Java 序列化期间,哪些变量未序列化？】
+**瞬态和静态变量会不会得到序列化**
+由于静态变量属于类, 而不是对象, 因此它们不是对象状态的一部分；
+由于序列化仅保留**对象的状态**而不是对象本身，瞬态变量也不包含在 Java 序列化过程中。
+
+
+# 18. 集合
+
+![img](../images/集合.gif)
+
+集合有关的类和接口均在 java.util 包下 
+
+**集合有关的接口：**
+
+- Collection 接口：集合类的根接口，没有这个接口的直接实现类。
+  - List 接口：有序的集合，可以包含重复的元素，提供了按索引访问的方式。
+    - ArrayList - 线程安全 Collections.synchronizedList()
+    - LinkedList
+    - Vector
+  - Set 接口：不能包含重复的元素。
+    - HashSet
+      - LinkedHashSet
+    - TreeSet
+  
+- Map 接口：Map不能包含重复的key，但是可以包含相同的value。
+  - HashMap
+    - LinkedHashMap
+  - TreeMap
+  - ConcurrentHashMap
+  - Hashtable
+
+- Iterator 接口：所有的集合类都实现了它，这是一个用于遍历集合中元素的接口。
+  > hasNext() 是否还有下一个元素。
+  > next() 返回下一个元素。
+  > remove() 删除当前元素。
+
+综上：List（有序可重复）、Set（无序不能重复）、Map（键值对：键唯一，值可重复）
+
+## 18.1. List
+
+![](../images/ArrayListVectorLinkedList.png)
+
+**ArrayList**
+- 底层基于数组，默认初始化长度为 10，每次增长当前数组长度的一半
+- 1.8 以后，只有当第一次 add 的时候才会初始化数组。
+- ArrayList不适合做队列。
+
+**LinkedList**
+- 底层是双向链表
+- 可以当作堆、栈、队列、双向队列使用
+
+**ArrayList和LinkedList**
+- ArrayList 和 LinkedList在用法上没有区别，但是在功能上还是有区别的。
+- ArrayList的底层是数组，LinkedList的底层是双向链表。
+- **一般来说ArrayList的访问速度是要比LinkedList要快的。一般来说LinkedList的增删速度是要比ArrayList要快的**
+- LinkedList 经常用在增删操作较多而查询操作很少的情况下，ArrayList则相反。
+- ArrayList 继承 AbstractList 实现 List
+  ```java
+  public class ArrayList<E> 
+      extends AbstractList<E>
+      implements List<E>, RandomAccess, Cloneable, java.io.Serializable
+  ```
+- LinkedList 继承 AbstractSequentialList 实现 List
+  ```java
+  public class LinkedList<E>
+      extends AbstractSequentialList<E>
+      implements List<E>, Deque<E>, Cloneable, java.io.Serializable
+  ```
+
+**ArrayList和Vector**
+```java
+public class Vector<E>
+    extends AbstractList<E>
+    implements List<E>, RandomAccess, Cloneable, java.io.Serializable
+```
+相同点：
+​	1、都实现了 List 接口
+​	2、都是有序的集合
+​	3、底层都是数组
+​	4、按位置索引取出某个元素
+​	5、允许重复元素
+​	6、允许元素为 null
+不同点：
+​	1、ArrayList是非同步的；Vector是同步的。可以使用Collections工具类来构建出同步的ArrayList。
+​	2、Vector 每次增长原来的一倍，ArrayList 每次增长原来的0.5倍。
+
+## 18.2. Set
+
+HashSet、TreeSet、LinkedHashSet
+所有的 Set 都是基于 Map 实现的。
+
+Set里的元素是不能重复的，那么用什么方法来区分重复与否呢? 是用==还是equals()
+
+答：都用，== 或者 equals
+
+```java
+// 1. 如果key 相等  
+if (p.hash == hash &&
+    ((k = p.key) == key || (key != null && key.equals(k))))
+    e = p;
+// 2. 修改对应的value
+if (e != null) { // existing mapping for key
+    V oldValue = e.value;
+    if (!onlyIfAbsent || oldValue == null)
+        e.value = value;
+    afterNodeAccess(e);
+    return oldValue;
+}
+```
+
+## 18.3. Map 集合
+
+![](../images/HashMapHashTableTreeMap.png)
+
+HashMap、ConcurrentHashMap、Hashtable、LinkedHashMap、TreeMap。
+
+- HashMap
+  HashMap是最常用的Map，它根据键的HashCode值存储数据，根据键可以直接获取它的值，具有很快的访问速度 o(1)。遍历时，取得数据的**顺序是完全随机**的。因为键对象不可以重复，所以HashMap最多**只允许一条记录的键为null**，允许多条记录的值为null，是**非同步的**。
+
+- Hashtable
+  Hashtable与HashMap类似，是**HashMap的线程安全版**，它支持线程的同步。HashTable是直接在操作方法上加synchronized关键字，锁住整个数组，锁粒度比较大。即任一时刻只有一个线程能写Hashtable，因此也导致了Hashtale在**写入时会比较慢**，它继承自Dictionary类，不同的是**它不允许记录的键或者值为null**，同时效率较低。
+
+- ConcurrentHashMap
+  ConcurrentHashMap使用**分段锁**，降低了锁粒度，让并发度大大提高。**线程安全**，并且锁分离。ConcurrentHashMap内部使用段(Segment)来表示这些不同的部分，**每个段其实就是一个小的hash table**，它们有自己的锁。**只要多个修改操作发生在不同的段上，它们就可以并发进行**。
+
+- LinkedHashMap
+  LinkedHashMap **是有序的**，内部使用一个**链表**，有头尾节点。LinkedHashMap保存了**记录的插入顺序**，在用Iteraor遍历LinkedHashMap时，先得到的记录肯定是先插入的，在遍历的时候会比HashMap慢，有HashMap的全部特性。
+
+- TreeMap
+  TreeMap实现SortMap接口，能够把它保存的记录**根据键排序**，默认是按键值的升序排序（自然顺序），也可以**指定排序的比较器**，当用Iterator遍历TreeMap时，得到的记录是排过序的。不允许key值为空，**非同步的**。
+
+
+**HashMap和Hashtable的区别**
+1、HashMap是非同步的；Hashtable是同步的
+2、HashMap允许 最多一个 key 为null，V 随意；Hashtable不允许 K 和 V为null
+3、Hashtable有contains方法；HashMap 把Hashtable的contains方法去掉了，改成了containsValue和containsKey
+4、继承的父类不同
+```java
+public class HashMap<K,V> 
+    extends AbstractMap<K,V>
+    implements Map<K,V>, Cloneable, Serializable {}
+public class Hashtable<K,V>
+    extends Dictionary<K,V>
+    implements Map<K,V>, Cloneable, java.io.Serializable {}
+```
+
+## 18.4. 集合遍历方式
+1. Iterator：迭代输出，是使用最多的输出方式。
+2. ListIterator：是Iterator的子接口，专门用于输出List中的内容。
+3. foreach输出：JDK1.5之后提供的新功能，可以输出数组或集合。
+4. for循环
+
+遍历 ArrayList
+```java
+public static void main(String[] args) {
+    List<String> list=new ArrayList<String>();
+    list.add("Hello");
+    list.add("World");
+    list.add("HAHAHAHA");
+
+    // 第一种遍历方法使用 For-Each 遍历 List
+    // 也可以改写 for(int i=0;i<list.size();i++) 这种形式
+    for (String str : list) {
+        System.out.println(str);
+    }
+
+    // 第二种遍历，把链表变为数组相关的内容进行遍历
+    String[] strArray = list.toArray(new String[0]);
+    //这里也可以改写为 for(String str:strArray) 这种形式
+    for(int i=0; i < strArray.length; i++) {
+        System.out.println(strArray[i]);
+    }
+
+    // 第三种遍历 使用迭代器进行相关遍历
+    Iterator<String> ite = list.iterator();
+    // 判断下一个元素之后有值
+    while(ite.hasNext())
+    {
+        System.out.println(ite.next());
+    }
+}
+```
+
+遍历 HashMap
+```java
+public static void main(String[] args) {
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("1", "value1");
+    map.put("2", "value2");
+    map.put("3", "value3");
+
+    //第一种：遍历 key，使用 key 二次取值
+    System.out.println("通过Map.keySet遍历key和value：");
+    for (String key : map.keySet()) {
+        System.out.println("key= "+ key + " and value= " + map.get(key));
+    }
+
+    //第二种：使用 entrySet 的迭代器
+    System.out.println("通过Map.entrySet使用iterator遍历key和value：");
+    Iterator<Map.Entry<String, String>> it = map.entrySet().iterator();
+    while (it.hasNext()) {
+        Map.Entry<String, String> entry = it.next();
+        System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
+    }
+
+    //第三种：遍历 entrySet。推荐，尤其是容量大时
+    System.out.println("通过Map.entrySet遍历key和value");
+    for (Map.Entry<String, String> entry : map.entrySet()) {
+        System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
+    }
+
+    //第四种：遍历所有 value
+    System.out.println("通过Map.values()遍历所有的value，但不能遍历key");
+    for (String v : map.values()) {
+        System.out.println("value= " + v);
+    }
+}
+```
+
+
+# 19. IO
+
+![](../images/IO.png)
+
+文件输入输出流
+```java
+InputStream f = new FileInputStream("C:/java/hello");
+OutputStream f = new FileOutputStream("C:/java/hello")
+```
+
+# 20. NIO
+
+Non-blocking I/O 是一种同步非阻塞的I/O模型，也是I/O多路复用的基础，已经被越来越多地应用到大型应用服务器，成为解决高并发与大量连接、I/O处理问题的有效方式。
+
+https://zhuanlan.zhihu.com/p/23488863
+
+
+# 21. Java 8 新特性
+
+## 21.1. 函数式接口
 函数式接口(Functional Interface)就是一个有且仅有一个抽象方法，但是可以有多个非抽象方法的接口。
 函数式接口可以被隐式转换为 lambda 表达式。
 
@@ -2682,7 +3895,7 @@ interface GreetingService {
 }
 ```
 
-## 15.2. Lambda 表达式 
+## 21.2. Lambda 表达式 
 Lambda 表达式，也可称为闭包。允许把函数作为一个方法的参数（函数作为参数传递到方法中）。
 当匿名内部类所实现的接口是一个函数式接口，可以使用Lambda表达式来替代。
 
@@ -2784,7 +3997,7 @@ public class LambdaFinal {
         // 从lambda 表达式引用的本地变量必须是最终变量或实际上的最终变量
         salutation = "你好";
         greetService1.sayMessage("Runoob");
-    }
+    } 
 
     interface GreetingService {
         void sayMessage(String message);
@@ -2795,7 +4008,7 @@ public class LambdaFinal {
 ```
 
 
-## 15.3. 方法引用
+## 21.3. 方法引用
 方法引用提供了非常有用的语法，可以直接引用已有Java类或对象（实例）的方法或构造器。与lambda联合使用，方法引用可以使语言的构造更紧凑简洁，减少冗余代码。
 方法引用提供了一种引用而不执行方法的方式。（函数指针？？）
 **注意方法引用是一个Lambda表达式**
@@ -2807,7 +4020,7 @@ public class LambdaFinal {
 - 特定对象的方法引用：`实例对象::方法名`
 
 
-## 15.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用
+## 21.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用
 
 定义一个函数式接口
 ```java
@@ -2923,7 +4136,7 @@ public class GreetingMain {
 
 
 
-## 15.5. 默认方法
+## 21.5. 默认方法
 Java 8 新增了接口的默认方法。默认方法就是一个在接口里面有了一个实现的方法。
 ```java
 public interface Vehicle {
@@ -2990,17 +4203,72 @@ class Mian {
 ```
 
 
-## 15.6. Stream API
+## 21.6. Stream API
 新添加的Stream API（java.util.stream） 把真正的函数式编程风格引入到Java中。
 
-## 15.7. Date Time API
+## 21.7. Date Time API
 加强对日期与时间的处理。
 
-## 15.8. Optional 类
+## 21.8. Optional 类
 Optional 类已经成为 Java 8 类库的一部分，用来解决空指针异常。
+Optional 是个容器：它可以保存类型T的值，或者保存null。
+Optional提供很多有用的方法，这样我们就不用显式进行空值检测。如果值存在则 isPresent() 方法会返回 true，调用 get() 方法会返回该对象。
 
-## 15.9. 新工具
+```java
+public final class Optional<T>
+extends Object
+```
+常用方法（以下方法均省略 public）
+```java
+// 1、返回空的 Optional 实例。 return(Optional<T>) new Optional<>(null);
+static <T> Optional<T> empty()
+
+// 2、判断其他对象是否等于 Optional。
+boolean equals(Object obj)
+
+// 3、如果值存在，并且这个值匹配给定的 predicate，返回一个Optional用以描述这个值，否则返回一个空的Optional。
+Optional<T> filter(Predicate<? super <T> predicate)
+
+// 4、如果值存在，返回基于Optional包含的映射方法的值，否则返回一个空的Optional
+<U> Optional<U> flatMap(Function<? super T,Optional<U>> mapper)
+
+// 5、如果在这个Optional中包含这个值，返回值，否则抛出异常：NoSuchElementException
+T get()
+
+//6、返回存在值的哈希码，如果值不存在 返回 0。
+int hashCode()
+
+// 7、如果值存在则使用该值调用 consumer , 否则不做任何事情。
+void ifPresent(Consumer<? super T> consumer)
+
+// 8、如果值存在则方法会返回true，否则返回 false。
+boolean isPresent()
+
+// 9、如果有值，则对其执行调用映射函数得到返回值。如果返回值不为 null，则创建包含映射返回值的Optional作为map方法返回值，否则返回空Optional。
+<U>Optional<U> map(Function<? super T,? extends U> mapper)
+
+// 10、返回一个指定非null值的Optional。
+static <T> Optional<T> of(T value)
+
+// 11、如果为非空，返回 Optional 描述的指定值，否则返回空的 Optional。
+static <T> Optional<T> ofNullable(T value)
+
+// 12、如果存在该值，返回值， 否则返回 other。
+T orElse(T other)
+
+// 13、如果存在该值，返回值， 否则触发 other，并返回 other 调用的结果。
+T orElseGet(Supplier<? extends T> other)
+
+// 14、如果存在该值，返回包含的值，否则抛出由 Supplier 继承的异常
+<X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier)
+
+// 15、返回一个Optional的非空字符串，用来调试
+String toString()
+```
+
+
+## 21.9. 新工具
 新的编译工具，如：Nashorn引擎 jjs、 类依赖分析器jdeps。
 
-## 15.10. Nashorn, JavaScript 引擎
+## 21.10. Nashorn, JavaScript 引擎
 Java 8提供了一个新的Nashorn javascript引擎，它允许我们在JVM上运行特定的javascript应用。
