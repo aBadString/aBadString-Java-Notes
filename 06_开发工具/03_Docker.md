@@ -93,9 +93,15 @@ sudo docker run ‐p 3306:3306 ‐‐name MySQL ‐e MYSQL_ROOT_PASSWORD=123456 
 # 3、下载 Tomcat 镜像
 sudo docker pull tomcat:8.0.52
 # 4、根据镜像创建并启动 Tomcat 容器
-sudo docker run ‐p 8080:8080 ‐‐name Tomcat -v /home/abadstring/tomcat/webapps:/usr/local/tomcat/webapps ‐d tomcat:8.0.52
+sudo docker run ‐p 8080:8080 ‐‐name Tomcat --restart=always -v /home/abadstring/tomcat/webapps:/usr/local/tomcat/webapps ‐d tomcat:8.0.52
 # -v /home/abadstring/tomcat/webapps:/usr/local/tomcat/webapps
 # 挂载目录, 主机目录:容器目录
+# --restart=always : 开机自启动
+```
+
+如果已经创建好的容器，更改为自启动
+```shell
+docker update --restart=always <容器名字>
 ```
 
 ## 2.4. 配置 Docker 远程连接
