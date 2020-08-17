@@ -4,7 +4,7 @@
 
 - ## Java 核心基础
     - [Java 基础编程](01_Java核心基础/01_Java基础编程.md)
-    - [Java 高级特性](01_Java核心基础/02_Java高级特性.md)
+    - [Java 并发编程](01_Java核心基础/02_Java并发编程.md)
     - [Java 虚拟机](01_Java核心基础/03_Java虚拟机.md)
     - [Java 常用API源码](01_Java核心基础/04_Java常用API源码.md)
 

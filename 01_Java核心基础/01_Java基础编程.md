@@ -54,6 +54,7 @@
   - [7.4. 代码块](#74-代码块)
   - [7.5. 内部类](#75-内部类)
     - [7.5.1. 匿名子类（匿名内部类）](#751-匿名子类匿名内部类)
+  - [7.6. 类加载初始化和对象实例化中各个过程的顺序](#76-类加载初始化和对象实例化中各个过程的顺序)
 - [8. 面向对象三大特征：封装 继承 多态](#8-面向对象三大特征封装-继承-多态)
   - [8.1. 封装性](#81-封装性)
   - [8.2. 继承性](#82-继承性)
@@ -78,28 +79,29 @@
   - [12.5. 自定义异常类](#125-自定义异常类)
 - [13. 多线程](#13-多线程)
   - [13.1. 程序、进程、线程](#131-程序-进程-线程)
-  - [13.2. 线程的使用](#132-线程的使用)
-    - [13.2.1. 创建线程方法一：继承Thread类](#1321-创建线程方法一继承thread类)
-    - [13.2.2. 创建线程方法二：实现Runnable接口](#1322-创建线程方法二实现runnable接口)
-    - [13.2.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）](#1323-创建线程方法三实现-callable-接口jdk50新增)
-    - [13.2.4. 线程的调度](#1324-线程的调度)
-  - [13.3. 线程的生命周期](#133-线程的生命周期)
-  - [13.4. 线程同步](#134-线程同步)
-    - [13.4.1. 同步代码块](#1341-同步代码块)
-    - [13.4.2. 同步方法](#1342-同步方法)
-    - [13.4.3. 同步锁 (jdk5.0 新增)](#1343-同步锁-jdk50-新增)
-    - [13.4.4. 死锁](#1344-死锁)
-  - [13.5. 线程通讯](#135-线程通讯)
-    - [13.5.1. PV 操作](#1351-pv-操作)
-    - [13.5.2. 两个线程交替打印 1~100](#1352-两个线程交替打印-1~100)
-    - [13.5.3. 生产者消费者问题](#1353-生产者消费者问题)
-  - [13.6. 创建线程方法四：线程池](#136-创建线程方法四线程池)
-    - [13.6.1. 几种常用的线程池](#1361-几种常用的线程池)
-    - [13.6.2. 线程池各个参数的作用，如何进行的?](#1362-线程池各个参数的作用如何进行的)
-    - [13.6.3. 线程池异常处理](#1363-线程池异常处理)
-    - [13.6.4. 线程池的工作队列](#1364-线程池的工作队列)
-    - [13.6.5. 线程池状态](#1365-线程池状态)
-    - [13.6.6. 使用方法](#1366-使用方法)
+  - [13.2. 线程安全](#132-线程安全)
+  - [13.3. 线程的使用](#133-线程的使用)
+    - [13.3.1. 创建线程方法一：继承Thread类](#1331-创建线程方法一继承thread类)
+    - [13.3.2. 创建线程方法二：实现Runnable接口](#1332-创建线程方法二实现runnable接口)
+    - [13.3.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）](#1333-创建线程方法三实现-callable-接口jdk50新增)
+    - [13.3.4. 线程的调度](#1334-线程的调度)
+  - [13.4. 线程的生命周期](#134-线程的生命周期)
+  - [13.5. 线程同步](#135-线程同步)
+    - [13.5.1. 同步代码块](#1351-同步代码块)
+    - [13.5.2. 同步方法](#1352-同步方法)
+    - [13.5.3. 同步锁 Lock ReentrantLock (jdk5.0 新增)](#1353-同步锁-lock-reentrantlock-jdk50-新增)
+    - [13.5.4. 死锁](#1354-死锁)
+  - [13.6. 线程通讯](#136-线程通讯)
+    - [13.6.1. PV 操作](#1361-pv-操作)
+    - [13.6.2. 两个线程交替打印 1~100](#1362-两个线程交替打印-1~100)
+    - [13.6.3. 生产者消费者问题](#1363-生产者消费者问题)
+  - [13.7. 创建线程方法四：线程池](#137-创建线程方法四线程池)
+    - [13.7.1. 几种常用的线程池](#1371-几种常用的线程池)
+    - [13.7.2. 线程池各个参数的作用，如何进行的?](#1372-线程池各个参数的作用如何进行的)
+    - [13.7.3. 线程池异常处理](#1373-线程池异常处理)
+    - [13.7.4. 线程池的工作队列](#1374-线程池的工作队列)
+    - [13.7.5. 线程池状态](#1375-线程池状态)
+    - [13.7.6. 使用方法](#1376-使用方法)
 - [14. 反射](#14-反射)
   - [14.1. 动态语言](#141-动态语言)
   - [14.2. 反射机制](#142-反射机制)
@@ -117,40 +119,43 @@
   - [17.2. Set](#172-set)
   - [17.3. Map 集合](#173-map-集合)
   - [17.4. 集合遍历方式](#174-集合遍历方式)
+  - [17.5. 集合有关面试题](#175-集合有关面试题)
 - [18. IO](#18-io)
 - [19. NIO](#19-nio)
-- [20. Java 常用类](#20-java-常用类)
-  - [20.1. Object 类](#201-object-类)
-    - [20.1.1. equals方法](#2011-equals方法)
-    - [20.1.2. hashCode方法](#2012-hashcode方法)
-    - [20.1.3. toString方法](#2013-tostring方法)
-    - [20.1.4. clone方法](#2014-clone方法)
-  - [20.2. 包装类(Wrapper)](#202-包装类wrapper)
-    - [20.2.1. 基本数据类型、包装类、String之间的转换](#2021-基本数据类型-包装类-string之间的转换)
-    - [20.2.2. 拆箱与装箱](#2022-拆箱与装箱)
-  - [20.3. String类和常量池](#203-string类和常量池)
-    - [20.3.1. String 的不可变性](#2031-string-的不可变性)
-    - [20.3.2. String 的几种构造器](#2032-string-的几种构造器)
-    - [20.3.3. String 常用 API](#2033-string-常用-api)
-    - [20.3.4. String 与其他结构的转换](#2034-string-与其他结构的转换)
-    - [20.3.5. StringBuffer 和 StringBuilder](#2035-stringbuffer-和-stringbuilder)
-  - [20.4. 时间有关类](#204-时间有关类)
-    - [20.4.1. java.util.Date](#2041-javautildate)
-    - [20.4.2. java.sql.Date](#2042-javasqldate)
-    - [20.4.3. SimpleDateFormat](#2043-simpledateformat)
-    - [20.4.4. java.util.Calendar 日历类](#2044-javautilcalendar-日历类)
-    - [20.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增）](#2045-localdate-localtime-localdatetimejdk8-新增)
-- [21. Java 8 新特性](#21-java-8-新特性)
-  - [21.1. 函数式接口](#211-函数式接口)
-  - [21.2. Lambda 表达式](#212-lambda-表达式)
-  - [21.3. 方法引用](#213-方法引用)
-  - [21.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#214-接口实现类-匿名内部类-lambda表达式-方法引用)
-  - [21.5. 默认方法](#215-默认方法)
-  - [21.6. Stream API](#216-stream-api)
-  - [21.7. Date Time API](#217-date-time-api)
-  - [21.8. Optional 类](#218-optional-类)
-  - [21.9. 新工具](#219-新工具)
-  - [21.10. Nashorn, JavaScript 引擎](#2110-nashorn-javascript-引擎)
+- [20. JNI](#20-jni)
+- [21. Java 常用类](#21-java-常用类)
+  - [21.1. Object 类](#211-object-类)
+    - [21.1.1. equals方法](#2111-equals方法)
+    - [21.1.2. hashCode方法](#2112-hashcode方法)
+    - [21.1.3. toString方法](#2113-tostring方法)
+    - [21.1.4. clone方法](#2114-clone方法)
+  - [21.2. 包装类(Wrapper)](#212-包装类wrapper)
+    - [21.2.1. 基本数据类型、包装类、String之间的转换](#2121-基本数据类型-包装类-string之间的转换)
+    - [21.2.2. 拆箱与装箱](#2122-拆箱与装箱)
+  - [21.3. String类和常量池](#213-string类和常量池)
+    - [21.3.1. String 的不可变性](#2131-string-的不可变性)
+    - [21.3.2. String 的几种构造器](#2132-string-的几种构造器)
+    - [21.3.3. String 常用 API](#2133-string-常用-api)
+    - [21.3.4. String 与其他结构的转换](#2134-string-与其他结构的转换)
+    - [21.3.5. StringBuffer 和 StringBuilder](#2135-stringbuffer-和-stringbuilder)
+  - [21.4. 时间有关类](#214-时间有关类)
+    - [21.4.1. java.util.Date](#2141-javautildate)
+    - [21.4.2. java.sql.Date](#2142-javasqldate)
+    - [21.4.3. SimpleDateFormat](#2143-simpledateformat)
+    - [21.4.4. java.util.Calendar 日历类](#2144-javautilcalendar-日历类)
+    - [21.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增）](#2145-localdate-localtime-localdatetimejdk8-新增)
+- [22. Java 8 新特性](#22-java-8-新特性)
+  - [22.1. 函数式接口](#221-函数式接口)
+  - [22.2. Lambda 表达式](#222-lambda-表达式)
+  - [22.3. 方法引用](#223-方法引用)
+  - [22.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#224-接口实现类-匿名内部类-lambda表达式-方法引用)
+  - [22.5. 默认方法](#225-默认方法)
+  - [22.6. Stream API](#226-stream-api)
+  - [22.7. Date Time API](#227-date-time-api)
+  - [22.8. Optional 类](#228-optional-类)
+  - [22.9. 新工具](#229-新工具)
+  - [22.10. Nashorn, JavaScript 引擎](#2210-nashorn-javascript-引擎)
+- [23. Servlet](#23-servlet)
 
 <!-- /code_chunk_output -->
 
@@ -1271,7 +1276,6 @@ Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的�
 代码块分为静态代码块和非静态代码块。
 
 静态代码块：
-
 ​    1、用来对类中的信息进行初始化。
 ​    2、静态代码块随着类的加载而执行，只执行一次。
 ​    3、静态代码块的执行优先于非静态代码块，因为要先加载类，后创建对象。
@@ -1279,7 +1283,6 @@ Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的�
 ​    5、静态代码块不能使用非静态的属性和方法，只能使用静态的属性和方法。
 
 非静态代码块：
-
 ​    1、 用来对对象进行初始化。
 ​    2、 非静态代码块随着对象的创建而执行，每次创建对象都会执行一次。
 ​    3、 非静态代码块的执行优先于构造器。
@@ -1421,6 +1424,88 @@ jumpass.addKeyListener
 ```
 
 匿名内部类只能引用 final 所修饰的外层**局部变量**。
+
+## 7.6. 类加载初始化和对象实例化中各个过程的顺序
+
+下面代码的执行结果是？
+```java
+public class Father{
+    private int i = test();
+    private static int j = method();
+
+    static{
+        System.out.print("(1)");
+    }
+    Father(){
+        System.out.print("(2)");
+    }
+    {
+        System.out.print("(3)");
+    }
+
+
+    public int test(){
+        System.out.print("(4)");
+        return 1;
+    }
+    public static int method(){
+        System.out.print("(5)");
+        return 1;
+    }
+}
+
+public class Son extends Father {
+    private int i = test();
+    private static int j = method();
+    static{
+        System.out.print("(6)");
+    }
+    Son(){
+        this(1);
+        System.out.print("(7)");
+    }
+    Son(int i) {
+        System.out.print("(A)");
+    }
+    {
+        System.out.print("(8)");
+    }
+    @Override
+    public int test(){
+        System.out.print("(9)");
+        return 1;
+    }
+    public static int method(){
+        System.out.print("(10)");
+        return 1;
+    }
+    public static void main(String[] args) {
+        Son s1 = new Son();
+        System.out.println();
+        Son s2 = new Son();
+    }
+}
+// (5)(1)(10)(6)(9)(3)(2)(9)(8)(A)(7)
+// (9)(3)(2)(9)(8)(A)(7)
+```
+
+**类初始化过程：**
+1. 当使用到一个类时，就会触发加载并初始化该类。创建类的实例之前必须先加载和初始化类。
+    - main 方法所在的类在程序启动时就加载并初始化。
+2. 子类初始化之前需要先初始化父类
+3. 类初始化的时候就是执行 `<clinit>()` 方法
+    - 这个方法由编译器生成，在 class 文件中可以找到。
+    - 该方法由 静态类变量显示赋值代码 和 静态代码块 组成。按照从上到下的顺序执行。
+    - 该方法只会执行一次。
+
+**实例初始化过程：**
+1. 实例初始化就是执行 `<init>()` 方法
+    - 该方法可能有多个重载，有几个构造器就有几个重载
+    - 该方法由 非静态实例变量显示赋值代码、非静态代码块、对应构造器中的代码 组成
+    - 非静态实例变量显示赋值代码、非静态代码块 按照从上到下的顺序执行，构造器中的代码最后执行
+    - `<init>()` 方法第一行是 supper(...)，所以会先执行父类的 `<init>()` 方法
+    - 每次创建实例对象时，都会执行
+
 
 
 # 8. 面向对象三大特征：封装 继承 多态
@@ -2119,9 +2204,43 @@ public class MyException extends Exception {
 
 一个Java应用至少有三个线程：main主线程、GC垃圾回收线程、异常处理线程。
 
-## 13.2. 线程的使用
+## 13.2. 线程安全
 
-### 13.2.1. 创建线程方法一：继承Thread类
+编写线程安全的代码，本质上就是管理对对象的状态的访问，而且这些状态通常都是共享的、可变的。
+一个对象的**状态**就是它的数据，存储在状态变量中。**共享**就是一个变量可以被多个线程访问。可变是指变量的值在其生命周期内是可以被**改变**的。
+
+线程安全的定义：一个类是线程安全的，是指在被多个线程访问时，类可以持续进行正确的行为。
+![image-20200323173052585](../images/image-20200323173052585.png)
+
+按照线程安全的安全程度分：
+1. 不可变：final，java.lang.String的对象是不可变对象
+2. 绝对线程安全：不论何种环境下，不需要做任何额外同步措施
+3. 相对线程安全：使用额外的同步手段保证调用的正确性
+4. 线程兼容：对象本身不是线程安全的，可以通过调用段使用同步手段来保证对象安全
+5. 线程对立：不管采用哪种方式，都不能并发的使用。
+
+线程安全的类封装了任何必要的同步，因此客户不需要自己提供。
+无状态对象永远是线程安全的。多数 Servlet 都可以实现为无状态的。
+
+**不可变对象永远是线程安全的。**
+不可变对象需要满足：
+- 它的状态不能在创建后再被修改
+- 所以字段都是 final 类型
+- 该对象被正确顺序的创建（创建期间没有发生this引用逸出）
+
+**原子操作**
+![image-20200323180121239](../images/image-20200323180121239.png)
+
+**设计线程安全的类**
+设计线程安全的类包括以下三要素：
+1. 确定对象状态是由哪些变量构成的
+2. 确定限制状态变量的不变约束
+3. 制定一个管理并发访问对象状态的策略
+
+
+## 13.3. 线程的使用
+
+### 13.3.1. 创建线程方法一：继承Thread类
 ```java
 // 1、继承 Thread 类
 class MyThread extends Thread {
@@ -2181,7 +2300,7 @@ new Thread("t1") {
 10、	isAlive()：判断线程是否存活。
 
 
-### 13.2.2. 创建线程方法二：实现Runnable接口
+### 13.3.2. 创建线程方法二：实现Runnable接口
 ```java
 // 1、实现 Runnable 接口
 class MyRunnable implements Runnable {
@@ -2211,7 +2330,7 @@ public class RunnableTest {
 推荐使用实现Runnable接口的方式，因为继承是is-a的关系。一个类不应该is-a线程，正确的应该是一个类具有多线程运行的功能。第二，通过Runnable实现类创建几个线程对象，这些线程共享一个Runnable实现类对象，该对象的成员变量由所有线程共享。
 Thread本身也是实现了Runnable接口：public class Thread implements Runnable
 
-### 13.2.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）
+### 13.3.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）
 
 与 Runnable 相比 Callable 接口：
 1. 相比 run() 方法，call() 方法可以用返回值
@@ -2280,7 +2399,7 @@ public class CallableTest {
 ```
 
 
-### 13.2.4. 线程的调度
+### 13.3.4. 线程的调度
 时间片轮转：时间片到，放弃CPU
 优先级调度：高优先级线程先使用CPU
 Java的调度策略：同级线程先来先服务，使用时间片轮转；高优先级线程优先调度。
@@ -2291,7 +2410,7 @@ NORM_PRIORITY 	5	默认的
 MAX_PRIORITY 	10
 
 
-## 13.3. 线程的生命周期
+## 13.4. 线程的生命周期
 ```java
 public enum State {
 NEW,
@@ -2313,9 +2432,12 @@ TIMED_WAITING,
 
 ![](../images/线程的生命周期.png)
 
-## 13.4. 线程同步
+## 13.5. 线程同步
 
-### 13.4.1. 同步代码块
+### 13.5.1. 同步代码块
+
+执行线程进入 synchronized 块之前会自动获得对象的内部锁，离开 synchronized 块时自动释放锁。获得内部锁的唯一途径是进入这个内部锁保护的同步块或方法。
+内部锁是互斥锁，至多只有一个线程可以拥有内部锁。其他线程会被阻塞，直到锁被释放。
 
 ```java
 synchronization(同步监视器) {
@@ -2406,12 +2528,12 @@ class WindowThreadTest {
 
 为了方便起见，锁可以直接使用 **this 对象** 或者 **getClass() / 类名.class**
 
-### 13.4.2. 同步方法
+### 13.5.2. 同步方法
 
 如果整个方法都是临界区，不妨把改方法声明为同步方法。
 非静态同步方法的锁是 this；静态方法的锁是当前类。
 
-### 13.4.3. 同步锁 (jdk5.0 新增)
+### 13.5.3. 同步锁 Lock ReentrantLock (jdk5.0 新增)
 
 java.util.concurrent.locks.Lock 接口
 ```java
@@ -2469,22 +2591,38 @@ class WindowRunnableTest {
 }
 ```
 
+**重进入 Reentrancy**
+![image-20200323183058740](../images/image-20200323183058740.png)
+![image-20200323183106399](../images/image-20200323183106399.png)
+获得的对象关联的锁并不能阻止其他线程访问这个对象，只能阻止其他线程再获得相同的锁。
+每个对象都有一个内部锁。
+
 【面试题】synchronized 和 Lock 的异同？
 答：
 相同：
-1. 可重入锁：Synchronized和ReentrantLook都是可重入锁
+1. 可重入锁：synchronized和ReentrantLook都是可重入锁
 
 不同：
-1. Synchronized 是隐性锁，自动的获取和释放锁；ReentrantLock 是显性锁，需要自己写获取和释放锁的语句。
+1. Synchronized 是隐性锁，自动的获取和释放锁；ReentrantLock 是显性锁，需要自己写获取和释放锁的语句(在try-finally块中释放锁)。
 2. synchronized 是非公平锁，它无法保证等待的线程获取锁的顺序；ReentrantLook 可以选择是否公平锁。
 3. Synchronized 是不可中断锁，ReentrantLock 可以通过 lockInterruptibly 方法中断等待锁。
 4. 底层实现：
     Synchronized 使用字节码指令来控制锁：monitorenter和monitorexit。当线程执行遇到monitorenter指令时会尝试获取内置锁，如果获取锁则锁计数器+1，如果没有获取锁则阻塞；当遇到monitorexit指令时锁计数器-1，如果计数器为0则释放锁。
     ReentrantLock 依靠的是CAS乐观锁，依赖 AbstractQueuedSynchronizer 类，把所有的请求线程构成一个CLH队列。而对该队列的操作均通过Lock-Free（CAS）操作。
+5. synchronized锁是读写互斥并且读读也互斥；ReentrantReadWriteLock 分为读锁和写锁，而读锁可以同时被多个线程持有，适合于读多写少场景的并发。
 
 参考：https://www.jianshu.com/p/b343a9637f95
 
-### 13.4.4. 死锁
+6. synchronized 修饰方法时锁定的是调用该方法的对象。它并不能使调用该方法的多个对象在执行顺序上互斥。
+
+![image-20200402181328804](../images/image-20200402181328804.png) 
+
+【看看题】
+![image-20200323182712945](../images/image-20200323182712945.png)
+1.synchronzied关键字修饰static方法：该锁由该类持有，相同类只可持有一把锁。
+2.synchronzied关键字修饰普通方法：该锁由类对象持有，相同对象只可持有一把锁。
+
+### 13.5.4. 死锁
 
 定义：两个或两个以上的进程/线程，在并发运行的情况下，因为竞争多个互斥资源，而造成它们互相等待对方无法释放的资源的现象，这种现象在无外力的作用时不可解除。
 
@@ -2502,9 +2640,9 @@ class WindowRunnableTest {
 
 参考：https://blog.csdn.net/hd12370/article/details/82814348
 
-## 13.5. 线程通讯
+## 13.6. 线程通讯
 
-### 13.5.1. PV 操作
+### 13.6.1. PV 操作
 
 ```java
 int S = 1;
@@ -2540,7 +2678,7 @@ V（S）；             V（S）；                     V（S）；
 参考：https://www.cnblogs.com/litaoyang/p/6606499.html
 
 
-### 13.5.2. 两个线程交替打印 1~100
+### 13.6.2. 两个线程交替打印 1~100
 
 wait()：执行改方法的线程进入阻塞状态，并释放同步监视器
 notify()：唤醒一个被wait的线程，多个线程按照优先级最高的被唤醒
@@ -2613,7 +2751,7 @@ public class ThreadCommunication {
 }
 ```
 
-### 13.5.3. 生产者消费者问题
+### 13.6.3. 生产者消费者问题
 
 ![](../images/生产者消费者问题.png)
 
@@ -2745,7 +2883,7 @@ public class ProductorCustomer {
 }
 ```
 
-## 13.6. 创建线程方法四：线程池
+## 13.7. 创建线程方法四：线程池
 
 好处：
 1. 便于管理线程
@@ -2762,7 +2900,7 @@ public interface Executor {
 ```
 ExecutorService 是线程池接口，常见实现类有 ThreadPoolExecutor。
 
-### 13.6.1. 几种常用的线程池
+### 13.7.1. 几种常用的线程池
 
 Executors 是一个工具类，线程池工厂，用于创建并返回不同类型的线程池。
 在 java.util.concurrent.Executors 中提供了一些方法去创建四种不同的线程池，这些方法实际上都是调用了 ThreadPoolExecutor 的构造器。返回值是线程池接口 ExecutorService。
@@ -2795,7 +2933,7 @@ scheduleAtFixedRate() ：按某种速率周期执行
 scheduleWithFixedDelay()：在某个延迟后执行
 周期性执行任务的场景，需要限制线程数量的场景
 
-### 13.6.2. 线程池各个参数的作用，如何进行的?
+### 13.7.2. 线程池各个参数的作用，如何进行的?
 
 **ThreadPoolExecutor 构造器**
 ```java
@@ -2821,14 +2959,14 @@ public ThreadPoolExecutor(
 3. DiscardOldestPolicy：丢弃队列里最老的任务，将当前这个任务继续提交给线程池
 4. CallerRunsPolicy：交给线程池调用所在的线程进行处理
 
-### 13.6.3. 线程池异常处理
+### 13.7.3. 线程池异常处理
 
 1. try - catch 处理
 2. 通过 Future 对象的 get 方法接收抛出的异常，再处理
 3. 使用自己的ThreadFactory，创建线程时设置线程的 UncaughtExceptionHandler，在 uncaughtException方法中处理异常
 4. 重写 ThreadPoolExecutor 的 afterExecute方法，处理传递的异常引用
 
-### 13.6.4. 线程池的工作队列
+### 13.7.4. 线程池的工作队列
 
 1. ArrayBlockingQueue：有界队列，用数组实现的，FIFO
 2. LinkedBlockingQueue：可设置容量队列，基于链表，FIFO，不设置容量则无限扩大，最大为 Integer.MAX_VALUE
@@ -2836,7 +2974,7 @@ public ThreadPoolExecutor(
 4. PriorityBlockingQueue：优先级队列
 5. SynchronousQueue：同步队列，插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
 
-### 13.6.5. 线程池状态
+### 13.7.5. 线程池状态
 
 1. **Running**
 该状态的线程池会接收新任务，并处理阻塞队列中的任务;
@@ -2858,7 +2996,7 @@ terminated() 执行完毕，进入 Terminated 状态
 5. **Terminated**
 该状态表示线程池彻底终止
 
-### 13.6.6. 使用方法
+### 13.7.6. 使用方法
 
 execute 用来执行 Runnable 实现类；submit 用来执行 Callable 实现类。
 ```java
@@ -3320,7 +3458,13 @@ public static void main(String[] args) {
 快速失败（fail-fast）：
 当多个线程对 Collection 进行操作时，若其中某一个线程通过iterator去遍历集合时，该集合的内容被其他线程所改变；则会抛出ConcurrentModificationException 并发修改异常。
 原理：迭代器在遍历时直接访问集合中的内容，并且在遍历过程中使用一个 modCount 变量。集合在被遍历期间如果内容发生变化，就会改变modCount的值。每当迭代器使用hashNext()/next()遍历下一个元素之前，都会检测modCount变量是否为expectedmodCount值，是的话就返回遍历；否则抛出异常，终止遍历。
-注意：这里异常的抛出条件是检测到 modCount！=expectedmodCount 这个条件。如果集合发生变化时修改modCount值刚好又设置为了expectedmodCount值，则异常不会抛出。因此，不能依赖于这个异常是否抛出而进行并发操作的编程，这个异常只建议用于检测并发修改的bug。
+```java
+final void checkForComodification() {
+    if (modCount != expectedModCount)
+        throw new ConcurrentModificationException();
+}
+```
+注意：这里异常的抛出条件是检测到 modCount！=expectedmodCount 这个条件。如果集合发生变化时修改modCount值刚好又设置为了expectedmodCount值，则异常不会抛出（ABA问题）。因此，不能依赖于这个异常是否抛出而进行并发操作的编程，这个异常只建议用于检测并发修改的bug。
 
 安全失败（fail—safe）:
 采用安全失败机制的集合容器，在遍历时不是直接在集合内容上访问的，而是先复制原有集合内容，在拷贝的集合上进行遍历。
@@ -3353,9 +3497,127 @@ Non-blocking I/O 是一种同步非阻塞的I/O模型，也是I/O多路复用的
 https://zhuanlan.zhihu.com/p/23488863
 
 
-# 20. Java 常用类
+# 20. JNI
 
-## 20.1. Object 类
+1、创建一个包 `mkdir -p priv/abadstring/jni/`
+2、创建一个java文件 `vi priv/abadstring/jni/JNIDemo.java`
+```java
+package priv.abadstring.jni;
+
+public class JNIDemo {
+    public native void sayHelloByC();
+
+    public static void main(String[] args) {
+        // 打印一下当前 VM 中库目录
+        System.out.println( System.getProperty("java.library.path"));
+        // 加载动态库
+        System.loadLibrary("JNIDemoByC");
+        new JNIDemo().sayHelloByC();
+    }
+}
+```
+
+3、编译`javac priv/abadstring/jni/JNIDemo.java`
+
+4、生成头文件`javah -classpath . -jni priv.abadstring.jni.JNIDemo`
+```c++
+/* DO NOT EDIT THIS FILE - it is machine generated */
+#include <jni.h>
+/* Header for class priv_abadstring_jni_JNIDemo */
+
+#ifndef _Included_priv_abadstring_jni_JNIDemo
+#define _Included_priv_abadstring_jni_JNIDemo
+#ifdef __cplusplus
+extern "C" {
+#endif
+/*
+ * Class:     priv_abadstring_jni_JNIDemo
+ * Method:    sayHelloByC
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_priv_abadstring_jni_JNIDemo_sayHelloByC
+  (JNIEnv *, jobject);
+
+#ifdef __cplusplus
+}
+#endif
+#endif
+```
+
+将生成的头文件放到包下 `mv priv_abadstring_jni_JNIDemo.h priv/abadstring/jni/`
+
+目前文件结构
+```
+.
+└── priv
+    └── abadstring
+        └── jni
+            ├── JNIDemo.class
+            ├── JNIDemo.java
+            └── priv_abadstring_jni_JNIDemo.h
+```
+
+5、新建一个C++源文件 `vi priv/abadstring/jni/JNIDemoByC.c`
+内容就是头文件的实现函数
+```C
+#include "priv_abadstring_jni_JNIDemo.h"
+#include <stdio.h>
+
+JNIEXPORT void JNICALL Java_priv_abadstring_jni_JNIDemo_sayHelloByC(JNIEnv * env, jobject obj)
+{
+    printf("hello, jni. I am C.");
+}
+```
+
+6、查找一下jdk的安装位置 `sudo tree /usr/lib/jvm/java-8-openjdk-amd64/include/`
+```
+/usr/lib/jvm/java-8-openjdk-amd64/include/
+├── classfile_constants.h
+├── jdwpTransport.h
+├── jni.h
+├── jvmticmlr.h
+├── jvmti.h
+└── linux
+    └── jni_md.h
+```
+
+发现 jni.h 和 jni_md.h 的位置，这个一会编译动态库时需要
+
+6、创建动态库 
+```shell
+gcc -shared -fPIC -o priv/abadstring/jni/libJNIDemoByC.so priv/abadstring/jni/JNIDemoByC.c -I/usr/lib/jvm/java-8-openjdk-amd64/include -I/usr/lib/jvm/java-8-openjdk-amd64/include/linux
+```
+动态库的名字格式是`libxxx.so`
+xxx必须和 Java 源代码中载入的名字 JNIDemoByC 相同。
+
+动态库生成成功
+```
+.
+└── priv
+    └── abadstring
+        └── jni
+            ├── JNIDemoByC.c
+            ├── JNIDemo.class
+            ├── JNIDemo.java
+            ├── libJNIDemoByC.so
+            └── priv_abadstring_jni_JNIDemo.h
+```
+
+7、运行起来
+```shell
+java -Djava.library.path="./priv/abadstring/jni" priv.abadstring.jni.JNIDemo
+```
+结果：
+```
+./priv/abadstring/jni
+hello, jni. I am C.
+```
+
+-D 必须在类前面，这种不行 `java priv.abadstring.jni.JNIDemo -Djava.library.path="./priv/abadstring/jni"`
+
+# 21. Java 常用类
+
+## 21.1. Object 类
 
 Object类是所有Java类的根父类。
 
@@ -3415,7 +3677,7 @@ public class Object {
 }
 ```
 
-### 20.1.1. equals方法
+### 21.1.1. equals方法
 
 **equals()方法需要具有如下特点：**
 
@@ -3468,19 +3730,19 @@ public boolean equals(Object anObject) {
 }
 ```
 
-### 20.1.2. hashCode方法
+### 21.1.2. hashCode方法
 
 这个方法返回一个整型值（hash code value），如果两个对象被equals()方法判断为相等，那么它们就应该拥有同样的 hash code。
 
 Object类的hashCode()方法为不同的对象返回不同的值，Object类的hashCode值表示的是对象的地址。
 
-### 20.1.3. toString方法
+### 21.1.3. toString方法
 
 输出一个引用时，实际上是先默认调用了toString方法得到一个字符串，然后调用重载方法public void System.out.println(String x)。
 
 ![image-20200403141045044](../images/image-20200403141045044.png) 
 
-### 20.1.4. clone方法
+### 21.1.4. clone方法
 
 1、想要重写clone方法的类必须实现 java.lang.Cloneable 接口，否则会抛出CloneNotSupportedException异常。Cloneable接口中不包含任何方法，所以实现它时只要在类声明中加上implements语句即可。
 
@@ -3524,11 +3786,11 @@ protected Object clone() throws CloneNotSupportedException {
 ![image-20200403151718701](../images/image-20200403151718701.png) 
 
 
-## 20.2. 包装类(Wrapper)
+## 21.2. 包装类(Wrapper)
 
 ![](../images/包装类.png)
 
-### 20.2.1. 基本数据类型、包装类、String之间的转换
+### 21.2.1. 基本数据类型、包装类、String之间的转换
  
 ![](../images/基本数据类型和包装类之间的转化.png)
 
@@ -3540,7 +3802,7 @@ protected Object clone() throws CloneNotSupportedException {
 - 基本数据类型 -> String：调用String类的valueOf()静态方法，String str = String.valueOf(10);
 - 包装类 -> String：调用包装类的toString()方法，String str = String.valueOf(integer);
 
-### 20.2.2. 拆箱与装箱
+### 21.2.2. 拆箱与装箱
 
 拆箱：将包装类直接赋值给基本数据类型。
 装箱：将基本数据类型直接赋值给包装类。底层是调用了valueOf方法。
@@ -3610,7 +3872,7 @@ public static Short valueOf(short s) {
 }
 ```
 
-## 20.3. String类和常量池
+## 21.3. String类和常量池
 1、String类被final所修饰，所有该类不能被继承。
 2、实现了Serializable接口可以被序列化，被序列化后才能在不同的进程间或前后端进行数据传输。
 3、实现了Compareable接口可以用来比较内容。
@@ -3619,14 +3881,14 @@ public static Short valueOf(short s) {
 6、字符串都放在常量池中.
 7、String的底层是一个数组：private final char value[]; 该数组被final所修饰，所以**String是一个不可变的字符序列**。修改字符串时不会在原来的字符串对象上修改，而是会创建一个新的字符串。
 
-### 20.3.1. String 的不可变性
+### 21.3.1. String 的不可变性
 
 当对字符串引用重新赋值或者改变字符串的内容时，会重新创建一个字符串对象，而不会去改变原来对象的内容。
 
 通过字面量的方式给字符串赋值，字符串对象会创建在方法区的常量池当中，栈中的引用直接引用常量池地址，多个相同内容的字符串共用一个常量池中的对象。
 如果给字符串重新赋值，那么会重写在常量池中创建一个字符串对象，让栈上的引用重新指向改对象，而不会改变原来的字符串对象。
 
-### 20.3.2. String 的几种构造器
+### 21.3.2. String 的几种构造器
 
 ```java
 // 这种就是引用间赋值，把地址值拷贝给引用变量
@@ -3711,7 +3973,7 @@ public void test4(){
 }
 ```
 
-### 20.3.3. String 常用 API
+### 21.3.3. String 常用 API
 **基本：**
 `int length()`：返回字符串的长度： return value.length
 `boolean isEmpty()`：判断是否是空字符串：return value.length == 0
@@ -3748,7 +4010,7 @@ public void test4(){
 `String[] split(String regex)`：根据给定正则表达式的匹配拆分此字符串。
 `String[] split(String regex, int limit)`：根据匹配给定的正则表达式来拆分此字符串，最多不超过limit个，如果超过了，剩下的全部都放到最后一个元素中。
 
-### 20.3.4. String 与其他结构的转换
+### 21.3.4. String 与其他结构的转换
 
 - **String 与基本数据类型和包装类的转换**
 [基本数据类型、包装类、String之间的转换](#921-基本数据类型-包装类-string之间的转换)
@@ -3809,7 +4071,7 @@ public void test2(){
 }
 ```
 
-### 20.3.5. StringBuffer 和 StringBuilder
+### 21.3.5. StringBuffer 和 StringBuilder
 
 - String: 不可变的字符序列；底层使用char[]存储
 - StringBuffer: 可变的字符序列；线程安全的，效率低；底层使用char[]存储
@@ -3902,7 +4164,7 @@ public static void main(String[] args) {
 // String的执行时间：1637
 ```
 
-## 20.4. 时间有关类
+## 21.4. 时间有关类
 
 System 类中的时间 API
 ```java
@@ -3911,7 +4173,7 @@ System 类中的时间 API
 long time = System.currentTimeMillis();
 ```
 
-### 20.4.1. java.util.Date
+### 21.4.1. java.util.Date
 java.util.Date 有多个重载的构造器，但许多都过时啦，这里介绍两个
 1. Date()：创建一个对应当前时间的Date对象
 2. Date(long date)：创建指定毫秒数的Date对象
@@ -3919,7 +4181,7 @@ java.util.Date 有多个重载的构造器，但许多都过时啦，这里介�
 toString()：显示当前Date对象 星期 月 日 时:分:秒 标准时间+时差 年。`Mon Aug 10 19:54:10 GMT+08:00 2020`
 getTime()：获取当前Date对象对应的毫秒数（时间戳）。
 
-### 20.4.2. java.sql.Date
+### 21.4.2. java.sql.Date
 ```java
 public class java.sql.Date extends java.util.Date
 ```
@@ -3935,7 +4197,7 @@ long date = utilDate.getTime();
 java.sql.Date sqlDate = new java.sql.Date(date);
 ```
 
-### 20.4.3. SimpleDateFormat
+### 21.4.3. SimpleDateFormat
 
 java.text.SimpleDateFormat 类可以对日期 Date 类的做格式化和解析
 格式化：日期 ---> 字符串
@@ -3986,7 +4248,7 @@ java.sql.Date sqlDate = new java.sql.Date(date);
 System.out.println(sqlDate);
 ```
 
-### 20.4.4. java.util.Calendar 日历类
+### 21.4.4. java.util.Calendar 日历类
 
 Calendar 是一个抽象类，不能被直接实例化。可以使用静态的 getInstance 方法获得一个实例 或者 实例化其子类 GregorianCalendar
 ```java
@@ -4012,14 +4274,14 @@ final void setTime(Date date)：java.util.Date --> Calendar
 
 从 set 和 add 方法可见 Calendar 具有可变性。
 
-### 20.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增） 
+### 21.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增） 
 
 [Date Time API](#217-date-time-api)
 
 
-# 21. Java 8 新特性
+# 22. Java 8 新特性
 
-## 21.1. 函数式接口
+## 22.1. 函数式接口
 函数式接口(Functional Interface)就是一个有且仅有一个抽象方法，但是可以有多个非抽象方法的接口。
 函数式接口可以被隐式转换为 lambda 表达式。
 
@@ -4030,7 +4292,7 @@ interface GreetingService {
 }
 ```
 
-## 21.2. Lambda 表达式 
+## 22.2. Lambda 表达式 
 Lambda 表达式，也可称为闭包。允许把函数作为一个方法的参数（函数作为参数传递到方法中）。
 当匿名内部类所实现的接口是一个函数式接口，可以使用Lambda表达式来替代。
 
@@ -4143,7 +4405,7 @@ public class LambdaFinal {
 ```
 
 
-## 21.3. 方法引用
+## 22.3. 方法引用
 方法引用提供了非常有用的语法，可以直接引用已有Java类或对象（实例）的方法或构造器。与lambda联合使用，方法引用可以使语言的构造更紧凑简洁，减少冗余代码。
 方法引用提供了一种引用而不执行方法的方式。（函数指针？？）
 **注意方法引用是一个Lambda表达式**
@@ -4155,7 +4417,7 @@ public class LambdaFinal {
 - 特定对象的方法引用：`实例对象::方法名`
 
 
-## 21.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用
+## 22.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用
 
 定义一个函数式接口
 ```java
@@ -4271,7 +4533,7 @@ public class GreetingMain {
 
 
 
-## 21.5. 默认方法
+## 22.5. 默认方法
 Java 8 新增了接口的默认方法。默认方法就是一个在接口里面有了一个实现的方法。
 ```java
 public interface Vehicle {
@@ -4338,10 +4600,10 @@ class Mian {
 ```
 
 
-## 21.6. Stream API
+## 22.6. Stream API
 新添加的Stream API（java.util.stream） 把真正的函数式编程风格引入到Java中。
 
-## 21.7. Date Time API
+## 22.7. Date Time API
 加强对日期与时间的处理。
 
 在旧版的 Java 中，日期时间 API 存在诸多问题，其中有：
@@ -4415,7 +4677,7 @@ System.out.println(localDateTime4);
 ```
 
 
-## 21.8. Optional 类
+## 22.8. Optional 类
 Optional 类已经成为 Java 8 类库的一部分，用来解决空指针异常。
 Optional 是个容器：它可以保存类型T的值，或者保存null。
 Optional提供很多有用的方法，这样我们就不用显式进行空值检测。如果值存在则 isPresent() 方法会返回 true，调用 get() 方法会返回该对象。
@@ -4473,8 +4735,95 @@ String toString()
 ```
 
 
-## 21.9. 新工具
+## 22.9. 新工具
 新的编译工具，如：Nashorn引擎 jjs、 类依赖分析器jdeps。
 
-## 21.10. Nashorn, JavaScript 引擎
+## 22.10. Nashorn, JavaScript 引擎
 Java 8提供了一个新的Nashorn javascript引擎，它允许我们在JVM上运行特定的javascript应用。
+
+
+# 23. Servlet
+
+```java
+package javax.servlet;
+import java.io.IOException;
+public interface Servlet {
+    void init(ServletConfig var1) throws ServletException;
+    void service(ServletRequest var1, ServletResponse var2) throws ServletException, IOException;
+    void destroy();
+    ServletConfig getServletConfig();
+    String getServletInfo();
+}
+
+public interface ServletConfig {
+    String getServletName();
+    ServletContext getServletContext();
+    String getInitParameter(String var1);
+    Enumeration<String> getInitParameterNames();
+}
+```
+
+Servlet 的生命周期：
+1. Servlet 通过调用 init () 方法进行初始化。
+2. Servlet 调用 service() 方法来处理客户端的请求。
+3. Servlet 通过调用 destroy() 方法终止（结束）。
+4. 最后，Servlet 是由 JVM 的垃圾回收器进行垃圾回收的。
+
+Servlet 的一个实现类 HttpServlet
+```java
+package javax.servlet;
+public abstract class GenericServlet implements Servlet, ServletConfig, Serializable {
+    public abstract void service(ServletRequest var1, ServletResponse var2) throws ServletException, IOException;
+}
+
+package javax.servlet.http;
+public abstract class HttpServlet extends GenericServlet {
+    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+        if (req instanceof HttpServletRequest && res instanceof HttpServletResponse) {
+            HttpServletRequest request = (HttpServletRequest)req;
+            HttpServletResponse response = (HttpServletResponse)res;
+            this.service(request, response);
+        } else {
+            throw new ServletException("non-HTTP request or response");
+        }
+    }
+
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String method = req.getMethod();
+        long lastModified;
+        if (method.equals("GET")) {
+            lastModified = this.getLastModified(req);
+            if (lastModified == -1L) {
+                this.doGet(req, resp);
+            } else {
+                long ifModifiedSince = req.getDateHeader("If-Modified-Since");
+                if (ifModifiedSince < lastModified) {
+                    this.maybeSetLastModified(resp, lastModified);
+                    this.doGet(req, resp);
+                } else {
+                    resp.setStatus(304);
+                }
+            }
+        } else if (method.equals("HEAD")) {
+            lastModified = this.getLastModified(req);
+            this.maybeSetLastModified(resp, lastModified);
+            this.doHead(req, resp);
+        } else if (method.equals("POST")) {
+            this.doPost(req, resp);
+        } else if (method.equals("PUT")) {
+            this.doPut(req, resp);
+        } else if (method.equals("DELETE")) {
+            this.doDelete(req, resp);
+        } else if (method.equals("OPTIONS")) {
+            this.doOptions(req, resp);
+        } else if (method.equals("TRACE")) {
+            this.doTrace(req, resp);
+        } else {
+            String errMsg = lStrings.getString("http.method_not_implemented");
+            Object[] errArgs = new Object[]{method};
+            errMsg = MessageFormat.format(errMsg, errArgs);
+            resp.sendError(501, errMsg);
+        }
+    }
+}
+```

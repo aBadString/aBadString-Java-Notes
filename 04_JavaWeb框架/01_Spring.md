@@ -218,53 +218,53 @@ Spring 是 用于 Java 企业级开发的，轻量级的，非侵入式的 开�
 <!-- 构造器注入 -->
   <bean name="user1" class="song.pojo.User">
   <!-- 默认按照构造函数参数顺序赋值 -->
-  	<constructor-arg value="1001"></constructor-arg>
-  	<constructor-arg value="松松"></constructor-arg>
+      <constructor-arg value="1001"></constructor-arg>
+      <constructor-arg value="松松"></constructor-arg>
   </bean>
   
   <!-- index指定参数 -->
   <bean name="user2" class="song.pojo.User">
-  	<constructor-arg index="1" value="松松"></constructor-arg>
-  	<constructor-arg index="0" value="1001"></constructor-arg>
+      <constructor-arg index="1" value="松松"></constructor-arg>
+      <constructor-arg index="0" value="1001"></constructor-arg>
   </bean>
   
   <!-- name（构造器参数名，而不是类的属性名）指定参数 -->
   <bean name="user3" class="song.pojo.User">
-  	<constructor-arg name="username" value="松松"></constructor-arg>
-  	<constructor-arg name="userid" value="1001"></constructor-arg>
+      <constructor-arg name="username" value="松松"></constructor-arg>
+      <constructor-arg name="userid" value="1001"></constructor-arg>
   </bean>
   
    <!-- type类型指定参数 -->
   <bean name="user4" class="song.pojo.User">
-  	<constructor-arg type="java.lang.String" value="松松"></constructor-arg>
-  	<constructor-arg type="int" value="1001"></constructor-arg>
+      <constructor-arg type="java.lang.String" value="松松"></constructor-arg>
+      <constructor-arg type="int" value="1001"></constructor-arg>
   </bean>
   
   
 <!-- setter方法注入 -->
   <bean id="person1" class="song.pojo.Person">
-  	<property name="id">
-  		<value>1001</value>	
-  	</property>
-  	<property name="name" value="松松"></property>
-  	<property name="sex" value="男"/>
-  	<property name="email" value="songsong@song.net"/>
-  	<property name="high" value="180.78"/>
-  	<property name="hello" value="hello, world"/>
+      <property name="id">
+          <value>1001</value>    
+      </property>
+      <property name="name" value="松松"></property>
+      <property name="sex" value="男"/>
+      <property name="email" value="songsong@song.net"/>
+      <property name="high" value="180.78"/>
+      <property name="hello" value="hello, world"/>
   </bean>
 
 <!-- 配置Dao -->
 <bean id="dao" class="song.dao.UserDaoImpl" ></bean>
 <!-- 配置Service -->
 <bean id="userService" class="song.service.UserServiceImpl" >
-	<property name="dao" ref="userDao"></property>
+    <property name="dao" ref="userDao"></property>
 </bean>
 
 <!-- 自动装配
-	-default: 不装配
-	-byName:  按照名称自动注入  dao - setDao
-	-byTpye:  按照类型自动注入  UserDao
-	-constructor: 使用构造器注入
+    -default: 不装配
+    -byName:  按照名称自动注入  dao - setDao
+    -byTpye:  按照类型自动注入  UserDao
+    -constructor: 使用构造器注入
  -->
 <bean id="userService" class="song.service.UserServiceImpl" autowire="byName" ></bean>
 
@@ -278,56 +278,56 @@ Spring 是 用于 Java 企业级开发的，轻量级的，非侵入式的 开�
   map property  可以互换
  -->
 <bean class="song.pojo.CollectionBean" >
-	<!-- 数组的注入 -->
-	<property name="array">
-		<array>
-			<value>松松1</value>
-			<value>松松2</value>
-			<value>松松3</value>
-			<value>松松4</value>
-		</array>
-	</property>
-	<!-- List的注入 -->
-	<property name="list">
-		<list>
-			<value>松松5</value>
-			<value>松松6</value>
-			<value>松松7</value>
-			<value>松松8</value>
-		</list>
-	</property>
-	<!-- Set的注入 -->
-	<property name="set">
-		<set>
-			<value>1</value>
-			<value>3</value>
-			<value>1</value>
-			<value>3</value>
-			<value>2</value>
-			<value>3</value>
-			<value>2</value>
-			<value>2</value>
-		</set>
-	</property>
-	<!-- Map的注入 -->
-	<property name="map">
-		<map>
-			<entry>
-				<key><value>id</value></key>
-				<value>1001</value>
-			</entry>
-			<entry key="name" value="松松"></entry>
-			<entry key="sex" value="男"/>
-		</map>	
-	</property>
-	<!-- Properties的注入 -->
-	<property name="properties">
-		<props>
-			<prop key="id">1002</prop>
-			<prop key="name">松松</prop>
-			<prop key="sex">男</prop>
-		</props>
-	</property>
+    <!-- 数组的注入 -->
+    <property name="array">
+        <array>
+            <value>松松1</value>
+            <value>松松2</value>
+            <value>松松3</value>
+            <value>松松4</value>
+        </array>
+    </property>
+    <!-- List的注入 -->
+    <property name="list">
+        <list>
+            <value>松松5</value>
+            <value>松松6</value>
+            <value>松松7</value>
+            <value>松松8</value>
+        </list>
+    </property>
+    <!-- Set的注入 -->
+    <property name="set">
+        <set>
+            <value>1</value>
+            <value>3</value>
+            <value>1</value>
+            <value>3</value>
+            <value>2</value>
+            <value>3</value>
+            <value>2</value>
+            <value>2</value>
+        </set>
+    </property>
+    <!-- Map的注入 -->
+    <property name="map">
+        <map>
+            <entry>
+                <key><value>id</value></key>
+                <value>1001</value>
+            </entry>
+            <entry key="name" value="松松"></entry>
+            <entry key="sex" value="男"/>
+        </map>    
+    </property>
+    <!-- Properties的注入 -->
+    <property name="properties">
+        <props>
+            <prop key="id">1002</prop>
+            <prop key="name">松松</prop>
+            <prop key="sex">男</prop>
+        </props>
+    </property>
 </bean>
 
 </beans>
@@ -475,34 +475,137 @@ classes：指定注解类所在地位置
 - 基于接口的动态代理  Proxy - JDK
 - 基于子类的动态代理  Enhancer - cglib
 
+Proxy 示例代码
+
+接口
+```java
+public interface IProducer {
+    /**
+     * 销售
+     * @param money
+     */
+    public void saleProduct(float money);
+    /**
+     * 售后
+     * @param money
+     */
+    public void afterService(float money);
+}
+```
+接口的实现类，被代理对象
+```java
+public class Producer implements IProducer{
+    /**
+     * 销售
+     * @param money
+     */
+    public void saleProduct(float money){
+        System.out.println("销售产品，并拿到钱："+money);
+    }
+    /**
+     * 售后
+     * @param money
+     */
+    public void afterService(float money){
+        System.out.println("提供售后服务，并拿到钱："+money);
+    }
+}
+```
+获取代理类对象，并执行增强方法
+```java
+public static void main(String[] args) {
+	// 被代理对象，源对象
+    final Producer producer = new Producer();
+    /**
+     * 动态代理：
+     *  特点：字节码随用随创建，随用随加载
+     *  作用：不修改源码的基础上对方法增强
+     *  分类：
+     *      基于接口的动态代理
+     *      基于子类的动态代理
+     *  基于接口的动态代理：
+     *      涉及的类：Proxy
+     *      提供者：JDK官方
+     *  如何创建代理对象：
+     *      使用Proxy类中的newProxyInstance方法
+     *  创建代理对象的要求：
+     *      被代理类最少实现一个接口，如果没有则不能使用
+     *  newProxyInstance方法的参数：
+     *      ClassLoader：类加载器
+     *          它是用于加载代理对象字节码的。和被代理对象使用相同的类加载器。固定写法。
+     *      Class[]：字节码数组
+     *          它是用于让代理对象和被代理对象有相同方法。固定写法。
+     *      InvocationHandler：用于提供增强的代码
+     *          它是让我们写如何代理。我们一般都是些一个该接口的实现类，通常情况下都是匿名内部类，但不是必须的。
+     *          此接口的实现类都是谁用谁写。
+     */
+	// 获取代理对象，增强后的对象
+    IProducer proxyProducer = (IProducer) Proxy.newProxyInstance(
+			// 被代理类的类加载器
+			producer.getClass().getClassLoader(),
+			// 被代理类的接口类型
+			producer.getClass().getInterfaces(),
+			// 增强方法的接口
+			new InvocationHandler() {
+				/**
+					* 作用：执行被代理对象的任何接口方法都会经过该方法
+					* @param proxy   代理对象的引用
+					* @param method  当前执行的方法
+					* @param args    当前执行方法所需的参数
+					* @return        和被代理对象方法有相同的返回值
+					* @throws Throwable
+					*/
+				@Override
+				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+					//提供增强的代码
+					Object returnValue = null;
+
+					//1.获取方法执行的参数
+					Float money = (Float)args[0];
+					//2.判断当前方法是不是销售
+					if("saleProduct".equals(method.getName())) {
+						// 执行原方法
+						returnValue = method.invoke(producer, money*0.8f);
+					}
+					// 返回原方法的返回值
+					return returnValue;
+				}
+			}
+		);
+	// 执行代理类对象的增强方法
+    proxyProducer.saleProduct(10000f);
+}
+```
+
+简要版
 ```java
 // 获取代理类
 UserService proxy = (UserService)Proxy.newProxyInstance(
-	// 被代理类的类加载器
-	userService.getClass().getClassLoader(),
-	// 被代理类的接口类型
-	userService.getClass().getInterfaces(),
-	// 增强方法的接口
-	new InvocationHandler() {
-		/**
-		* 增强方法
-		* @param proxy  代理类对象
-		* @param method 接口中的方法
-		* @param args   方法参数
-		* @return 必须和原方法相同
-		* @throws Throwable
-		*/
-		@Override
-		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-			// before
-			Integer money = (Integer) args[0];
-			System.out.println("扣钱 10 元");
-			money -= 10;
+    // 被代理类的类加载器
+    userService.getClass().getClassLoader(),
+    // 被代理类的接口类型
+    userService.getClass().getInterfaces(),
+    // 增强方法的接口
+    new InvocationHandler() {
+        /**
+        * 增强方法
+        * @param proxy  代理类对象
+        * @param method 接口中的方法
+        * @param args   方法参数
+        * @return 必须和原方法相同
+        * @throws Throwable
+        */
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            // before
+            Integer money = (Integer) args[0];
+            System.out.println("扣钱 10 元");
+            money -= 10;
 
-			// 执行原方法
-			return method.invoke(userService, money);
-		}
-	}
+            // 执行原方法
+            return method.invoke(userService, money);
+        }
+    }
 );
 
 // 执行代理类方法
@@ -542,56 +645,56 @@ JDk 动态代理类 Proxy 的 newProxyInstance 方法源码
  */
 @CallerSensitive
 public static Object newProxyInstance(
-	ClassLoader loader,
-	Class<?>[] interfaces,
-	InvocationHandler h
-	)
-	throws IllegalArgumentException
+    ClassLoader loader,
+    Class<?>[] interfaces,
+    InvocationHandler h
+    )
+    throws IllegalArgumentException
 {
-	Objects.requireNonNull(h);
+    Objects.requireNonNull(h);
 
-	final Class<?>[] intfs = interfaces.clone();
-	final SecurityManager sm = System.getSecurityManager();
-	if (sm != null) {
-		checkProxyAccess(Reflection.getCallerClass(), loader, intfs);
-	}
+    final Class<?>[] intfs = interfaces.clone();
+    final SecurityManager sm = System.getSecurityManager();
+    if (sm != null) {
+        checkProxyAccess(Reflection.getCallerClass(), loader, intfs);
+    }
 
-	/*
-	 * Look up or generate the designated proxy class.
-	 */
-	Class<?> cl = getProxyClass0(loader, intfs);
+    /*
+     * Look up or generate the designated proxy class.
+     */
+    Class<?> cl = getProxyClass0(loader, intfs);
 
-	/*
-	 * Invoke its constructor with the designated invocation handler.
-	 */
-	try {
-		if (sm != null) {
-			checkNewProxyPermission(Reflection.getCallerClass(), cl);
-		}
+    /*
+     * Invoke its constructor with the designated invocation handler.
+     */
+    try {
+        if (sm != null) {
+            checkNewProxyPermission(Reflection.getCallerClass(), cl);
+        }
 
-		final Constructor<?> cons = cl.getConstructor(constructorParams);
-		final InvocationHandler ih = h;
-		if (!Modifier.isPublic(cl.getModifiers())) {
-			AccessController.doPrivileged(new PrivilegedAction<Void>() {
-				public Void run() {
-					cons.setAccessible(true);
-					return null;
-				}
-			});
-		}
-		return cons.newInstance(new Object[]{h});
-	} catch (IllegalAccessException|InstantiationException e) {
-		throw new InternalError(e.toString(), e);
-	} catch (InvocationTargetException e) {
-		Throwable t = e.getCause();
-		if (t instanceof RuntimeException) {
-			throw (RuntimeException) t;
-		} else {
-			throw new InternalError(t.toString(), t);
-		}
-	} catch (NoSuchMethodException e) {
-		throw new InternalError(e.toString(), e);
-	}
+        final Constructor<?> cons = cl.getConstructor(constructorParams);
+        final InvocationHandler ih = h;
+        if (!Modifier.isPublic(cl.getModifiers())) {
+            AccessController.doPrivileged(new PrivilegedAction<Void>() {
+                public Void run() {
+                    cons.setAccessible(true);
+                    return null;
+                }
+            });
+        }
+        return cons.newInstance(new Object[]{h});
+    } catch (IllegalAccessException|InstantiationException e) {
+        throw new InternalError(e.toString(), e);
+    } catch (InvocationTargetException e) {
+        Throwable t = e.getCause();
+        if (t instanceof RuntimeException) {
+            throw (RuntimeException) t;
+        } else {
+            throw new InternalError(t.toString(), t);
+        }
+    } catch (NoSuchMethodException e) {
+        throw new InternalError(e.toString(), e);
+    }
 }
 ```
 
@@ -675,12 +778,12 @@ spring 采用动态代理织入，而 AspectJ 采用编译期织入和类装载�
 `* *..*.*()`
 
 - 参数列表  
-	- 可以直接写数据类型: 
-		- 基本类型直接写名称 `int`
-		- 引用类型写包名.类名的方式 `java.lang.String`
-	- 可以使用通配符表示任意类型，但是必须有参数
-	- 可以使用 .. 表示有无参数均可，有参数可以是任意类型
-	
+    - 可以直接写数据类型: 
+        - 基本类型直接写名称 `int`
+        - 引用类型写包名.类名的方式 `java.lang.String`
+    - 可以使用通配符表示任意类型，但是必须有参数
+    - 可以使用 .. 表示有无参数均可，有参数可以是任意类型
+    
 - 全通配写法: `* *..*.*(..)`
 
 - 实际开发中切入点表达式的通常写法:  
@@ -692,20 +795,20 @@ spring 采用动态代理织入，而 AspectJ 采用编译期织入和类装载�
 ```xml
 <!--配置AOP-->
 <aop:config>
-	<!--配置切面 -->
-	<aop:aspect id="logAdvice" ref="logger">
-		<!-- 配置前置通知：在切入点方法执行之前执行-->
-		<aop:before method="beforePrintLog" pointcut="execution(* com.itheima.service.impl.*.*(..))" ></aop:before>
+    <!--配置切面 -->
+    <aop:aspect id="logAdvice" ref="logger">
+        <!-- 配置前置通知：在切入点方法执行之前执行-->
+        <aop:before method="beforePrintLog" pointcut="execution(* com.itheima.service.impl.*.*(..))" ></aop:before>
 
-		<!-- 配置后置通知：在切入点方法正常执行之后值。它和异常通知永远只能执行一个-->
-		<aop:after-returning method="afterReturningPrintLog" pointcut="execution(* com.itheima.service.impl.*.*(..))" ></aop:after-returning>
+        <!-- 配置后置通知：在切入点方法正常执行之后值。它和异常通知永远只能执行一个-->
+        <aop:after-returning method="afterReturningPrintLog" pointcut="execution(* com.itheima.service.impl.*.*(..))" ></aop:after-returning>
 
-		<!-- 配置异常通知：在切入点方法执行产生异常之后执行。它和后置通知永远只能执行一个-->
-		<aop:after-throwing method="afterThrowingPrintLog" pointcut="execution(* com.itheima.service.impl.*.*(..))" ></aop:after-throwing>
+        <!-- 配置异常通知：在切入点方法执行产生异常之后执行。它和后置通知永远只能执行一个-->
+        <aop:after-throwing method="afterThrowingPrintLog" pointcut="execution(* com.itheima.service.impl.*.*(..))" ></aop:after-throwing>
 
-		<!-- 配置最终通知：无论切入点方法是否正常执行它都会在其后面执行-->
-		<aop:after method="afterPrintLog" pointcut="execution(* com.itheima.service.impl.*.*(..))" ></aop:after>
-	</aop:aspect>
+        <!-- 配置最终通知：无论切入点方法是否正常执行它都会在其后面执行-->
+        <aop:after method="afterPrintLog" pointcut="execution(* com.itheima.service.impl.*.*(..))" ></aop:after>
+    </aop:aspect>
 </aop:config>
 ```
 
@@ -713,27 +816,27 @@ spring 采用动态代理织入，而 AspectJ 采用编译期织入和类装载�
 
 ```xml
 <aop:config>
-	<!-- 配置切入点表达式 id属性用于指定表达式的唯一标识。expression属性用于指定表达式内容
-			此标签写在aop:aspect标签内部只能当前切面使用。
-			它还可以写在aop:aspect外面，此时就变成了所有切面可用
+    <!-- 配置切入点表达式 id属性用于指定表达式的唯一标识。expression属性用于指定表达式内容
+            此标签写在aop:aspect标签内部只能当前切面使用。
+            它还可以写在aop:aspect外面，此时就变成了所有切面可用
 
-			**aop:pointcut 必须出现在 aop:aspect 之前**
-		-->
-	<aop:pointcut id="pt1" expression="execution(* com.itheima.service.impl.*.*(..))"></aop:pointcut>
-	<!--配置切面 -->
-	<aop:aspect id="logAdvice" ref="logger">
-		<!-- 配置前置通知：在切入点方法执行之前执行-->
-		<aop:before method="beforePrintLog" pointcut-ref="pt1" ></aop:before>
+            **aop:pointcut 必须出现在 aop:aspect 之前**
+        -->
+    <aop:pointcut id="pt1" expression="execution(* com.itheima.service.impl.*.*(..))"></aop:pointcut>
+    <!--配置切面 -->
+    <aop:aspect id="logAdvice" ref="logger">
+        <!-- 配置前置通知：在切入点方法执行之前执行-->
+        <aop:before method="beforePrintLog" pointcut-ref="pt1" ></aop:before>
 
-		<!-- 配置后置通知：在切入点方法正常执行之后值。它和异常通知永远只能执行一个-->
-		<aop:after-returning method="afterReturningPrintLog" pointcut-ref="pt1"></aop:after-returning>
+        <!-- 配置后置通知：在切入点方法正常执行之后值。它和异常通知永远只能执行一个-->
+        <aop:after-returning method="afterReturningPrintLog" pointcut-ref="pt1"></aop:after-returning>
 
-		<!-- 配置异常通知：在切入点方法执行产生异常之后执行。它和后置通知永远只能执行一个-->
-		<aop:after-throwing method="afterThrowingPrintLog" pointcut-ref="pt1"></aop:after-throwing>
+        <!-- 配置异常通知：在切入点方法执行产生异常之后执行。它和后置通知永远只能执行一个-->
+        <aop:after-throwing method="afterThrowingPrintLog" pointcut-ref="pt1"></aop:after-throwing>
 
-		<!-- 配置最终通知：无论切入点方法是否正常执行它都会在其后面执行-->
-		<aop:after method="afterPrintLog" pointcut-ref="pt1"></aop:after>
-	</aop:aspect>
+        <!-- 配置最终通知：无论切入点方法是否正常执行它都会在其后面执行-->
+        <aop:after method="afterPrintLog" pointcut-ref="pt1"></aop:after>
+    </aop:aspect>
 </aop:config>
 ```
 
@@ -743,28 +846,28 @@ spring 采用动态代理织入，而 AspectJ 采用编译期织入和类装载�
 
 ```xml
 <aop:config>
-	<!--配置切面 -->
-	<aop:aspect id="logAdvice" ref="logger">
-		<!-- 配置环绕通知 详细的注释请看Logger类中-->
-		<aop:around method="aroundPringLog" pointcut="execution(* com.itheima.service.impl.*.*(..))"></aop:around>
-	</aop:aspect>
+    <!--配置切面 -->
+    <aop:aspect id="logAdvice" ref="logger">
+        <!-- 配置环绕通知 详细的注释请看Logger类中-->
+        <aop:around method="aroundPringLog" pointcut="execution(* com.itheima.service.impl.*.*(..))"></aop:around>
+    </aop:aspect>
 </aop:config>
 ```
 ```java
 public class Logger {
    /**
-	* 环绕通知
-	* 问题：
-	*      当我们配置了环绕通知之后，切入点方法没有执行，而通知方法执行了。
-	* 分析：
-	*      通过对比动态代理中的环绕通知代码，发现动态代理的环绕通知有明确的切入点方法调用，而我们的代码中没有。
-	* 解决：
-	*      Spring框架为我们提供了一个接口：ProceedingJoinPoint。该接口有一个方法proceed()，此方法就相当于明确调用切入点方法。
-	*      该接口可以作为环绕通知的方法参数，在程序执行时，spring框架会为我们提供该接口的实现类供我们使用。
-	*
-	* spring中的环绕通知：
-	*      它是spring框架为我们提供的一种可以在代码中手动控制增强方法何时执行的方式。
-	*/
+    * 环绕通知
+    * 问题：
+    *      当我们配置了环绕通知之后，切入点方法没有执行，而通知方法执行了。
+    * 分析：
+    *      通过对比动态代理中的环绕通知代码，发现动态代理的环绕通知有明确的切入点方法调用，而我们的代码中没有。
+    * 解决：
+    *      Spring框架为我们提供了一个接口：ProceedingJoinPoint。该接口有一个方法proceed()，此方法就相当于明确调用切入点方法。
+    *      该接口可以作为环绕通知的方法参数，在程序执行时，spring框架会为我们提供该接口的实现类供我们使用。
+    *
+    * spring中的环绕通知：
+    *      它是spring框架为我们提供的一种可以在代码中手动控制增强方法何时执行的方式。
+    */
     public Object aroundPringLog(ProceedingJoinPoint pjp){
         Object rtValue = null;
         try{
