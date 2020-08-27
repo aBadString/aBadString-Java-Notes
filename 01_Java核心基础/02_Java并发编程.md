@@ -29,6 +29,13 @@
     - [4.3.1. ReentrantLook 源码](#431-reentrantlook-源码)
   - [4.4. 自旋锁（Unsafe类 CAS）](#44-自旋锁unsafe类-cas)
   - [4.5. 独占锁(写锁、排他锁)和共享锁(读锁)](#45-独占锁写锁-排他锁和共享锁读锁)
+- [5. 线程工具类](#5-线程工具类)
+  - [5.1. CountDownLatch](#51-countdownlatch)
+  - [5.2. CyclicBarrier](#52-cyclicbarrier)
+  - [5.3. Semaphore 信号量](#53-semaphore-信号量)
+- [6. 阻塞队列](#6-阻塞队列)
+  - [6.1. BlockingQueue 核心方法](#61-blockingqueue-核心方法)
+  - [6.2. 再探生产者消费者模型](#62-再探生产者消费者模型)
 
 <!-- /code_chunk_output -->
 
@@ -1508,6 +1515,216 @@ public class ReentrantReadWriteLock implements ReadWriteLock, java.io.Serializab
         public void unlock() {
             sync.release(1);
         }
+    }
+}
+```
+
+# 5. 线程工具类
+
+## 5.1. CountDownLatch
+被 await 的线程需要等待前面 count 个线程完成，才继续进行。
+```java
+// 构造器指明 count
+public CountDownLatch(int count) {
+    if (count < 0) throw new IllegalArgumentException("count < 0");
+    this.sync = new Sync(count);
+}
+// 使 count 减一
+public void countDown() {
+    sync.releaseShared(1);
+}
+// 线程自旋，知道 count 为 0
+public void await() throws InterruptedException {
+    sync.acquireSharedInterruptibly(1);
+}
+```
+例子：
+```java
+public class CountDownLatchDemo {
+    public static void main(String[] args) {
+        CountDownLatch latch = new CountDownLatch(6);
+
+        for (int i = 1; i <= 6; i++) {
+            new Thread(()->{
+                System.out.println(Thread.currentThread().getName() + "线程完成工作");
+                latch.countDown();
+            }, String.valueOf(i)).start();
+        }
+
+        System.out.println("主线程等待其他线程完成工作");
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("主线程等待完毕");
+    }
+}
+// 主线程等待其他线程完成工作
+// 1线程完成工作
+// 2线程完成工作
+// 3线程完成工作
+// 4线程完成工作
+// 5线程完成工作
+// 6线程完成工作
+// 主线程等待完毕
+```
+
+## 5.2. CyclicBarrier
+让一组线程到达一个屏障（同步点）时被阻塞，直到所有线程都到齐时才放行。
+```java
+public class CyclicBarrierDemo {
+    public static void main(String[] args) {
+        CyclicBarrier barrier = new CyclicBarrier(4, () -> {
+            System.out.println("线程到齐");
+        });
+
+        for (int i = 1; i <= 4; i++) {
+            new Thread(()->{
+                System.out.println(Thread.currentThread().getName() + " 到达");
+                try {
+                    barrier.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(Thread.currentThread().getName() + " 继续执行");
+            }, String.valueOf(i)).start();
+        }
+    }
+}
+// 1 到达
+// 3 到达
+// 2 到达
+// 4 到达
+// 线程到齐
+// 4 继续执行
+// 3 继续执行
+// 2 继续执行
+// 1 继续执行
+```
+
+## 5.3. Semaphore 信号量
+
+作用：
+1. 用于多个共享资源的互斥使用
+2. 用于并发线程数量的控制
+
+```java
+public class SemaphoreDemo {
+    public static void main(String[] args) {
+        Semaphore semaphore = new Semaphore(3);
+        for (int i = 1; i <= 6; i++) {
+            new Thread(()->{
+                try {
+                    semaphore.acquire();
+                    System.out.println(Thread.currentThread().getName() + "进入临界区");
+                    try {
+                        TimeUnit.SECONDS.sleep(3);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(Thread.currentThread().getName() + "离开临界区");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    semaphore.release();
+                }
+            }, String.valueOf(i)).start();
+        }
+    }
+}
+// 1进入临界区
+// 3进入临界区
+// 2进入临界区
+// 3离开临界区
+// 2离开临界区
+// 1离开临界区
+// 5进入临界区
+// 4进入临界区
+// 6进入临界区
+// 5离开临界区
+// 6离开临界区
+// 4离开临界区
+```
+
+# 6. 阻塞队列
+
+1. **ArrayBlockingQueue**：有界队列，用数组实现的，FIFO
+2. **LinkedBlockingQueue**：有界队列，基于链表，FIFO。可设置容量队列，不设置容量则最大为 Integer.MAX_VALUE
+3. PriorityBlockingQueue：优先级队列
+4. DelayQueue：延迟无界队列，其中的对象到期时才能从队列中取走，使用优先级队列实现
+5. **SynchronousQueue**：同步队列，只有单个元素的队列。插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
+6. LinkedTransferQueue：无界队列，基于链表
+7. LinkedBlockingDeque：双向队列，基于链表
+
+## 6.1. BlockingQueue 核心方法
+
+| 方法类型 | 抛出异常 | 返回特殊值 | 阻塞   | 超时间              |
+|:-------:|:--------:|:---------:|:------:|:------------------:|
+| 插入    | add(e)    | offer(e) | put(e) | offer(e,time,unit) |
+| 移除    | remove()  | poll()   | take() | poll(time,unit)    |
+| 检查    | element() | peek()   | ——     | ——                 |
+
+抛出异常：
+当队列满了，add 插入元素会抛出异常 IllegalStateException:Queue full;
+当队列为空时，element 查看队首元素和 remove 移除元素会抛出 NoSuchElementException
+
+返回特殊值：
+当队列满了，offer 插入元素返回 false
+当队列为空时，poll 移除元素会返回 null
+
+阻塞：
+put 和 take 在插入元素或移除元素失败时会阻塞线程，直到可以进行操作时唤醒
+
+## 6.2. 再探生产者消费者模型
+
+线程操作资源类，高内聚低耦合
+判断 干活 通知
+防止虚假唤醒机制
+
+模板：
+```java
+// synchronized - wait - notify
+private volatile int num = 0;
+public void addOne() throws Exception {
+    // 0、加锁
+    synchronized (this) {
+        // 1、判断，不满足干活条件就阻塞
+        while (num != 0) {
+            this.wait();
+        }
+        // 2、干活
+        num++;
+        System.out.println(Thread.currentThread().getName() + " " + num);
+        // 3、干完活唤醒其他线程
+        this.notify();
+    }
+    // 0、解锁
+}
+// lock/unlock - await - signal
+private volatile int num = 0;
+private Lock lock = new ReentrantLock();
+private Condition condition = lock.newCondition();
+public void addOne() throws Exception {
+    // 0、加锁
+    lock.lock();
+    try {
+        // 1、判断，不满足干活条件就阻塞
+        while (num != 0) {
+            condition.await();
+        }
+        // 2、干活
+        num++;
+        System.out.println(Thread.currentThread().getName()+" "+num);
+        // 3、干完活唤醒其他线程
+        condition.signal();
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        // 0、解锁
+        lock.unlock();
     }
 }
 ```

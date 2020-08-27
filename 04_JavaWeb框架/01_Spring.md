@@ -16,6 +16,11 @@
   - [2.1. 动态代理](#21-动态代理)
   - [2.2. AOP 面向切面编程](#22-aop-面向切面编程)
   - [2.3. AOP 中的注解](#23-aop-中的注解)
+- [3. Spring MVC](#3-spring-mvc)
+- [4. Spring Boot](#4-spring-boot)
+  - [4.1. Spring Boot 简介](#41-spring-boot-简介)
+  - [4.2. 配置文件](#42-配置文件)
+  - [4.3. Spring Boot 场景启动器](#43-spring-boot-场景启动器)
 
 <!-- /code_chunk_output -->
 
@@ -926,3 +931,247 @@ private void pt1(){}
 **用注解配置通知时, 后置/异常通知个最终通知存在调用顺序错误的情况. 这是一个坑, 可能是框架代码写错了???**
 
 ![最终同时顺序错误的坑](../images/spring/最终同时顺序错误的坑.png)
+
+
+# 3. Spring MVC
+
+```sequence
+浏览器 -> DispatcherServlet : 1.发送请求
+
+    DispatcherServlet -> HandlerMapping : 2.请求获取Handler
+    HandlerMapping -> HandlerMapping : 3.寻找具体的处理器\n(xml配置、注解)
+    HandlerMapping --> DispatcherServlet : 4.HandlerExecutionChain\n（HandelIntercepter和Handle）
+
+    DispatcherServlet -> HandlerAdapter : 5.请求执行Handler
+        HandlerAdapter -> Handler(Controller) : 6.执行相应方法
+        Handler(Controller) --> HandlerAdapter : 7.ModelAndView
+    HandlerAdapter --> DispatcherServlet : 8.ModelAndView
+
+    DispatcherServlet -> ViewReslover : 9.请求视图解析 ModelAndView
+    ViewReslover -> ViewReslover : 10.视图解析
+    ViewReslover --> DispatcherServlet : 11.View
+
+    DispatcherServlet -> DispatcherServlet : 12.渲染视图\n（将模型数据填充至视图中）
+
+DispatcherServlet --> 浏览器 : 13.响应结果
+```
+SpringMVC 流程
+1. 用户发送请求至前端控制器DispatcherServlet。
+2. DispatcherServlet收到请求调用HandlerMapping处理器映射器。
+3. 处理器映射器找到具体的处理器(可以根据xml配置、注解进行查找)，生成处理器对象及处理器拦截器(如果有则生成)一并返回给DispatcherServlet。
+4. DispatcherServlet调用HandlerAdapter处理器适配器。
+5. HandlerAdapter经过适配调用具体的处理器(Controller，也叫后端控制器)。
+6. Controller执行完成返回ModelAndView。
+7. HandlerAdapter将controller执行结果ModelAndView返回给DispatcherServlet。
+8. DispatcherServlet将ModelAndView传给ViewReslover视图解析器。
+9. ViewReslover解析后返回具体View。
+10. DispatcherServlet根据View进行渲染视图（即将模型数据填充至视图中）。
+11. DispatcherServlet响应用户。
+
+DispatcherServlet：作为前端控制器，整个流程控制的中心，控制其它组件执行，统一调度，降低组件之间的耦合性，提高每个组件的扩展性。
+HandlerMapping：通过扩展处理器映射器实现不同的映射方式，例如：配置文件方式，实现接口方式，注解方式等。 
+HandlAdapter：通过扩展处理器适配器，支持更多类型的处理器。
+ViewResolver：通过扩展视图解析器，支持更多类型的视图解析，例如：jsp、freemarker、pdf、excel等。
+
+
+# 4. Spring Boot
+
+## 4.1. Spring Boot 简介
+
+Spring Boot 核心
+
+- 自动配置
+- 起步依赖 org.springframework.boot:spring-boot-starter-web
+- 命令行界面: Spring Boot CLI利用了起步依赖和自动配置，让你专注于代码本身。Spring Boot CLI是Spring Boot的非必要组成部分。
+- Actuator: 提供在运行时检视应用程序内部情况的能力
+
+
+@SpringBootApplication 这个注解 开启组件扫描和自动配置, 由以下三个注解组合
+    
+- @SpringBootConfiguration 继承自@Configuration, 标明该类使用Spring基于Java的配置, 而非XML配置
+    - @Configuration
+        - @Component
+- @EnableAutoConfiguration 启用自动配置
+    - @AutoConfigurationPackage 自动配置包 
+    - @Import(AutoConfigurationPackages.Registrar.class)
+- @ComponentScan 启用组件扫描
+
+
+## 4.2. 配置文件
+
+application.properties  
+application.yml
+
+yml 语法:
+
+k:(空格)v : 表示一对键值对 (空格必须有)  
+以空格的缩进来控制层级关系；只要是左对齐的一列数据，都是同一个层级的
+
+
+**引号:**
+
+name: "zhangsan \n lisi"：输出；zhangsan 换行 lisi  
+name: 'zhangsan \n lisi'：输出；zhangsan \n lisi
+
+**数组:**
+
+```yaml
+- cat
+- dog
+- tigger
+
+# 行内写法
+
+[cat,dog,tigger]
+
+```
+
+## 4.3. Spring Boot 场景启动器
+
+文件结构
+```
+hello-spring-boot-starter
+    |-- pom.xml：这个 jar 包中只有一个 pom 文件，用于引入 hello-spring-boot-starter-autoconfigurer 和其他需要依赖的 jar 包
+hello-spring-boot-starter-autoconfigurer
+    |-- pom.xml
+    |-- src
+        |-- java
+            |-- priv.abadstring.hello
+                |-- HelloProperties.java : 配置信息，读取 application.xxx 配置文件的数据
+                |-- HelloService.java    : 业务功能实现类
+                |-- HelloServiceAutoConfiguration.java : 自动配置类
+        |-- resources
+            |-- META-INF
+                |-- spring.factories : 告诉 SpringBoot 自动配置类是哪一个
+```
+hello-spring-boot-starter/pom.xml
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>priv.abadstring</groupId>
+    <artifactId>hello-spring-boot-starter</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+        <!--引入自动配置模块-->
+        <dependency>
+            <groupId>priv.abadstring</groupId>
+            <artifactId>hello-spring-boot-starter-autoconfigurer</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+</project>
+```
+hello-spring-boot-starter-autoconfigurer/pom.xml
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>priv.abadstring</groupId>
+    <artifactId>hello-spring-boot-starter-autoconfigurer</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.10.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <dependencies>
+        <!--引入spring-boot-starter；所有starter的基本配置-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
+```
+hello-spring-boot-starter-autoconfigurer/src/main/resources/META-INF/spring.factories
+```factories
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+priv.abadstring.hello.HelloServiceAutoConfiguration
+```
+HelloServiceAutoConfiguration.java
+```java
+package priv.abadstring.hello;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ConditionalOnWebApplication //web应用才生效
+@EnableConfigurationProperties(HelloProperties.class)
+public class HelloServiceAutoConfiguration {
+
+    @Autowired
+    HelloProperties helloProperties;
+    @Bean
+    public HelloService helloService(){
+        HelloService service = new HelloService();
+        service.setHelloProperties(helloProperties);
+        return service;
+    }
+}
+```
+HelloProperties.java
+```java
+package priv.abadstring.hello;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties(prefix = "atguigu.hello")
+public class HelloProperties {
+
+    private String prefix;
+    private String suffix;
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+}
+```
+HelloService.java
+```java
+package priv.abadstring.hello;
+
+public class HelloService {
+
+    HelloProperties helloProperties;
+
+    public HelloProperties getHelloProperties() {
+        return helloProperties;
+    }
+
+    public void setHelloProperties(HelloProperties helloProperties) {
+        this.helloProperties = helloProperties;
+    }
+
+    public String sayHellAtguigu(String name){
+        return helloProperties.getPrefix()+"-" +name + helloProperties.getSuffix();
+    }
+}
+```

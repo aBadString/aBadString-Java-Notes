@@ -155,7 +155,11 @@
   - [22.8. Optional 类](#228-optional-类)
   - [22.9. 新工具](#229-新工具)
   - [22.10. Nashorn, JavaScript 引擎](#2210-nashorn-javascript-引擎)
-- [23. Servlet](#23-servlet)
+- [23. Java Web 三大组件](#23-java-web-三大组件)
+  - [23.1. Servlet](#231-servlet)
+  - [23.2. Filter](#232-filter)
+    - [23.2.1. Filter的四种拦截方式](#2321-filter的四种拦截方式)
+  - [23.3. Listener](#233-listener)
 
 <!-- /code_chunk_output -->
 
@@ -2607,7 +2611,7 @@ class WindowRunnableTest {
 2. synchronized 是非公平锁，它无法保证等待的线程获取锁的顺序；ReentrantLook 可以选择是否公平锁。
 3. Synchronized 是不可中断锁，ReentrantLock 可以通过 lockInterruptibly 方法中断等待锁。
 4. 底层实现：
-    Synchronized 使用字节码指令来控制锁：monitorenter和monitorexit。当线程执行遇到monitorenter指令时会尝试获取内置锁，如果获取锁则锁计数器+1，如果没有获取锁则阻塞；当遇到monitorexit指令时锁计数器-1，如果计数器为0则释放锁。
+    synchronized 使用字节码指令来控制锁：monitorenter和monitorexit。当线程执行遇到monitorenter指令时会尝试获取内置锁，如果获取锁则锁计数器+1，如果没有获取锁则阻塞；当遇到monitorexit指令时锁计数器-1，如果计数器为0则释放锁。
     ReentrantLock 依靠的是CAS乐观锁，依赖 AbstractQueuedSynchronizer 类，把所有的请求线程构成一个CLH队列。而对该队列的操作均通过Lock-Free（CAS）操作。
 5. synchronized锁是读写互斥并且读读也互斥；ReentrantReadWriteLock 分为读锁和写锁，而读锁可以同时被多个线程持有，适合于读多写少场景的并发。
 
@@ -2900,7 +2904,43 @@ public interface Executor {
 ```
 ExecutorService 是线程池接口，常见实现类有 ThreadPoolExecutor。
 
-### 13.7.1. 几种常用的线程池
+### 13.7.1. 线程池各个参数的作用，如何进行的?
+
+**ThreadPoolExecutor 构造器**
+```java
+public ThreadPoolExecutor(
+    int corePoolSize,     // 线程池核心线程数最大值
+    int maximumPoolSize,  // 线程池最大线程数大小
+    long keepAliveTime,   // 程池中非核心线程空闲的存活时间大小
+    TimeUnit unit,        // 线程空闲存活时间单位
+    BlockingQueue<Runnable> workQueue, // 存放任务的阻塞队列
+    ThreadFactory threadFactory,       // 用于设置创建线程的工厂，可以给创建的线程设置有意义的名字，可方便排查问题
+    RejectedExecutionHandler handler   // 线城池的饱和策略事件，主要有四种类型。
+)
+```
+
+线程池执行流程：核心线程 — 任务队列 — 非核心线程 — 拒绝策略
+
+![img](https://user-gold-cdn.xitu.io/2019/7/7/16bca03a5a6fd78f?imageslim) 
+
+四种拒绝策略：
+
+1. AbortPolicy：抛出一个异常，默认的
+2. DiscardPolicy：直接丢弃任务
+3. DiscardOldestPolicy：丢弃队列里最老的任务，将当前这个任务继续提交给线程池
+4. CallerRunsPolicy：交给线程池调用所在的线程进行处理
+
+### 13.7.2. 线程池的工作队列
+
+1. ArrayBlockingQueue：有界队列，用数组实现的，FIFO
+2. LinkedBlockingQueue：有界队列，基于链表，FIFO。可设置容量队列，不设置容量则最大为 Integer.MAX_VALUE
+3. PriorityBlockingQueue：优先级队列
+4. DelayQueue：延迟无界队列，其中的对象到期时才能从队列中取走，使用优先级队列实现
+5. SynchronousQueue：同步队列，只有单个元素的队列。插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
+6. LinkedTransferQueue：无界队列，基于链表
+7. LinkedBlockingDeque：双向队列，基于链表
+
+### 13.7.3. 几种常用的线程池
 
 Executors 是一个工具类，线程池工厂，用于创建并返回不同类型的线程池。
 在 java.util.concurrent.Executors 中提供了一些方法去创建四种不同的线程池，这些方法实际上都是调用了 ThreadPoolExecutor 的构造器。返回值是线程池接口 ExecutorService。
@@ -2933,46 +2973,12 @@ scheduleAtFixedRate() ：按某种速率周期执行
 scheduleWithFixedDelay()：在某个延迟后执行
 周期性执行任务的场景，需要限制线程数量的场景
 
-### 13.7.2. 线程池各个参数的作用，如何进行的?
-
-**ThreadPoolExecutor 构造器**
-```java
-public ThreadPoolExecutor(
-    int corePoolSize,     // 线程池核心线程数最大值
-    int maximumPoolSize,  // 线程池最大线程数大小
-    long keepAliveTime,   // 程池中非核心线程空闲的存活时间大小
-    TimeUnit unit,        // 线程空闲存活时间单位
-    BlockingQueue<Runnable> workQueue, // 存放任务的阻塞队列
-    ThreadFactory threadFactory,       // 用于设置创建线程的工厂，可以给创建的线程设置有意义的名字，可方便排查问题
-    RejectedExecutionHandler handler   // 线城池的饱和策略事件，主要有四种类型。
-)
-```
-
-线程池执行流程：核心线程 — 任务队列 — 非核心线程 — 拒绝策略
-
-![img](https://user-gold-cdn.xitu.io/2019/7/7/16bca03a5a6fd78f?imageslim) 
-
-四种拒绝策略：
-
-1. AbortPolicy：抛出一个异常，默认的
-2. DiscardPolicy：直接丢弃任务
-3. DiscardOldestPolicy：丢弃队列里最老的任务，将当前这个任务继续提交给线程池
-4. CallerRunsPolicy：交给线程池调用所在的线程进行处理
-
-### 13.7.3. 线程池异常处理
+### 13.7.4. 线程池异常处理
 
 1. try - catch 处理
 2. 通过 Future 对象的 get 方法接收抛出的异常，再处理
 3. 使用自己的ThreadFactory，创建线程时设置线程的 UncaughtExceptionHandler，在 uncaughtException方法中处理异常
 4. 重写 ThreadPoolExecutor 的 afterExecute方法，处理传递的异常引用
-
-### 13.7.4. 线程池的工作队列
-
-1. ArrayBlockingQueue：有界队列，用数组实现的，FIFO
-2. LinkedBlockingQueue：可设置容量队列，基于链表，FIFO，不设置容量则无限扩大，最大为 Integer.MAX_VALUE
-3. DelayQueue：延迟队列，其中的对象到期时才能从队列中取走
-4. PriorityBlockingQueue：优先级队列
-5. SynchronousQueue：同步队列，插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
 
 ### 13.7.5. 线程池状态
 
@@ -3464,7 +3470,7 @@ final void checkForComodification() {
         throw new ConcurrentModificationException();
 }
 ```
-注意：这里异常的抛出条件是检测到 modCount！=expectedmodCount 这个条件。如果集合发生变化时修改modCount值刚好又设置为了expectedmodCount值，则异常不会抛出（ABA问题）。因此，不能依赖于这个异常是否抛出而进行并发操作的编程，这个异常只建议用于检测并发修改的bug。
+注意：这里异常的抛出条件���检测到 modCount！=expectedmodCount 这个条件。如果集合发生变化时修改modCount值刚好又设置为了expectedmodCount值，则异常不会抛出（ABA问题）。因此，不能依赖于这个异常是否抛出而进行并发操作的编程，这个异常只建议用于检测并发修改的bug。
 
 安全失败（fail—safe）:
 采用安全失败机制的集合容器，在遍历时不是直接在集合内容上访问的，而是先复制原有集合内容，在拷贝的集合上进行遍历。
@@ -4742,7 +4748,18 @@ String toString()
 Java 8提供了一个新的Nashorn javascript引擎，它允许我们在JVM上运行特定的javascript应用。
 
 
-# 23. Servlet
+# 23. Java Web 三大组件
+
+- Servlet 用到了模板方法模式：HttpServlet 是一个抽象类，需要子类继承并重写 doGet doPost 等方法。
+- Filter 用到了责任链模式：在一个 URL 上可以有多个 Filter，执行完一个 Filter 之后。通过 FilterChain 的 doFilter 方法继续往后执行下一个 Filter，直到执行到 Servlet。
+- Listener 用到了观察者模式：当 Request 等对象更新了之后会调用 ServletRequestListener 相应的方法。
+
+## 23.1. Servlet
+
+创建servlet有三种方式:
+- 实现Servlet接口
+- 继承GenericServlet类
+- 继承HttpServlet类
 
 ```java
 package javax.servlet;
@@ -4787,7 +4804,8 @@ public abstract class HttpServlet extends GenericServlet {
             throw new ServletException("non-HTTP request or response");
         }
     }
-
+    // 在 service 方法中，根据不同的请求类型
+    // 调用不同的 doGet doPost 等方法
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getMethod();
         long lastModified;
@@ -4825,5 +4843,60 @@ public abstract class HttpServlet extends GenericServlet {
             resp.sendError(501, errMsg);
         }
     }
+}
+```
+
+**1、servlet是不是单例设计模式?**
+Servlet 并不是单例设计模式,如果有多个Url映射到同一个 Servlet 时,就会出现多个实例。虽然 Servlet 在多数情况下只有一个实例。但它并不是单例设计模式，即不是真正的单例。
+
+**2、serlvet线程安全问题?**
+基于 JVM 对多线程的支持，这样可以提高代码的执行效率。 不需要为每一个请求都要单独创建/销毁 Servlet（执行 init(), desdroy()）。同一段代码可以在同一时间被多个请求同时执行。 Servlet 是普通的 Java 类，因此没有对其做线程安全的处理
+
+## 23.2. Filter
+
+```java
+package javax.servlet;
+import java.io.IOException;
+public interface Filter {
+    void init(FilterConfig var1) throws ServletException;
+    void doFilter(ServletRequest var1, ServletResponse var2, FilterChain var3) throws IOException, ServletException;
+    void destroy();
+}
+
+package javax.servlet;
+import java.io.IOException;
+public interface FilterChain {
+    void doFilter(ServletRequest var1, ServletResponse var2) throws IOException, ServletException;
+}
+
+```
+
+Filter 接口中有一个 doFilter 方法，当我们编写好 Filter 需要实现这个方法，并在web.xml中配置。
+当每次请求对应的url之前，都会先调用一下filter的doFilter方法。
+
+doFilter 第三个参数是 FilterChain 类型的
+
+### 23.2.1. Filter的四种拦截方式
+- REQUEST：直接访问目标资源时执行过滤器。包括：在地址栏中直接访问、表单提交、超链接、重定向，只要在地址栏中可以看到目标资源的路径，就是REQUEST；
+- FORWARD：转发访问执行过滤器。包括RequestDispatcher#forward()方法、<jsp:forward>标签都是转发访问；
+- INCLUDE：包含访问执行过滤器。包括RequestDispatcher#include()方法、<jsp:include>标签都是包含访问；
+- ERROR：当目标资源在web.xml中配置为<error-page>中时，出现异常后，转发到目标资源时，会执行过滤器。
+
+
+## 23.3. Listener
+
+```java
+package javax.servlet.http;
+import java.util.EventListener;
+public interface HttpSessionListener extends EventListener {
+    void sessionCreated(HttpSessionEvent var1);
+    void sessionDestroyed(HttpSessionEvent var1);
+}
+
+package javax.servlet;
+import java.util.EventListener;
+public interface ServletRequestListener extends EventListener {
+    void requestDestroyed(ServletRequestEvent var1);
+    void requestInitialized(ServletRequestEvent var1);
 }
 ```
