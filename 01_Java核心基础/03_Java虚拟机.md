@@ -52,8 +52,12 @@
     - [4.4.1. 双亲委派模型](#441-双亲委派模型)
 - [5. 虚拟机字节码执行引擎](#5-虚拟机字节码执行引擎)
   - [5.1. 运行时栈帧结构](#51-运行时栈帧结构)
+    - [5.1.1. 局部变量表](#511-局部变量表)
+    - [5.1.2. 操作数栈](#512-操作数栈)
+    - [5.1.3. 动态连接](#513-动态连接)
+    - [5.1.4. 方法返回地址](#514-方法返回地址)
   - [5.2. 方法调用](#52-方法调用)
-    - [5.2.1. 解析](#521-解析)
+    - [5.2.1. 解析（类加载过程的解析阶段进行）](#521-解析类加载过程的解析阶段进行)
     - [5.2.2. 分派](#522-分派)
   - [5.3. 基于栈的指令集和基于寄存器的指令集](#53-基于栈的指令集和基于寄存器的指令集)
 - [6. 高效并发](#6-高效并发)
@@ -478,35 +482,131 @@ Java虚拟机角度分：两种不同的类加载器：
 ## 5.1. 运行时栈帧结构
 
 栈帧是虚拟机运行时数据区中的虚拟机栈的栈元素。
-
 栈帧中存储了：方法的局部变量表、操作数栈、动态链接、方法返回地址等信息。
+当前栈帧：栈顶的栈帧。所关联的方法称为当前方法。
 
-当前栈帧：栈顶的栈帧。所关联的方法称为当前方法
+### 5.1.1. 局部变量表
 
+局部变量表的容量以变量槽（Variable Slot）为最小单位。用于存储方法的入参和方法内的局部变量。
+在代码被编译为 class 文件时，就在方法的 Code 属性的 max_locals 中确定了局部变量表的最大容量。
+每个 Slot 的大小并不是固定的，和具体的虚拟机位数有关，但规定了一个 Slot 可以存放下 boolean byte char short int float reference returnAddress，long double 用两个 Slot 存储。
+非静态方法的 0 号 Slot 是方法所属对象的引用，接着按参数表顺序放入实参，然后是局部变量。
+Slot 是可重用的，当一个局部变量离开它的作用域后，它会被出栈。（但不会马上删掉这个 Slot 上的数据，会在下一个局部变量入栈时覆盖，也就是说在此之前，旧的变量还是存在的，不能被 GC。看下面例子：）
 
+在虚拟机参数加上 `-verbose:gc` 以便看GC的过程
+```java
+public static void main(String[] args) {
+    byte[] holder = new byte[64 * 1024 * 1024];
+    System.gc();
+}
+// [GC (System.gc())  69468K->66288K(251392K), 0.0011545 secs]
+// [Full GC (System.gc())  66288K->66152K(251392K), 0.0047648 secs]
+// 还有 66152K 内存没有被回收，这是正常的，因为holder还没有离开作用域
 
-局部变量表的容量以变量槽为最小单位。
+// 改变一下holder的作用域
+// 这下总该回收了吧
+public static void main(String[] args) {
+    {
+        byte[] holder = new byte[64 * 1024 * 1024];
+    }
+    System.gc();
+}
+// [GC (System.gc())  69468K->66312K(251392K), 0.0008585 secs]
+// [Full GC (System.gc())  66312K->66152K(251392K), 0.0044798 secs]
+// 事实是仍然没有
+// 原因是虽然 holder 出栈了，但是它的数据还没有被抹去
+
+// 我们将一个局部变量入栈，覆盖 holder 的数据看看
+public static void main(String[] args) {
+    {
+        byte[] holder = new byte[64 * 1024 * 1024];
+    }
+    System.gc();
+    int a = 1;
+    System.gc();
+}
+// [GC (System.gc())  69468K->66296K(251392K), 0.0009442 secs]
+// [Full GC (System.gc())  66296K->66152K(251392K), 0.0045894 secs]
+// [GC (System.gc())  66152K->66152K(251392K), 0.0005715 secs]
+// [Full GC (System.gc())  66152K->616K(251392K), 0.0033609 secs]
+// 可以看到第二次 GC 把这 64M 空间回收了
+
+// 还有一种方法，将 holder 置空也能帮助 GC
+public static void main(String[] args) {
+    {
+        byte[] holder = new byte[64 * 1024 * 1024];
+        holder = null; // help GC
+    }
+    System.gc();
+}
+// [GC (System.gc())  69468K->66312K(251392K), 0.0009519 secs]
+// [Full GC (System.gc())  66312K->616K(251392K), 0.0044553 secs]
+// 这一方法在 java.util.concurrent.locks.AbstractQueuedSynchronizer 的 final boolean acquireQueued(final Node node, int arg) 中也有
+```
+
+局部变量与类变量的初始化不同：
+类变量有两次赋值操作：准备阶段赋默认值，初始化阶段显示赋值；局部变量没有赋默认值这一阶段，只有显示赋值。
+
+### 5.1.2. 操作数栈
+
+在代码被编译为 class 文件时，就在方法的 Code 属性的 max_stacks 中确定了操作数栈的最大深度。
+
+### 5.1.3. 动态连接
+
+### 5.1.4. 方法返回地址
 
 退出方法的两种方式：
-
-1. 正常完成出口：遇到方法返回的字节码指令
-2. 异常完成出口：遇到异常，且异常没有在方法中处理
+1. 正常完成出口：遇到方法返回的字节码指令，根据方法的声明来给出返回值
+2. 异常完成出口：遇到异常，且异常没有在方法中处理，不会有任何返回值
 
 ## 5.2. 方法调用
 
 方法调用并不等于方法执行。方法调用阶段的唯一任务是：确定被调用方法的版本，即调用哪一个方法。
+class 文件的编译是没有**链接**这个过程的。所有的方法调用在 class 文件中都存储的是**符号引用**，而不是**直接引用**（运行时内存中的方法入口地址）。
+而符号引用转化为直接引用的过程是在：类加载阶段 或 运行期间进行的。
 
-### 5.2.1. 解析
+### 5.2.1. 解析（类加载过程的解析阶段进行）
 
 解析：如果当方法的调用版本在运行期间是不可改变的，那么在类加载阶段，会把一部分符号引用转化为直接引用。
+编译器可知，运行期不可变 — 静态方法和私有方法。这两种方法都不能被重写。静态方法直接与类型关联，私有方法在外部不可访问。
 
-编译器可知，运行期不可变 — 静态方法和私有方法。这两种方法都不能被重写。
+JVM 中有四条方法调用的字节码指令：
+invokestatic：调用静态方法
+invokespecial：调用实例构造器`<init>`方法、私有方法、父类方法。
+invokevirtual：调用所有虚方法（特别的 final 所修饰的方法也是使用 invokevirtual 来调用，但是它是非虚方法，不能被重写）
+invokeinterface：调用接口方法（抽象方法），运行时才确定实现类的对象的方法
+
+被 invokestatic 和 invokespecial 调用的方法解析阶段可以确定版本（静态方法、私有方法、构造器、父类方法），在类加载时将符号引用解析为直接引用。
+以上四类方法 加上 final 修饰的方法，称为非虚方法。
 
 ### 5.2.2. 分派
 
 - **静态分派**：所有依赖静态类型来定位方法执行版本的分派动作，方法重载。静态分派发生在编译期间。
 
-编译器在决定使用那个重载方法时是通过参数的静态类型来做判断的。
+```java
+public class OverLoad {
+    public void say(Human h) {
+        System.out.println("Human");
+    }
+    public void say(Man h) {
+        System.out.println("Man");
+    }
+    public void say(Woman h) {
+        System.out.println("Woman");
+    }
+
+    public static void main(String[] args) {
+        OverLoad load = new OverLoad();
+        Human h1 = new Man();
+        Human h2 = new Woman();
+        load.say(h1);
+        load.say(h2);
+    }
+}
+// Human
+// Human
+```
+编译器在决定使用那个重载方法时是通过参数的**静态类型**来做判断的。
 
 ```java
 public class MethodTest {
@@ -514,9 +614,9 @@ public class MethodTest {
         int a = 0;
         method(a);
     }
-	
+
     // 以下五个方法按照调用选择顺序排列
-	//方法1
+   //方法1
     public static void method(int a){
         System.out.println("执行method(int a)");
     }
@@ -559,46 +659,85 @@ public class MethodTest2 extends A{
     }
 }
 ```
-
 关于方法重载时的调用选择我们可以得出以下结论：
-
 (1)   精确匹配：对于上述代码中，当有method(int a)存在时调用的肯定就是这个方法；
 (2)   自动类型提升：对于基础数据类型，自动转成表示范围更大的类型；当方法1被注释的时候，会去调用method(long a)而不是method(Integer a)；
 (3)   自动装箱与拆箱：当方法1，2被注释，就调用方法3；
 (4)   根据子类依次向上继承路线匹配：当只有方法4与方法5时，先找int的父类，找到的object类型，匹配之后调用；当继承A类之后，由于本类没有合适的方法，然后就去A类中找，匹配调用（A类中方法参数类型换成long，Integer结果也一样）；
 (5)   根据可变参数匹配。
-
 引用自：https://www.jianshu.com/p/306c4bfe3f54
 
 
-
 - **动态分派**：方法重写
-
-通过方法的接收者来决定使用那个方法。
-
+通过方法的接收者来决定使用那个方法。运行期间通过实际类型来确定方法的调用版本。
 Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的虚函数，**动态绑定**是Java的默认行为。如果 Java 中不希望某个函数具有虚函数特性，可以加上 final 关键字变成非虚函数。
-
-
 
 - **单分派与多分派**：
 
 方法的宗量：方法的接收者与方法的参数统称为方法的宗量。
-
-Java 语言：静态多分派，动态单分派。
-
+单分派：根据一个宗量选择目标方法；
+多分派：根据多个宗量选择目标方法。
+重载时：根据不同方法接收者的静态类型和不同参数类型的方法中选择，即在根据两个个宗量来选择方法；
+重写时：重载已经在解析阶段确定了，运行时只需要根据方法的接收者的实际类型来选择方法，即根据一个宗量来选择方法。
+所以，Java 语言：静态多分派，动态单分派。
 C# 3.0 以前和 Java 一样，4.0 引入了 dynamic 类型后，实现了动态多分派。
 
-![image-20200321185141401](../images/image-20200321185141401.png)
+例子：
+```java
+class A{}
+class B{}
+class Super {
+    public void say(A a) {
+        System.out.println("Super A");
+    }
+    public void say(B b) {
+        System.out.println("Super B");
+    }
+}
+class Son extends Super{
+    @Override
+    public void say(A a) {
+        System.out.println("Son A");
+    }
+    @Override
+    public void say(B b) {
+        System.out.println("Son B");
+    }
+}
+
+public class ZhongLiang {
+    public static void main(String[] args) {
+        Super sup = new Super();
+        Super son = new Son();
+
+        sup.say(new A());
+        son.say(new B());
+    }
+}
+// Super A
+// Son B
+```
+上述有四个方法：
+1、Super::say(A)
+2、Super::say(B)
+3、Son::say(A)
+4、Son::say(B)
+
+12 重载，34重载；13重写，24重写；
+
+静态分派需要根据 接收者的静态类型是Super或者Son 以及 方法参数类型是A或者B 这两个宗量来选择；结果是选择了 Super::say(A) 和 Super::say(B)
+动态分派：由于静态分配期间已经确定了方法签名这一个宗量，所以只需要根据 接收者的实际类型是Super或者Son 这一个宗量来选择；结果是选择了 Super::say(A) 和 Son::say(B)
 
 ## 5.3. 基于栈的指令集和基于寄存器的指令集
 
-Java 编译器输出的指令流基本上是一种基于栈的指令集架构。
-
+Java 编译器输出的指令流基本上是一种基于栈的指令集架构（栈是指操作数栈）。
 基于栈：
-
 ​	优点：可移植性，代码相对更紧凑，编译器实现更简单
-
 ​	缺点：执行速度相对稍慢
+
+安卓的 Dalvik 虚拟机是基于寄存器的架构。
+
+![image-20200321185141401](../images/image-20200321185141401.png)
 
 # 6. 高效并发
 

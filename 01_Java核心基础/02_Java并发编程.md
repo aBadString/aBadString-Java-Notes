@@ -186,12 +186,12 @@ class atguigu.volatiledemo.MyData {
 
   void add();
     Code:
-       0: aload_0           // 从局部变量0中装在引用类型值
+       0: aload_0           // 把局部变量表0号位（this）复制到操作数栈
        1: dup               // 复制栈顶部一个字长内容
-       2: getfield      #2                  // Field num:I
+       2: getfield #2                  // Field num:I
        5: iconst_1
        6: iadd
-       7: putfield      #2                  // Field num:I
+       7: putfield #2                  // Field num:I
       10: return
 }
 
