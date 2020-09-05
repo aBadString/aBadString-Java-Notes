@@ -1728,3 +1728,21 @@ public void addOne() throws Exception {
     }
 }
 ```
+
+## synchronized 与 Lock 的区别
+
+1. 原始构成：
+    synchronized 是关键字，属于 JVM 层面，使用字节码指令来控制锁：monitorenter和monitorexit。底层是通过 monitor 对象来完成的。（另外 wait 和 notify/notifyAll 也依赖于 monitor 对象，所以它们只能用于同步代码块中）；
+    Lock 是一个接口，它有一堆的实现类，属于 API 层面。
+2. 使用方法上：
+    synchronized 是全自动的，自动获取锁、自动释放锁，无论正常退出还是发生异常都会释放锁
+    Lock 需要自己来控制锁的获取和释放
+3. 是否是公平锁：
+    synchronized 是非公平锁，它无法保证等待的线程获取锁的顺序；
+    ReentrantLook 可以选择是否公平锁。
+4. 等待是否可以中断：
+    synchronized 是不可中断锁；
+    ReentrantLock 可以中断：1、可以通过 lockInterruptibly 方法中断等待锁；2、tryLock(long timeout, TimeUnit unit) 超时自动中断。
+5. 是否支持精确唤醒：
+    synchronized 不支持，要么随机唤醒一个（notify），要么全部唤醒（notifyAll）；
+    ReentrantLock 通过 Condition 可以实现分组唤醒、精准唤醒。
