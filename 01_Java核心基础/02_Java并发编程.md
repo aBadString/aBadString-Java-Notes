@@ -1,4 +1,4 @@
-<h1 align="center">Java 并发编程</h1>
+<h1 id="Java并发编程" align="center">Java 并发编程</h1>
 <!-- @import "[TOC]" {cmd="toc"} -->
 
 <!-- code_chunk_output -->
@@ -29,6 +29,9 @@
     - [4.3.1. ReentrantLook 源码](#431-reentrantlook-源码)
   - [4.4. 自旋锁（Unsafe类 CAS）](#44-自旋锁unsafe类-cas)
   - [4.5. 独占锁(写锁、排他锁)和共享锁(读锁)](#45-独占锁写锁-排他锁和共享锁读锁)
+  - [4.6. 乐观锁和悲观锁](#46-乐观锁和悲观锁)
+    - [4.6.1. 补充：线程同步方式](#461-补充线程同步方式)
+    - [4.6.2. 补充：锁优化（jdk1.6）](#462-补充锁优化jdk16)
 - [5. 线程工具类](#5-线程工具类)
   - [5.1. CountDownLatch](#51-countdownlatch)
   - [5.2. CyclicBarrier](#52-cyclicbarrier)
@@ -96,7 +99,7 @@ JMM 三大特性：
 1. 保证特定操作的执行顺序
 2. 保证某些变量的内存可见性
 通过插入内存屏障指令，禁止在内存屏障前后的指令进行重排序。
-![](../images/Java高级特性/内存屏障.png)
+![](/images/Java高级特性/内存屏障.png)
 
 
 可见性例子：
@@ -524,7 +527,7 @@ public static void main(String[] args) {
 3. CopyOnWriteArrayList
 
 ### 3.1.4. CopyOnWriteArrayList
-![image-20200326192142191](../images/image-20200326192142191.png)
+![image-20200326192142191](/images/image-20200326192142191.png)
 
 CopyOnWriteArrayList add 方法：写时复制，当要往list中添加元素时，不会在原list上直接修改，而是拷贝一份原list，在拷贝的list上做修改；修改完成之后用拷贝的数组更新原来的引用。
 ```java
@@ -1519,6 +1522,67 @@ public class ReentrantReadWriteLock implements ReadWriteLock, java.io.Serializab
 }
 ```
 
+## 4.6. 乐观锁和悲观锁
+
+> https://juejin.im/post/6844903639207641096
+
+**悲观锁**：总是假设最坏的情况，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会阻塞直到它拿到锁。
+- 传统的关系型数据库里，行锁，表锁等，读锁，写锁等，都是在做操作之前先上锁。
+- Java中，synchronized 和 ReentrantLock 等独占锁就是悲观锁思想的实现。
+
+**乐观锁**：总是假设最好的情况，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是在更新的时候会判断一下在此期间别人有没有去更新这个数据。使用 版本号机制 或 CAS算法 实现。
+- 数据库里，write_condition 机制，其实都是提供的乐观锁。
+- 在Java中，java.util.concurrent.atomic 包下面的原子变量类（CAS实现的）。
+
+适合场景：
+- 乐观锁适用于写比较少的情况下（多读场景），即冲突真的很少发生的时候，这样可以省去了锁的开销，加大了系统的整个吞吐量。
+- 但如果是多写的情况，一般会经常产生冲突，这就会导致上层应用会不断的进行retry，这样反倒是降低了性能，所以一般多写的场景下用悲观锁就比较合适。
+
+### 4.6.1. 补充：线程同步方式
+- **互斥同步（加锁，悲观锁，阻塞同步，悲观的并发策略）**
+
+synchronized 与 Lock 的区别：
+1. 原始构成：
+    synchronized 是关键字，属于 JVM 层面，使用字节码指令来控制锁：monitorenter和monitorexit。底层是通过 monitor 对象来完成的。（另外 wait 和 notify/notifyAll 也依赖于 monitor 对象，所以它们只能用于同步代码块中）；
+    Lock 是一个接口，它有一堆的实现类，属于 API 层面。
+2. 使用方法上：
+    synchronized 是全自动的，自动获取锁、自动释放锁，无论正常退出还是发生异常都会释放锁
+    Lock 需要自己来控制锁的获取和释放
+3. 是否是公平锁：
+    synchronized 是非公平锁，它无法保证等待的线程获取锁的顺序；
+    ReentrantLook 可以选择是否公平锁。
+4. 等待是否可以中断：
+    synchronized 是不可中断锁；
+    ReentrantLock 可以中断：1、可以通过 lockInterruptibly 方法中断等待锁；2、tryLock(long timeout, TimeUnit unit) 超时自动中断。
+5. 是否支持精确唤醒：
+    synchronized 不支持，要么随机唤醒一个（notify），要么全部唤醒（notifyAll）；
+    ReentrantLock 锁绑定多个条件，通过 Condition 可以实现分组唤醒、精准唤醒。
+
+- **非阻塞同步（乐观锁，基于冲突检测的乐观并发策略）**
+
+需要支持硬件指令支持：
+- 测试并设置 Test-and-Set
+- 获取并增加 Fetch-and-Increment
+- 交换 Swap
+- 比较并交换 Compare-and-Swap，CAS
+- 加载链接/条件存储 Load-Linked/Store-Conditional，LL/SC
+
+- **无同步方案**
+
+天然安全的代码，无需同步手段：
+
+- 可重入代码（Reentrant Code），也叫纯代码（Pure Code），可以在代码执行的任何时刻打断它，转去执行其他代码，在转回来时原代码继续执行不会发生任何错误。**可重入代码都是线程安全的**。
+可重入代码的一些特征：1、不依赖共享数据，用到的状态量都是由参数传进来的；2、不调用非可重入方法。3、可重入代码在输入相同时可以保证输出不变。
+
+- 线程本地存储（Thread Local Storage）：如果一段代码必须和其他代码共享数据，可以尝试将临界区的代码保证在同一个线程中执行。（一个用户请求对应一个服务器线程）
+
+### 4.6.2. 补充：锁优化（jdk1.6）
+
+在JavaSE 1.6之后进行了主要包括为了减少获得锁和释放锁带来的性能消耗而引入的**偏向锁**和**轻量级锁**以及其它各种优化之后变得在某些情况下并不是那么重了。
+synchronized 的底层实现主要依靠 Lock-Free 的队列，基本思路是**自旋后阻塞，竞争切换后继续竞争锁，稍微牺牲了公平性，但获得了高吞吐量**。
+在线程冲突较少的情况下，可以获得和CAS类似的性能；而线程冲突严重的情况下，性能远高于CAS。
+
+
 # 5. 线程工具类
 
 ## 5.1. CountDownLatch
@@ -1728,21 +1792,3 @@ public void addOne() throws Exception {
     }
 }
 ```
-
-## synchronized 与 Lock 的区别
-
-1. 原始构成：
-    synchronized 是关键字，属于 JVM 层面，使用字节码指令来控制锁：monitorenter和monitorexit。底层是通过 monitor 对象来完成的。（另外 wait 和 notify/notifyAll 也依赖于 monitor 对象，所以它们只能用于同步代码块中）；
-    Lock 是一个接口，它有一堆的实现类，属于 API 层面。
-2. 使用方法上：
-    synchronized 是全自动的，自动获取锁、自动释放锁，无论正常退出还是发生异常都会释放锁
-    Lock 需要自己来控制锁的获取和释放
-3. 是否是公平锁：
-    synchronized 是非公平锁，它无法保证等待的线程获取锁的顺序；
-    ReentrantLook 可以选择是否公平锁。
-4. 等待是否可以中断：
-    synchronized 是不可中断锁；
-    ReentrantLock 可以中断：1、可以通过 lockInterruptibly 方法中断等待锁；2、tryLock(long timeout, TimeUnit unit) 超时自动中断。
-5. 是否支持精确唤醒：
-    synchronized 不支持，要么随机唤醒一个（notify），要么全部唤醒（notifyAll）；
-    ReentrantLock 通过 Condition 可以实现分组唤醒、精准唤醒。

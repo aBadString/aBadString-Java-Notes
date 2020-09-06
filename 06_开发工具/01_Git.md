@@ -1,4 +1,4 @@
-<h1 align="center">Git</h1>
+<h1 id="Git" align="center">Git</h1>
 <!-- @import "[TOC]" {cmd="toc"} -->
 
 <!-- code_chunk_output -->
@@ -192,7 +192,7 @@ The key's randomart image is:
 
 然后来到 GitHub 网站。点击一个储存库的 setting ---> Deploy keys ---> Add deploy keys：
 
-![image-20200312224657261](images/tool/image-20200312224657261.png) 
+![image-20200312224657261](/images/tool/image-20200312224657261.png)
 
 测试连接，回到 git bash 执行
 
@@ -202,7 +202,7 @@ ssh -T git@github.com
 
 回答 yes，并出现下面信息则表示链接上了。
 
-![image-20200312225017231](images/tool/image-20200312225017231.png) 
+![image-20200312225017231](/images/tool/image-20200312225017231.png)
 
 设置一下全局的 username 和 email
 

@@ -1,4 +1,4 @@
-<h1 align="center">Java 常用API源码</h1>
+<h1 id="Java常用API源码" align="center">Java 常用API源码</h1>
 <!-- @import "[TOC]" {cmd="toc"} -->
 
 <!-- code_chunk_output -->
@@ -367,7 +367,7 @@ private Segment<K,V> ensureSegment(int k) {
 4. 每个红色节点的两个子节点都是黑色（从每个叶子到根的路径不能有两个连续的红色节点）
 5. 从任何一个节点到其每个叶子节点的所用路径包含相同数目的黑色节点
 
-![image-20200403175646744](../images/image-20200403175646744.png)
+![image-20200403175646744](/images/image-20200403175646744.png)
 
 这些规则的限定，保证了红黑树的自平衡。红黑树从根节点到叶子的最长路径不会超过最短路径的 2 倍。
 
@@ -383,7 +383,7 @@ private Segment<K,V> ensureSegment(int k) {
 
 ## 3.2. TreeMap 源码
 
-![img](../images/TreeMap.png)
+![img](/images/TreeMap.png)
 
 - TreeMap实现了NavigableMap接口，而NavigableMap接口继承着SortedMap接口，致使我们的**TreeMap是有序的**
 - TreeMap底层是红黑树，它方法的时间复杂度：log(n)
@@ -726,7 +726,7 @@ successor方法找节点的后继节点:
 
 第 2 种：若节点有右子树，后继为右子树的最左节点  p -> s
 
-![image-20200403194459803](../images/image-20200403194459803.png) 
+![image-20200403194459803](/images/image-20200403194459803.png) 
 
 第 3 种：若节点没有右子树，后继为该节点所在左子树的第一个祖先节点  p -> s
 
@@ -734,11 +734,11 @@ successor方法找节点的后继节点:
 
 ​	2、若其有父节点 且 p 为父节点左子树，返回其父节点;  P -> A
 
-![image-20200403195027806](../images/image-20200403195027806.png)
+![image-20200403195027806](/images/image-20200403195027806.png)
 
 若其有父节点且 p 为父节点右子树，其所在左子树的第一个祖先节点 p -> s
 
-![image-20200403195211157](../images/image-20200403195211157.png) 
+![image-20200403195211157](/images/image-20200403195211157.png) 
 
 
 
@@ -842,7 +842,7 @@ private void deleteEntry(Entry<K,V> p) {
 
 # 4. HashSet
 
-![HashMap的UML图](../images/1.png) 
+![HashMap的UML图](/images/1.png) 
 
 HashSet内部基本使用HashMap来实现。HashMap的key为要存储的元素，value为一个固定的 Object 常量。
 

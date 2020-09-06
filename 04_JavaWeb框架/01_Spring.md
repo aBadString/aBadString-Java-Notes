@@ -1,4 +1,4 @@
-<h1 align="center">Spring</h1>
+<h1 id="Spring" align="center">Spring</h1>
 <!-- @import "[TOC]" {cmd="toc"} -->
 
 <!-- code_chunk_output -->
@@ -156,7 +156,7 @@ Spring 是 用于 Java 企业级开发的，轻量级的，非侵入式的 开�
   - 既可以与hibernate整合，【session】
   - 也可以使用spring的对hibernate操作的封装
 
-![Spring模块](../images/spring/Spring模块.png) 
+![Spring模块](/images/spring/Spring模块.png) 
 
 
 **涉及到Spring core的开发jar包有6个**：
@@ -169,7 +169,7 @@ Spring 是 用于 Java 企业级开发的，轻量级的，非侵入式的 开�
 
 - log4j.jar：spring 依赖于 log4j
 
-![Spring体系结构](../images/spring/Spring体系结构.png) 
+![Spring体系结构](/images/spring/Spring体系结构.png) 
 
 ## 1.4. 托管 Bean 的三种方式
 
@@ -726,7 +726,7 @@ spring 采用动态代理织入，而 AspectJ 采用编译期织入和类装载�
 
 - Aspect(切面):   是切入点和通知（引介）的结合。 **切面就是配置**
 
-![通知的类型](../images/spring/通知的类型.jpg)
+![通知的类型](/images/spring/通知的类型.jpg)
 
 
 ```xml
@@ -930,7 +930,7 @@ private void pt1(){}
 
 **用注解配置通知时, 后置/异常通知个最终通知存在调用顺序错误的情况. 这是一个坑, 可能是框架代码写错了???**
 
-![最终同时顺序错误的坑](../images/spring/最终同时顺序错误的坑.png)
+![最终同时顺序错误的坑](/images/spring/最终同时顺序错误的坑.png)
 
 
 # 3. Spring MVC

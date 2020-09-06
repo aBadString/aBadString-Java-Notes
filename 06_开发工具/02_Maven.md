@@ -1,13 +1,14 @@
-<h1 align="center">Maven</h1>
+<h1 id="Maven" align="center">Maven</h1>
 <!-- @import "[TOC]" {cmd="toc"} -->
 
 <!-- code_chunk_output -->
 
-- [1. Maven 简介](#1-maven-简介)
-  - [1.1. 约定配置](#11-约定配置)
-  - [1.2. POM (Project Object Model 项目对象模型)](#12-pom-project-object-model-项目对象模型)
-- [2. Maven 命令](#2-maven-命令)
-  - [package、install、deploy的联系与区别](#package-install-deploy的联系与区别)
+- [1. 需要做的配置](#1-需要做的配置)
+- [2. Maven 简介](#2-maven-简介)
+  - [2.1. 约定配置](#21-约定配置)
+  - [2.2. POM (Project Object Model 项目对象模型)](#22-pom-project-object-model-项目对象模型)
+- [3. Maven 命令](#3-maven-命令)
+  - [3.1. package、install、deploy的联系与区别](#31-package-install-deploy的联系与区别)
 
 <!-- /code_chunk_output -->
 

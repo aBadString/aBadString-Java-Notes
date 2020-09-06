@@ -1,13 +1,13 @@
-<h1 align="center">Linux</h1>
+<h1 id="Linux" align="center">Linux</h1>
 <!-- @import "[TOC]" {cmd="toc"} -->
 
 <!-- code_chunk_output -->
 
-- [1 Linux进程间通信方式](#1-linux进程间通信方式)
+- [1. Linux进程间通信方式](#1-linux进程间通信方式)
 
 <!-- /code_chunk_output -->
 
-# 1 Linux进程间通信方式
+# 1. Linux进程间通信方式
 
 管道、命名管道、内存映射、消息队列、共享内存、信号量、信号、套接字。
 
