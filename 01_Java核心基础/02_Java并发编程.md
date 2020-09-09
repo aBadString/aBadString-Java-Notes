@@ -344,7 +344,6 @@ do {
 2. 可能会发生ABA问题。
 
 **ABA 问题**
-
 当一个线程 t1 从内存位置 V 取出值 A，进行操作。再 t1 操作过程中，另一个线程 t2 将 V 处的值改为了 B，之后 t2 又将值改回了 A。此时线程 t1 操作完成，执行 CAS 原语将其操作结果写回 V 处，操作成功。
 也就是说线程 t1 对线程 t2 执行的操作是不知情的。
 
@@ -496,24 +495,24 @@ public static void main(String[] args) {
 但是当我们试图去读取list列表时，就会发生并发修改异常 java.util.ConcurrentModificationException
 ```java
 public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
+    List<String> list = new ArrayList<>();
 
-        for (int i = 1; i <= 30; i++) {
-            new Thread(() -> {
-                String s = UUID.randomUUID().toString().substring(0, 8);
-                list.add(s);
-                // 读取list的全部元素
-                list.forEach(System.out::println);
-                System.out.println(Thread.currentThread().getName() + " add " + s);
-            }, String.valueOf(i)).start();
-        }
-
-        while (Thread.activeCount() > 2) {
-            Thread.yield();
-        }
-        System.out.println(list.size());
-        System.out.println(list);
+    for (int i = 1; i <= 30; i++) {
+        new Thread(() -> {
+            String s = UUID.randomUUID().toString().substring(0, 8);
+            list.add(s);
+            // 读取list的全部元素
+            list.forEach(System.out::println);
+            System.out.println(Thread.currentThread().getName() + " add " + s);
+        }, String.valueOf(i)).start();
     }
+
+    while (Thread.activeCount() > 2) {
+        Thread.yield();
+    }
+    System.out.println(list.size());
+    System.out.println(list);
+}
 ```
 
 ### 3.1.2. 异常原因
