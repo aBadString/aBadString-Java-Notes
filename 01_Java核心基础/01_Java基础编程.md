@@ -2661,17 +2661,17 @@ class WindowRunnableTest {
     public static void main(String[] args) {
         WindowRunnable w = new WindowRunnable();
 
-        Thread w1 = new Thread(w);
-        Thread w2 = new Thread(w);
-        Thread w3 = new Thread(w);
+        Thread t1 = new Thread(w);
+        Thread t2 = new Thread(w);
+        Thread t3 = new Thread(w);
 
-        w1.setName("窗口1");
-        w2.setName("窗口2");
-        w3.setName("窗口3");
+        t1.setName("窗口1");
+        t2.setName("窗口2");
+        t3.setName("窗口3");
 
-        w1.start();
-        w2.start();
-        w3.start();
+        t1.start();
+        t2.start();
+        t3.start();
     }
 }
 ```
