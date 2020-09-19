@@ -74,6 +74,19 @@
   - [6.4. 线程安全](#64-线程安全)
     - [6.4.1. 线程安全的实现方法](#641-线程安全的实现方法)
 - [7. 锁优化](#7-锁优化)
+- [8. JVM 调优](#8-jvm-调优)
+  - [8.1. 三大参数（java 命令）](#81-三大参数java-命令)
+    - [8.1.1. 标配参数](#811-标配参数)
+    - [8.1.2. X 参数](#812-x-参数)
+    - [8.1.3. XX 参数](#813-xx-参数)
+  - [8.2. JDK 工具](#82-jdk-工具)
+    - [8.2.1. jps 虚拟机进程状况工具](#821-jps-虚拟机进程状况工具)
+    - [8.2.2. jstat 虚拟机统计信息监视工具](#822-jstat-虚拟机统计信息监视工具)
+    - [8.2.3. jinfo Java 配置信息工具](#823-jinfo-java-配置信息工具)
+    - [8.2.4. jmap Java 内存映像工具](#824-jmap-java-内存映像工具)
+    - [8.2.5. jhat 堆转储快照分析工具](#825-jhat-堆转储快照分析工具)
+    - [8.2.6. jstack Java 堆栈跟踪工具](#826-jstack-java-堆栈跟踪工具)
+    - [8.2.7. jconsole 可视化监视与管理控制台](#827-jconsole-可视化监视与管理控制台)
 
 <!-- /code_chunk_output -->
 
@@ -887,3 +900,261 @@ Mark Word
 ![](/images/JVM/MarkWord.png)
 
 ![image-20200413162304323](/images/image-20200413162304323.png)
+
+ 
+# 8. JVM 调优
+
+## 8.1. 三大参数（java 命令）
+
+### 8.1.1. 标配参数
+
+- java -version，获取JDK版本
+- java -help，获取帮助
+- java -showversion，获取JDK版本和帮助
+
+```shell
+java -version
+
+openjdk version "1.8.0_265"
+OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_265-b01)
+OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.265-b01, mixed mode)
+```
+
+### 8.1.2. X 参数
+
+X 参数用于指定字节码的执行模式（java -version 命令输出的最后一行 mixed mode 表示混合模式）。
+
+- java -Xint：直接解释执行  interpreted mode
+- java -Xcomp：先编译成本地代码再执行  compiled mode
+- java -XMixed：混合模式（既有编译执行也有解释执行）  mixed mode
+
+### 8.1.3. XX 参数
+
+XX 参数有两种类型，一种是 Boolean 类型，另外一种是键值对类型。
+
+**Boolean 类型**
+`-XX:+属性名` 或者 `-XX:-属性名`
++表示开启了这个属性，-表示关闭了这个属性。
+例如：
+-XX:-PrintGCDetails：表示关闭GC详情输出
+-XX:+PrintGCDetails：表示开启GC详情输出
+
+```shell
+java -XX:+PrintGCDetails HelloJVM
+```
+
+**key-value类型**
+`-XX:key=value`
+例如：
+-XX:metaspace=2000000：设置Java元空间的值为2000000。
+-XX:MetaspaceSize=128m：设置Java元空间的值为128M。
+-Xms参数代表-XX:InitialHeapSize ，初始化堆内存（默认只会用最大物理内存的1/64）
+-Xmx:参数代表-XX:MaxHeapSize ，大堆内存（默认只会用最大物理内存的1/4）
+
+```shell
+java -XX:InitialHeapSize=200m HelloJVM
+# 或者
+java -Xms200m HelloJVM
+
+
+java -XX:MaxHeapSize=200M HelloJVM
+# 或者
+java -Xmx200m HelloJVM
+```
+
+**查看XX配置的命令**
+
+使用 `jinfo -flag` 指令可以查看各个java进程的参数设置情况
+```shell
+# 查看元空间大小
+# MetaspaceSize: 属性名
+# 12208: Java 进程ID，使用 jps指令查看（jps -l 可以列出 id 和 类名）
+jinfo -flag MetaspaceSize 15048
+-XX:MetaspaceSize=21807104
+# 可以看到元空间大小是 21 M
+
+# 查看GC详情输出是否开启
+jinfo -flag PrintGCDetails 15852
+-XX:+PrintGCDetails
+```
+
+```shell
+# 查看出厂默认设置的所有XX配置项
+java -XX:+PrintFlagsInitial -version
+
+# 查看 JVM 当前所有XX配置项
+java -XX:+PrintFlagsFinal -version
+
+# 也可以在运行程序时打印配置
+java -XX:+PrintFlagsFinal HelloJVM
+
+# 查看 JVM 自动配置的或者用户手动设置的XX选项（非应用程序的）
+java -XX:+PrintCommandLineFlags -version
+```
+
+## 8.2. JDK 工具
+
+### 8.2.1. jps 虚拟机进程状况工具
+
+列出正在运行的虚拟机进程，显示：执行主类的类名（main方法所在类）、进程的本地虚拟机唯一ID（LVMID）
+
+|参数|含义|
+|:-:|:-:|
+|-q|只输出LVMID|
+|-l|输出主类的全类名；如果执行的是jar包，输出jar路径|
+|-m|输出main方法的命令行参数|
+|-v|输出JVM参数|
+
+```shell
+java -Xmx200m jvm.XX hello args
+
+PS D:\MyProject\IdeaProjects\java> jps
+11904 XX
+5684 Jps
+10828 Launcher
+
+PS D:\MyProject\IdeaProjects\java> jps -q
+11904
+3312
+10828
+
+PS D:\MyProject\IdeaProjects\java> jps -l
+1040 sun.tools.jps.Jps
+11904 jvm.XX
+10828 org.jetbrains.jps.cmdline.Launcher
+
+PS D:\MyProject\IdeaProjects\java> jps -m
+11904 XX hello args
+10828 Launcher C:/Program Files/DevTools/IntelliJ IDEA 2020.1.3/lib/httpclient-4.5.12.jar;C:/Program Files/DevTools/IntelliJ IDEA 2020.1.3/lib/plexus-utils-3.2.0.jar;......
+11868 Jps -m
+
+PS D:\MyProject\IdeaProjects\java> jps -v
+11904 XX -Xmx200m -javaagent:C:\Program Files\DevTools\IntelliJ IDEA 2020.1.3\lib\idea_rt.jar=57118:C:\Program Files\DevTools\IntelliJ I
+DEA 2020.1.3\bin -Dfile.encoding=UTF-8
+```
+
+main 函数 args 参数中 args[0] 就是第一个参数。
+与 C 的命令行参数不同，在 C 的 main 函数中 argv[0] 是程序名。
+
+```java
+public static void main(String[] args) {
+    for (int i = 0; i < args.length; i++) {
+        System.out.print(args[i] + " ");
+    }
+}
+```
+```shell
+java jvm.XX onw two three
+onw two three
+```
+
+```c
+#include <stdio.h>
+int main(int argc, char *argv[])
+{
+    for (int i = 0; i < argc i++) {
+        printf("%s ", argv[i]);
+    }
+}
+```
+```shell
+./a.out onw two three
+./a.out onw two three
+```
+
+### 8.2.2. jstat 虚拟机统计信息监视工具
+
+监视虚拟机各种运行状态信息（包括：类装载、内存、垃圾收集、JIT编译等运行数据）。是运行期定位虚拟机性能问题的首选工具。
+
+jstat -gc 456 250 10
+查询 VMID 为 456 的进程的 GC 情况，每 250 毫秒查询一次，共查询 10 次。
+
+```shell
+jstat -class 456
+Loaded  Bytes  Unloaded  Bytes     Time
+   625  1285.7        0     0.0       0.11
+
+jstat -gc 456
+ S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT
+8192.0 8192.0  0.0    0.0   51712.0   5177.1   136704.0     0.0     4480.0 780.9  384.0   76.6       0    0.000   0      0.000    0.000
+```
+
+### 8.2.3. jinfo Java 配置信息工具
+
+查看虚拟机参数配置
+
+```shell
+jinfo -flag MetaspaceSize 15048
+-XX:MetaspaceSize=21807104
+```
+
+### 8.2.4. jmap Java 内存映像工具
+
+用于生产堆转储快照（heapdump 或 dump 文件）。
+```shell
+jmap -dump:live,file=dump_001.bin 1344
+
+Dumping heap to D:\MyProject\IdeaProjects\java\dump_001.bin ...
+Heap dump file created
+
+```
+
+还可以使用-XX:+HeapDumpOnOutOfMemoryError参数来让虚拟机出现OOM的时候自动生成dump文件
+
+### 8.2.5. jhat 堆转储快照分析工具
+
+用于分析 jmap 生成的转储快照。
+
+```shell
+> jhat .\java_pid14596.hprof
+Reading from .\java_pid14596.hprof...
+Dump file created Wed Sep 16 14:58:37 GMT+08:00 2020
+Snapshot read, resolving...
+Resolving 13125 objects...
+Chasing references, expect 2 dots..
+Eliminating duplicate references..
+Snapshot resolved.
+Started HTTP server on port 7000
+Server is ready.
+```
+浏览器输入 http://localhost:7000 访问分析结果
+
+
+### 8.2.6. jstack Java 堆栈跟踪工具
+
+生成虚拟机当前时刻的线程快照。线程快照是当前虚拟机内每一条正在执行的方法的堆栈集合。
+
+|参数|含义|
+|:-:|:-:|
+|-F|当正常输出的请求不被响应时，强制输出线程堆栈|
+|-l|除堆栈外，显示关于锁的附加信息|
+|-m|如果调用本地方法的话，显示C/C++的堆栈|
+
+```shell
+jstack 15508
+
+"main" #1 prio=5 os_prio=0 tid=0x000001c89180f000 nid=0x411c waiting on condition [0x0000002e616fe000]
+   java.lang.Thread.State: TIMED_WAITING (sleeping)
+        at java.lang.Thread.sleep(Native Method)
+        at java.lang.Thread.sleep(Thread.java:340)
+        at java.util.concurrent.TimeUnit.sleep(TimeUnit.java:386)
+        at jvm.XX.main(XX.java:18)
+
+"VM Thread" os_prio=2 tid=0x000001c8a3f31800 nid=0x184c runnable
+
+"GC task thread#0 (ParallelGC)" os_prio=0 tid=0x000001c891824800 nid=0x308 runnable
+
+"GC task thread#1 (ParallelGC)" os_prio=0 tid=0x000001c891826000 nid=0x25c runnable
+
+"GC task thread#2 (ParallelGC)" os_prio=0 tid=0x000001c891828000 nid=0x237c runnable
+
+"GC task thread#3 (ParallelGC)" os_prio=0 tid=0x000001c891829800 nid=0x2d18 runnable
+
+"VM Periodic Task Thread" os_prio=2 tid=0x000001c8a4ae3800 nid=0x373c waiting on condition
+
+JNI global references: 12
+```
+
+### 8.2.7. jconsole 可视化监视与管理控制台
+
+使用jconsole 命令运行可视化控制台。

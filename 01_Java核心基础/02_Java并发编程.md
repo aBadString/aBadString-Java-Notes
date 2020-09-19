@@ -6,8 +6,10 @@
 - [1. volatile](#1-volatile)
   - [1.1. volatile 是什么](#11-volatile-是什么)
   - [1.2. JMM Java内存模型](#12-jmm-java内存模型)
-  - [1.3. 双重锁定检查的单例模式](#13-双重锁定检查的单例模式)
-    - [1.3.1. 对象的发布和逸出](#131-对象的发布和逸出)
+  - [1.3. 可见性与缓存一致性协](#13-可见性与缓存一致性协)
+  - [1.4. 有序性](#14-有序性)
+  - [1.5. 双重锁定检查的单例模式](#15-双重锁定检查的单例模式)
+    - [1.5.1. 对象的发布和逸出](#151-对象的发布和逸出)
 - [2. CAS 比较并交换](#2-cas-比较并交换)
 - [3. 集合类的线程不安全情况](#3-集合类的线程不安全情况)
   - [3.1. 并发修改异常 java.util.ConcurrentModificationException](#31-并发修改异常-javautilconcurrentmodificationexception)
@@ -30,19 +32,34 @@
   - [4.4. 自旋锁（Unsafe类 CAS）](#44-自旋锁unsafe类-cas)
   - [4.5. 独占锁(写锁、排他锁)和共享锁(读锁)](#45-独占锁写锁-排他锁和共享锁读锁)
   - [4.6. 乐观锁和悲观锁](#46-乐观锁和悲观锁)
-    - [4.6.1. 补充：线程同步方式](#461-补充线程同步方式)
-    - [4.6.2. 补充：锁优化（jdk1.6）](#462-补充锁优化jdk16)
+  - [4.7. 补充：线程同步方式](#47-补充线程同步方式)
+  - [4.8. 补充：锁优化（jdk1.6）](#48-补充锁优化jdk16)
 - [5. 线程工具类](#5-线程工具类)
   - [5.1. CountDownLatch](#51-countdownlatch)
   - [5.2. CyclicBarrier](#52-cyclicbarrier)
   - [5.3. Semaphore 信号量](#53-semaphore-信号量)
-- [6. 阻塞队列](#6-阻塞队列)
-  - [6.1. BlockingQueue 核心方法](#61-blockingqueue-核心方法)
-  - [6.2. 再探生产者消费者模型](#62-再探生产者消费者模型)
+- [6. 创建线程方法四：线程池](#6-创建线程方法四线程池)
+  - [6.1. 线程池各个参数的作用，线程池如何工作的?](#61-线程池各个参数的作用线程池如何工作的)
+  - [6.2. 线程池的工作队列](#62-线程池的工作队列)
+    - [6.2.1. BlockingQueue 核心方法](#621-blockingqueue-核心方法)
+  - [6.3. 默认的线程工厂](#63-默认的线程工厂)
+  - [6.4. 四种拒绝策略](#64-四种拒绝策略)
+  - [6.5. 几种常用的线程池](#65-几种常用的线程池)
+  - [6.6. 线程池异常处理](#66-线程池异常处理)
+  - [6.7. 线程池状态](#67-线程池状态)
+  - [6.8. 使用方法](#68-使用方法)
+  - [6.9. 实际中应该使用哪个线程池？](#69-实际中应该使用哪个线程池)
+  - [6.10. 如何合理的配置线程池参数？](#610-如何合理的配置线程池参数)
+    - [6.10.1. CPU 密集型](#6101-cpu-密集型)
+    - [6.10.2. IO 密集型](#6102-io-密集型)
+- [7. 死锁](#7-死锁)
 
 <!-- /code_chunk_output -->
 
 # 1. volatile
+
+> 并发volatile关键字如何保证可见性和有序性及底层实现原理 https://blog.csdn.net/lc13571525583/article/details/90345760
+> Java程序员面试：Volatile全方位解析 https://developer.51cto.com/art/202008/623442.htm
 
 ## 1.1. volatile 是什么
 
@@ -77,14 +94,35 @@ JMM 三大特性：
 原子性：不可分割，完整性。线程中某个操作作为一个整体，要么全部完成，要么全部失败。
 有序性：禁止指令重排序优化
 
-**指令重排序**：为了提高性能，编译器和处理器常常会对指令进行重新排序，分三种：
+## 1.3. 可见性与缓存一致性协
+
+**多级缓存**
+现代处理器为了提高处理速度，在处理器和内存之间增加了多级缓存，处理器不会直接去和内存通信，将数据读到内部缓存中再进行操作。由于引入了多级缓存，就存在缓存数据不一致问题。
+
+**缓存一致性协**
+每个处理器通过嗅探在总线上传播的数据来检查自己缓存的值是不是过期了，当处理器发现自己缓存行对应的内存地址被修改，就会将当前处理器的缓存行设置成无效状态，当处理器要对这个数据进行修改操作的时候，会强制重新从系统内存里把数据读到处理器缓存里。
+
+**volatile是两条实现原则：**
+1. Lock前缀指令会引起处理器缓存会写到内存
+当对volatile变量进行写操作的时候，JVM会向处理器发送一条lock前缀的指令，将这个缓存中的变量回写到系统主存中
+2. 一个处理器的缓存回写到内存会导致其他处理器的缓存失效
+处理器使用嗅探技术保证内部缓存 系统内存和其他处理器的缓存的数据在总线上保持一致。
+
+这两条原则保证了volatile的可见性：如果一个变量被volatile所修饰的话，在每次数据变化之后，其值都会被强制刷入主存。而其他处理器的缓存由于遵守了缓存一致性协议，也会把这个变量的值从主存加载到自己的缓存中。
+
+## 1.4. 有序性
+
+**指令重排序**：
+为了提高性能，编译器和处理器常常会对指令进行重新排序，分三种：
 ```
 源代码 -> 编译器优化的重排 -> 指令并行的重排 -> 内存系统的重排 -> 最终执行的指令
 ```
 在单线程的环境下，重排序后的代码执行结果和源代码执行结果相同。
 在进行指令重排时，要考虑指令之间的数据依赖性。（先行发生原则）
 
-**先行发生原则**：如果说操作A先行发生于操作B，则说明操作A产生的影响能够被B观察到。如果两个操作之间没有先行关系，虚拟机可以对它们进行随意的重排序。
+**先行发生原则**：
+如果说操作A先行发生于操作B，则说明操作A产生的影响能够被B观察到。如果两个操作之间没有先行关系，虚拟机可以对它们进行随意的重排序。
+
 先行发生原则：
 - 程序次序规则：源代码中书写在前面的代码 先行发生于 后面的。
 - 管程锁定规则：unlock 操作 先行发生于 之后对于同一个锁的 lock 操作。只有释放了锁之后，才能加锁。
@@ -95,7 +133,22 @@ JMM 三大特性：
 - 对象终结规则：一个对象的构造器执行 先行发生于 finalize 方法的执行
 - 传递性：A 先行发生于 B、B 先行发生于 C，那么 A 先行发生于 C
 
-**内存屏障**：是一条CPU指令，它的作用是：
+
+**volatile重排序规则表（针对编译器重排序）**
+|||||
+|:-:|:-:|:-:|:-:|
+|||第二个操作||
+|第一个操作 |普通读/写|volatile读|volatile写|
+|普通读/写  |        |       |    NO   |
+|volatile读|   NO   |   NO   |    NO   |
+|volatile写|        |   NO   |    NO   |
+
+当第一个操作是volatile读时，不管第二个操作是什么，都不能重排序；
+当第一个操作是volatile写时，第二个操作是volatile读或写，不能重排序；
+当第一个操作是普通读写，第二个操作是volatile写时，不能重排序。
+
+**内存屏障（针对处理器重排序）**：
+内存屏障是一条CPU指令，它的作用是：
 1. 保证特定操作的执行顺序
 2. 保证某些变量的内存可见性
 通过插入内存屏障指令，禁止在内存屏障前后的指令进行重排序。
@@ -247,7 +300,7 @@ public class Atomicity {
 // 200000
 ```
 
-## 1.3. 双重锁定检查的单例模式
+## 1.5. 双重锁定检查的单例模式
 
 ```java
 class Singleton {
@@ -278,7 +331,7 @@ t = new Singleton(); 不是原子操作，并且步骤 2 3 允许重排
 如果重排后是 1 3 2，会导致还没有初始化完成的对象的引用 t 被 return 出去。造成**对象逸出**。 
 解决方法：给 t 加上 volatile 禁止指令重排： `private static volatile Singleton t = null;` 
 
-### 1.3.1. 对象的发布和逸出
+### 1.5.1. 对象的发布和逸出
 发布一个对象，是使它能够被当前范围之外的代码所使用。
 一个对象在尚未准备好时就将其发布，这称为逸出
 
@@ -1537,7 +1590,7 @@ public class ReentrantReadWriteLock implements ReadWriteLock, java.io.Serializab
 - 乐观锁适用于写比较少的情况下（多读场景），即冲突真的很少发生的时候，这样可以省去了锁的开销，加大了系统的整个吞吐量。
 - 但如果是多写的情况，一般会经常产生冲突，这就会导致上层应用会不断的进行retry，这样反倒是降低了性能，所以一般多写的场景下用悲观锁就比较合适。
 
-### 4.6.1. 补充：线程同步方式
+## 4.7. 补充：线程同步方式
 - **互斥同步（加锁，悲观锁，阻塞同步，悲观的并发策略）**
 
 synchronized 与 Lock 的区别：
@@ -1575,7 +1628,7 @@ synchronized 与 Lock 的区别：
 
 - 线程本地存储（Thread Local Storage）：如果一段代码必须和其他代码共享数据，可以尝试将临界区的代码保证在同一个线程中执行。（一个用户请求对应一个服务器线程）
 
-### 4.6.2. 补充：锁优化（jdk1.6）
+## 4.8. 补充：锁优化（jdk1.6）
 
 在JavaSE 1.6之后进行了主要包括为了减少获得锁和释放锁带来的性能消耗而引入的**偏向锁**和**轻量级锁**以及其它各种优化之后变得在某些情况下并不是那么重了。
 synchronized 的底层实现主要依靠 Lock-Free 的队列，基本思路是**自旋后阻塞，竞争切换后继续竞争锁，稍微牺牲了公平性，但获得了高吞吐量**。
@@ -1712,17 +1765,65 @@ public class SemaphoreDemo {
 // 4离开临界区
 ```
 
-# 6. 阻塞队列
+# 6. 创建线程方法四：线程池
+
+好处：
+1. 便于管理线程
+2. 提高响应速度，直接从线程池中拿线程的速度肯定快于创建一条线程
+3. 重复利用线程，避免增加创建线程和销毁线程的资源消耗
+
+![](/images/线程池.png)
+
+```java
+public class ThreadPoolExecutor extends AbstractExecutorService {}
+public abstract class AbstractExecutorService implements ExecutorService {}
+public interface ExecutorService extends Executor {}
+public interface Executor {
+    void execute(Runnable command);
+}
+```
+ExecutorService 是线程池接口，常见实现类有 ThreadPoolExecutor。
+
+## 6.1. 线程池各个参数的作用，线程池如何工作的?
+
+**ThreadPoolExecutor 构造器**
+```java
+public ThreadPoolExecutor(
+    int corePoolSize,     // 线程池核心线程数最大值
+    int maximumPoolSize,  // 线程池最大线程数大小
+    long keepAliveTime,   // 程池中非核心线程空闲的存活时间大小
+    TimeUnit unit,        // 线程空闲存活时间单位
+    BlockingQueue<Runnable> workQueue, // 存放任务的阻塞队列
+    ThreadFactory threadFactory,       // 用于设置创建线程的工厂，可以给创建的线程设置有意义的名字，可方便排查问题
+    RejectedExecutionHandler handler   // 线城池的饱和策略事件，主要有四种类型。
+)
+```
+
+**线程池执行流程**：核心线程 — 任务队列 — 非核心线程 — 拒绝策略
+
+![img](https://user-gold-cdn.xitu.io/2019/7/7/16bca03a5a6fd78f?imageslim) 
+
+1. 在创建了线程池后，等待提交过来的任务请求。
+2. 当调用execute()方法添加一个请求任务时，线程池会做如下判断:
+  2.1. 如果正在运行的线程数量小于corePoolSize，那么马上创建线程运行这个任务;
+  2.2. 如果正在运行的线程数量大于或于corePoolSize，那么将这个任务放入队列;
+  2.3如果这时候队列满了且正在运行的线程数量还小于maximumPoolSize，那么还是要创建非核心线程立刻运行这个任务;
+  2.4如果队列满了且正在运行的线程数量大于或等于maximumPoolSize，那么线程池会启动饱和拒绝策略来执行。
+3. 当一个线程完成任务时，它会从队列中取下一个任务来执行。
+4. 当一个线程无事可做超过一定的时间（keepAliveTime）时，线程池会判断: 如果当前运行的线程数大于corePoolSize，那么这个线程就被停掉。
+
+
+## 6.2. 线程池的工作队列
 
 1. **ArrayBlockingQueue**：有界队列，用数组实现的，FIFO
 2. **LinkedBlockingQueue**：有界队列，基于链表，FIFO。可设置容量队列，不设置容量则最大为 Integer.MAX_VALUE
 3. PriorityBlockingQueue：优先级队列
 4. DelayQueue：延迟无界队列，其中的对象到期时才能从队列中取走，使用优先级队列实现
-5. **SynchronousQueue**：同步队列，只有单个元素的队列。插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
+5. **SynchronousQueue**：同步队列，只有**单个元素**的队列。插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
 6. LinkedTransferQueue：无界队列，基于链表
 7. LinkedBlockingDeque：双向队列，基于链表
 
-## 6.1. BlockingQueue 核心方法
+### 6.2.1. BlockingQueue 核心方法
 
 | 方法类型 | 抛出异常 | 返回特殊值 | 阻塞   | 超时间              |
 |:-------:|:--------:|:---------:|:------:|:------------------:|
@@ -1741,53 +1842,313 @@ public class SemaphoreDemo {
 阻塞：
 put 和 take 在插入元素或移除元素失败时会阻塞线程，直到可以进行操作时唤醒
 
-## 6.2. 再探生产者消费者模型
+## 6.3. 默认的线程工厂
 
-线程操作资源类，高内聚低耦合
-判断 干活 通知
-防止虚假唤醒机制
-
-模板：
 ```java
-// synchronized - wait - notify
-private volatile int num = 0;
-public void addOne() throws Exception {
-    // 0、加锁
-    synchronized (this) {
-        // 1、判断，不满足干活条件就阻塞
-        while (num != 0) {
-            this.wait();
-        }
-        // 2、干活
-        num++;
-        System.out.println(Thread.currentThread().getName() + " " + num);
-        // 3、干完活唤醒其他线程
-        this.notify();
-    }
-    // 0、解锁
+public interface ThreadFactory {
+    Thread newThread(Runnable r);
 }
-// lock/unlock - await - signal
-private volatile int num = 0;
-private Lock lock = new ReentrantLock();
-private Condition condition = lock.newCondition();
-public void addOne() throws Exception {
-    // 0、加锁
-    lock.lock();
-    try {
-        // 1、判断，不满足干活条件就阻塞
-        while (num != 0) {
-            condition.await();
+
+static class DefaultThreadFactory implements ThreadFactory {
+    private static final AtomicInteger poolNumber = new AtomicInteger(1);
+    private final ThreadGroup group;
+    private final AtomicInteger threadNumber = new AtomicInteger(1);
+    private final String namePrefix;
+
+    DefaultThreadFactory() {
+        SecurityManager s = System.getSecurityManager();
+        group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+        namePrefix = "pool-" + poolNumber.getAndIncrement() + "-thread-";
+    }
+
+    public Thread newThread(Runnable r) {
+        Thread t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement(), 0);
+        if (t.isDaemon())
+            t.setDaemon(false);
+        if (t.getPriority() != Thread.NORM_PRIORITY)
+            t.setPriority(Thread.NORM_PRIORITY);
+        return t;
+    }
+}
+```
+
+## 6.4. 四种拒绝策略
+
+1. AbortPolicy：抛出一个异常，默认的
+2. DiscardPolicy：直接丢弃任务
+3. DiscardOldestPolicy：丢弃队列里最老的任务，将当前这个任务继续提交给线程池
+4. CallerRunsPolicy：交给线程池调用所在的线程进行处理
+
+以下创建的线程池，最多同时支持 5+3=8 个任务
+```java
+public class MyThreadPool {
+    public static void main(String[] args) {
+        ExecutorService pool = new ThreadPoolExecutor(
+                2, 5,
+                1L, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(3),
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.AbortPolicy()
+        );
+        try{
+            for (int i = 0; i < 9; i++) {
+                pool.execute(()->{
+                    System.out.println(Thread.currentThread().getName() + " 执行任务");
+                });
+            }
+        } finally {
+            pool.shutdown();
         }
-        // 2、干活
-        num++;
-        System.out.println(Thread.currentThread().getName()+" "+num);
-        // 3、干完活唤醒其他线程
-        condition.signal();
-    } catch (Exception e) {
+    }
+}
+// 拒绝策略为 new ThreadPoolExecutor.AbortPolicy()
+// 输出：
+// pool-1-thread-1 执行任务
+// ...
+// pool-1-thread-5 执行任务
+// Exception in thread "main" java.util.concurrent.RejectedExecutionException: Task priv.abadstring.threaddemo.pool.MyThreadPool$$Lambda$1/1915318863@6d311334 rejected from java.util.concurrent.ThreadPoolExecutor@682a0b20[Running, pool size = 5, active threads = 4, queued tasks = 0, completed tasks = 4]
+// 	at java.util.concurrent.ThreadPoolExecutor$AbortPolicy.rejectedExecution(ThreadPoolExecutor.java:2063)
+// 	at java.util.concurrent.ThreadPoolExecutor.reject(ThreadPoolExecutor.java:830)
+// 	at java.util.concurrent.ThreadPoolExecutor.execute(ThreadPoolExecutor.java:1379)
+// 	at priv.abadstring.threaddemo.pool.MyThreadPool.main(MyThreadPool.java:22)
+
+// 拒绝策略为 new ThreadPoolExecutor.AbortPolicy()
+// 输出：
+// pool-1-thread-1 执行任务
+// main 执行任务
+// pool-1-thread-1 执行任务
+// ...
+```
+
+## 6.5. 几种常用的线程池
+
+Executors 是一个工具类，线程池工厂，用于创建并返回不同类型的线程池。
+在 java.util.concurrent.Executors 中提供了一些方法去创建四种不同的线程池，这些方法实际上都是调用了 ThreadPoolExecutor 的构造器。返回值是线程池接口 ExecutorService。
+
+1. **newFixedThreadPool  固定线程数目的线程池**
+最大线程数目 和 核心线程数目 相等。
+keepAliveTime 非核心线程空闲的存活时间 为 0
+阻塞队列是 LinkedBlockingQueue   可能导致 OOM
+适用于处理CPU密集型的任务，即适用执行长期的任务。
+```java
+public static ExecutorService newFixedThreadPool(int nThreads) {
+    return new ThreadPoolExecutor(
+        nThreads, nThreads,
+        0L, TimeUnit.MILLISECONDS,
+        new LinkedBlockingQueue<Runnable>());
+}
+```
+
+2. **newCachedThreadPool  可缓存的线程池**
+最大核心线程数目为 0   任务直接放入队列
+最大线程数为 Integer.MAX_VALUE
+非核心线程空闲的存活时间 为 60 秒
+阻塞队列是 SynchronousQueue
+适用于并发执行大量短期的小任务。
+```java
+public static ExecutorService newCachedThreadPool() {
+    return new ThreadPoolExecutor(
+        0, Integer.MAX_VALUE,
+        60L, TimeUnit.SECONDS,
+        new SynchronousQueue<Runnable>());
+}
+```
+
+3. **newSingleThreadExecutor  单线程的线程池**
+核心线程数为 1
+最大线程数也为 1
+keepAliveTime为 0
+阻塞队列是 LinkedBlockingQueue
+适用于串行执行任务的场景，一个任务一个任务地执行。
+```java
+public static ExecutorService newSingleThreadExecutor() {
+    return new FinalizableDelegatedExecutorService(
+        new ThreadPoolExecutor(
+            1, 1,
+            0L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<Runnable>()));
+}
+```
+
+4. **newScheduledThreadPool  定时及周期执行的线程池**
+最大线程数为 Integer.MAX_VALUE
+阻塞队列是 DelayedWorkQueue
+keepAliveTime为 0
+scheduleAtFixedRate() ：按某种速率周期执行
+scheduleWithFixedDelay()：在某个延迟后执行
+适用于周期性执行任务的场景，需要限制线程数量的场景
+
+5、**newWorkStealingPool JDK8 新增**
+使用 ForkJoinPool 线程池。
+创建一个拥有多个任务队列的线程池，可以减少连接数，创建当前可用CPU数量的线程来并行执行，
+适用于大耗时的操作，可以并行来执行
+```java
+public static ExecutorService newWorkStealingPool() {
+    return new ForkJoinPool(
+        Runtime.getRuntime().availableProcessors(), // Java 虚拟机可用CPU数量
+        ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+        null, true);
+}
+```
+
+## 6.6. 线程池异常处理
+
+1. try - catch 处理
+2. 通过 Future 对象的 get 方法接收抛出的异常，再处理
+3. 使用自己的ThreadFactory，创建线程时设置线程的 UncaughtExceptionHandler，在 uncaughtException方法中处理异常
+4. 重写 ThreadPoolExecutor 的 afterExecute方法，处理传递的异常引用
+
+## 6.7. 线程池状态
+
+1. **Running**
+该状态的线程池会接收新任务，并处理阻塞队列中的任务;
+调用线程池的 shutdown() 方法，可以切换到 Shutdown 状态;
+调用线程池的 shutdownNow() 方法，可以切换到 Stop 状态;
+
+2. **Shutdown**
+该状态的线程池不会接收新任务，但会处理阻塞队列中的任务；
+队列为空，并且线程池中执行的任务也为空,进入 Tidying 状态;
+
+3. **Stop**
+该状态的线程不会接收新任务，也不会处理阻塞队列中的任务，而且会中断正在运行的任务；
+线程池中执行的任务为空, 进入 Tidying 状态;
+
+4. **Tidying**
+该状态表明所有的任务已经运行终止，记录的任务数量为0。
+terminated() 执行完毕，进入 Terminated 状态
+
+5. **Terminated**
+该状态表示线程池彻底终止
+
+## 6.8. 使用方法
+
+execute 用来执行 Runnable 实现类；submit 用来执行 Callable 实现类。
+```java
+public static void main(String[] args) {
+    // 1、创建一个线程池
+    ExecutorService pool = Executors.newFixedThreadPool(1);
+
+    // 2、运行一个线程
+    pool.execute(new Runnable() {
+        @Override
+        public void run() {
+            for (int i = 0; i < 100; i++) {
+                if (i % 2 == 0) {
+                    System.out.println(Thread.currentThread().getName() + ": " +i);
+                }
+            }
+        }
+    });
+    Future<Integer> future = pool.submit(new Callable<Integer>() {
+        @Override
+        public Integer call() {
+            int sum = 0;
+            for (int i = 0; i < 100; i++) {
+                if (i % 2 != 0) {
+                    System.out.println(Thread.currentThread().getName() + ": " +i);
+                    sum += i;
+                }
+            }
+            return sum;
+        }
+    });
+
+    try {
+        System.out.println("sum=" + future.get());
+    } catch (InterruptedException e) {
         e.printStackTrace();
-    } finally {
-        // 0、解锁
-        lock.unlock();
+    } catch (ExecutionException e) {
+        e.printStackTrace();
+    }
+
+    // 3、关闭线程池
+    pool.shutdown();
+}
+```
+
+## 6.9. 实际中应该使用哪个线程池？
+
+不要用 JDK 预设的五大线程池。直接使用 ThreadPoolExecutor 的构造器去创建。
+
+原因：
+> 3.【强制】线程资源必须通过线程池提供，不允许在应用中自行显式创建线程。
+> 说明：线程池的好处是减少在创建和销毁线程上所消耗的时间以及系统资源的开销，解决资源不足的问题。
+> 如果不使用线程池，有可能造成系统创建大量同类线程而导致消耗完内存或者“过度切换”的问题。
+> 
+> 4.【强制】线程池不允许使用 Executors 去创建，而是通过 ThreadPoolExecutor 的方式，这
+> 样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。
+> 说明：Executors 返回的线程池对象的弊端如下： 
+>    1） FixedThreadPool 和 SingleThreadPool：
+>       允许的请求队列长度为 Integer.MAX_VALUE，可能会堆积大量的请求，从而导致 OOM。
+>    2） CachedThreadPool：
+>       允许的创建线程数量为 Integer.MAX_VALUE，可能会创建大量的线程，从而导致 OOM。
+
+## 6.10. 如何合理的配置线程池参数？
+
+> https://blog.csdn.net/lixinkuan328/article/details/94501073
+
+### 6.10.1. CPU 密集型
+
+定义：CPU密集型的意思就是该任务需要大量运算，而没有阻塞，CPU一直全速运行。
+CPU密集型任务只有在真正的多核CPU上才可能得到加速（通过多线程）。
+CPU密集型任务配置尽可能少的线程数。
+CPU密集型线程数配置公式：(CPU核数+1) 个线程的线程池
+Runtime.getRuntime().availableProcessors() // 获取 Java 虚拟机可用CPU数量
+
+### 6.10.2. IO 密集型
+
+定义：IO密集型，即该任务需要大量的IO，即大量的阻塞。
+在单线程上运行IO密集型任务会导致浪费大量的CPU运算能力浪费在等待。
+所以IO密集型任务中使用多线程可以大大的加速程序运行，即使在单核CPU上，这种加速主要利用了被浪费掉的阻塞时间。
+
+**第一种配置方式：**
+由于IO密集型任务线程并不是一直在执行任务，则应配置尽可能多的线程。
+配置公式：CPU核数 * 2。
+
+**第二种配置方式：**
+IO密集型时，大部分线程都阻塞，故需要多配置线程数。
+配置公式：CPU核数 / (1 – 阻塞系数)（0.8~0.9之间）
+比如：8核 / (1 – 0.9) = 80个线程数
+
+
+# 7. 死锁
+
+不废话，直接上代码
+```java
+class Resource implements Runnable {
+
+    // 两个资源
+    private Object a;
+    private Object b;
+
+    public Resource(Object a, Object b) {
+        this.a = a;
+        this.b = b;
+    }
+
+    @Override
+    public void run() {
+        synchronized (a) {
+            System.out.println(Thread.currentThread().getName() + " 获取了资源" + a + "，等待获取资源" +b);
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            synchronized (b) {
+                System.out.println(Thread.currentThread().getName() + " 获取了资源" + a + "，等待获取资源" + b);
+            }
+        }
+    }
+}
+
+public class DeadLock {
+    public static void main(String[] args) {
+        String a = "a";
+        String b = "b";
+        new Thread(new Resource(a, b)).start();
+        new Thread(new Resource(b, a)).start();
     }
 }
 ```

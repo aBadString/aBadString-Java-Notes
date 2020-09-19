@@ -35,15 +35,21 @@
   - [3.5. 死锁](#35-死锁)
   - [3.6. 锁升级](#36-锁升级)
 - [4. 事务](#4-事务)
-- [5. 索引](#5-索引)
-  - [5.1. InnoDB 存储引擎支持的常见索引](#51-innodb-存储引擎支持的常见索引)
-  - [5.2. B+ 树](#52-b-树)
-    - [5.2.1. B+ 树](#521-b-树)
-  - [5.3. B+ 树索引](#53-b-树索引)
-    - [5.3.1. 聚集索引](#531-聚集索引)
-    - [5.3.2. 辅助索引 (非聚集索引)](#532-辅助索引-非聚集索引)
-    - [5.3.3. 联合索引](#533-联合索引)
-- [6. 其他](#6-其他)
+  - [4.1. 四大特性](#41-四大特性)
+  - [4.2. 事务的分类](#42-事务的分类)
+  - [4.3. 事务隔离级别](#43-事务隔离级别)
+- [5. MySQL 索引](#5-mysql-索引)
+  - [5.1. B+ 树索引](#51-b-树索引)
+    - [5.1.1. 聚集索引](#511-聚集索引)
+    - [5.1.2. 辅助索引 (非聚集索引)](#512-辅助索引-非聚集索引)
+    - [5.1.3. 联合索引](#513-联合索引)
+      - [5.1.3.1. MySQL联合索引，为什么范围查找不能使用索引](#5131-mysql联合索引为什么范围查找不能使用索引)
+  - [5.2. 全文索引](#52-全文索引)
+  - [5.3. 哈希索引](#53-哈希索引)
+- [6. 索引优化](#6-索引优化)
+  - [6.1. 单列索引](#61-单列索引)
+  - [6.2. 多列索引](#62-多列索引)
+- [7. 其他](#7-其他)
 
 <!-- /code_chunk_output -->
 
@@ -116,6 +122,8 @@ show tables;
 查看某张表的列
 ```sql
 show columns from customers;
+desc member;
+-- 这两命令是一样的效果
 ```
 
 ![image-20200331150351139](/images/image-20200331150351139.png)
@@ -602,7 +610,6 @@ MySQL 的组成：
 ![image-20200328145525223](/images/image-20200328145525223.png)
 
 
-
 **日志类型：**
 
 1. 二进制日志
@@ -743,6 +750,8 @@ InnoDB 存储引擎不存在锁升级的问题。
 事务是区别数据库和文件系统的重要特性之一。
 事务会把数据库从一种一致状态转换为另一种一致状态。在数据库提交工作时，可以确保要么所有修改都已经保存了，要么所有修改都不保存。
 
+## 4.1. 四大特性
+
 InnoDB 存储引擎中的事务符合：
 - 原子性：整个事务是不可分割的工作单位。要么都完成，要么都不完成。
 - 一致性：事务将数据库从一种一致状态转变为另一种一致状态。
@@ -751,7 +760,7 @@ InnoDB 存储引擎中的事务符合：
 
 事务是由一条或者一组 SQL 语句组成的，事务是访问并更新数据库中各种数据项的一个程序执行单元。
 
-**事务的分类**：
+## 4.2. 事务的分类
 
 - 扁平事务
   在扁平事务中，所有的操作都处于一个层次，由 begin work 开始，commit work 或者 rollback work 结束，期间操作是原子的，要么都执行，要么都回滚。
@@ -772,7 +781,7 @@ InnoDB 存储引擎中的事务符合：
 - 分布式事务
   通常是在一个分布式环境下允许的扁平事务，需要根据数据所在位置访问网络中 的不同节点。
 
-**事务隔离级别**
+## 4.3. 事务隔离级别
 
 未提交读 Read uncommitted：如果一个事务读取到了另一个未提交的事务修改过的数据。
 已提交读 Read committed：一个事务能读到另一个已经提交的事务修改过的数据。
@@ -793,21 +802,14 @@ undo log：回滚日志，用于记录数据被修改前的信息。他正好跟
 - 问题 undo log 记录事务修改之前版本的数据信息，因此假如由于系统错误或者rollback操作而回滚的话可以根据undo log的信息来进行回滚到没被修改前的状态。
 - 作用 undo log是用来回滚数据的用于保障未提交事务的原子性
 
-# 5. 索引
+# 5. MySQL 索引
 
 索引的优点：
 1. 索引大大减少了服务器需要扫描的数据量
 2. 索引可以帮助服务器避免排序和临时表
 3. 索引可以将随机 I/O 变为顺序 I/O
 
-## 5.1. InnoDB 存储引擎支持的常见索引
-- B+ 树索引
-- 全文索引
-- 哈希索引
-
-哈希索引是自适应的，InnoDB 会根据需要添加，不能人为干预。
-
-## 5.2. B+ 树
+## 5.1. B+ 树索引
 
 **二分查找法**
 将一组数据先升序排序，然后每次比较中点位置的值；若大于则在右半区间查找，否则在左半区间查找。
@@ -821,7 +823,7 @@ undo log：回滚日志，用于记录数据被修改前的信息。他正好跟
 - 必须满足任何节点的两个子树的高度之差小于等于1
 维护一棵平衡二叉树，需要经常性的旋转操作，开销较大。
 
-### 5.2.1. B+ 树
+**B+ 树**
 
 由 B 树和索引顺序访问方法 (ISAM) 演化而来。
 最下面一层用于存放数，叫做 Leaf Page；上面几层存放索引，叫做 Index Page。 Leaf Page 之间通过双向链表连接起来。
@@ -855,17 +857,16 @@ undo log：回滚日志，用于记录数据被修改前的信息。他正好跟
    1.2 要删除的数据是第一个，删除后，更新 Index Page
 2. ...... 没看懂
 ![image-20200328220614492](/images/image-20200328220614492.png)
-
 204页，edge的框上输入。
 
-## 5.3. B+ 树索引
+**InnoDB 和 MyISAM 的索引**
 
 在数据库中 B+ 树的高度一般在 2 — 4 层。
 MyISAM的索引方式也叫做“非聚集”的，之所以这么称呼是为了与InnoDB的聚集索引区分。
 ![image-20200426130649578](/images/image-20200426130649578.png)
 ![image-20200426130711071](/images/image-20200426130711071.png)
 
-### 5.3.1. 聚集索引
+### 5.1.1. 聚集索引
 
 聚集索引就是按照每张表的主键构造一棵 B+ 树，叶子节点中存放的是整张表的行记录数据。也将聚集索引的叶子节点叫做数据页。
 每张表只有一个聚集索引。聚集索引并不是物理上连续的，而是逻辑上连续的。
@@ -883,14 +884,12 @@ MyISAM的索引方式也叫做“非聚集”的，之所以这么称呼是为�
 4. 二级索引变大，因为与主索引有关
 5. 二级索引查找的次数不只一次
 
-### 5.3.2. 辅助索引 (非聚集索引)
+### 5.1.2. 辅助索引 (非聚集索引)
 
 辅助索引的叶子节点不包括行记录的全部数据，包含一个键值和书签。
 当使用辅助索引来查询数据时，会先通过辅助索引找到指向聚集索引的主键，然后再通过聚集索引来找到完整的记录。
 
-覆盖索引：最左原则：
-
-### 5.3.3. 联合索引
+### 5.1.3. 联合索引
 
 索引匹配的最左原则具体是说，假如索引列分别为A，B，C，顺序也是A，B，C：
 - 那么查询的时候，如果查询【A】【A，B】 【A，B，C】，那么可以通过索引查询
@@ -918,14 +917,96 @@ WHERE a = 1 AND c = 3
 #以上SQL语句用不到索引
 ```
 
-**只要列涉及到运算，MySQL就不会使用索引**
+**只要列涉及到运算和函数，MySQL就不会使用索引**
 
 ```sql
 SELECT FROM users WHERE YEAR(adddate) < 2007
 ```
 
+#### 5.1.3.1. MySQL联合索引，为什么范围查找不能使用索引
+![](/images/范围查找不能使用索引.png)
+![](/images/索引使用总结.jpg)
 
-# 6. 其他
+
+## 5.2. 全文索引
+
+MyISAM 存储引擎支持全文索引，用于查找文本中的关键词，而不是直接比较是否相等。
+查找条件使用 MATCH AGAINST，而不是普通的 WHERE。
+全文索引使用倒排索引实现，它记录着关键词到其所在文档的映射。
+
+InnoDB 存储引擎在 MySQL 5.6.4 版本中也开始支持全文索引。
+
+## 5.3. 哈希索引
+
+哈希索引查找复杂度为 $O(1)$
+哈希索引是自适应的，InnoDB 会根据需要添加，不能人为干预。
+
+## 5.4. 空间数据索引(R-Tree)
+
+MyISAM表支持空间索引，可以用作地理数据存储。
+
+
+# 6. 索引优化
+
+## 6.1. 单列索引
+
+主要要注意索引列不能作为表达式的一部分参与运算，或者做为函数的参数，否则不会走索引。
+
+例如：
+有如下数据表和单列索引：
+```sql
+create table `order`
+(
+   `id` int auto_increment,
+   `member_id` int,
+   `status` int null,
+   `create_time` datetime null,
+   constraint order_pk
+      primary key (id)
+);
+
+create index order_create_time_index
+  on `order` (create_time);
+
+insert into `order`(id, member_id, status, create_time) VALUE (1, 1, 3, '2020-9-11');
+insert into `order`(id, member_id, status, create_time) VALUE (2, 2, 1, '2020-9-12');
+insert into `order`(id, member_id, status, create_time) VALUE (3, 3, 4, '2020-9-9');
+insert into `order`(id, member_id, status, create_time) VALUE (4, 4, 0, '2020-9-13');
+insert into `order`(id, member_id, status, create_time) VALUE (5, 5, 1, '2020-9-11');
+insert into `order`(id, member_id, status, create_time) VALUE (6, 6, 2, '2020-9-11');
+insert into `order`(id, member_id, status, create_time) VALUE (7, NULL, 0, '2020-9-7');
+```
+如下两条 SQL
+```sql
+-- 走索引 order_create_time_index
+explain select * from `order` where create_time = '2020-9-11';
+-- 不能走索引
+explain select * from `order` where year(create_time) = 2020;
+```
+
+## 6.2. 多列索引
+
+注意最左前缀原则。
+让选择性最强的索引列放在前面。选择性强是指，数据重复性低的。如：id 属于选择性强，性别选择性弱。
+
+```sql
+create index order_status_member_id_create_time_index
+  on `order` (`status`, member_id, create_time);
+
+-- 走索引 order_status_member_id_create_time_index    Extra: Using where
+explain select * from `order` where status = 2 and member_id = 6 and create_time = '2020-9-13';
+-- 走索引 order_create_time_index    Extra: Using index
+explain select * from `order` where status = 2 and member_id = 6 and create_time = '2020-9-11';
+
+-- 走索引 order_status_member_id_create_time_index    Extra: Using where; Using index
+explain select * from `order` where status = 2 and member_id >= 6 and create_time = '2020-9-11';
+-- 走索引 order_status_member_id_create_time_index    Extra: Using where; Using index
+explain select * from `order` where status > 2 and member_id = 6 and create_time = '2020-9-11';
+```
+
+
+
+# 7. 其他
 
 **触发器**
 

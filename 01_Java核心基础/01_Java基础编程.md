@@ -2335,6 +2335,20 @@ public class FinallyTest {
 ```
 原因：函数的信息存储在栈帧中，函数的返回值也是放在栈帧的一个位置上。return语句会将返回值放在该位置上，并终止本层函数，返回上一层调用。return了两次，后一次值覆盖了前一次值。
 
+这个更牛逼！！！！
+try块中如果有System.exit();代码就会不执行finally块代码
+```java
+public static void main(String[] args) {
+    try{
+        System.exit(0);
+    } finally {
+        System.out.println("exit()调用后不执行dinally");
+    }
+}
+// 输出：
+```
+
+
 ## 13.3. throws
 格式：方法名(形参列表) throws 异常类型1, 异常类型2, … { 方法体 }
 
@@ -2533,6 +2547,7 @@ class Num implements Callable<Integer> {
     // 2、重写 call() 方法
     @Override
     public Integer call() throws Exception {
+        System.out.println("run task");
         int sum = 0;
         for (int i = 0; i < 100; i++) {
             if (i % 2 == 0) {
@@ -2552,6 +2567,11 @@ public class CallableTest {
         FutureTask<Integer> task = new FutureTask<Integer>(num);
         // 5、创建 Thread 对象，并调用 start() 方法
         new Thread(task).start();
+        // 同一个 task 被 start 多次时，只会start一个线程
+        // 只会输出一次 run task
+        new Thread(task).start();
+        // 如果想要 start 多次，则必须 new 多个 tsak 对象
+        //new Thread(new FutureTask<Integer>(num)).start();
 
         System.out.println("1. 主线程继续运行。。。");
 
@@ -2571,6 +2591,7 @@ public class CallableTest {
 }
 
 // 结果：
+// run task
 // 0
 // 2
 // 1. 主线程继续运行。。。
@@ -2814,6 +2835,11 @@ class WindowRunnableTest {
 
 定义：两个或两个以上的进程/线程，在并发运行的情况下，因为竞争多个互斥资源，而造成它们互相等待对方无法释放的资源的现象，这种现象在无外力的作用时不可解除。
 
+**死锁产生的主要原因**
+1. 系统资源不足
+2. 进程推进的顺序不合理
+3. 资源分配不当
+
 **死锁产生的四个必要条件**
 1. 互斥条件：进程要求对所分配的资源进行排它性控制，即在一段时间内某资源仅为一进程所占用。
 2. 请求和保持条件：当进程因请求资源而阻塞时，对已获得的资源保持不放。
@@ -2825,6 +2851,10 @@ class WindowRunnableTest {
 2. 只要有一个资源得不到分配，也不给这个进程分配其他的资源：（破坏请保持条件）
 3. 可剥夺资源：即当某进程获得了部分资源，但得不到其它资源，则释放已占有的资源（破坏不可剥夺条件）
 4. 资源有序分配法：系统给每类资源赋予一个编号，每一个进程按编号递增的顺序请求资源，释放则相反（破坏环路等待条件）
+
+**避免死锁**（一定不会发送死锁）
+银行家算法：当进程请求一组资源时，假设同意该请求，从而改变了系统的状态，然后确定其结果是否还处于安全状态。如果是，同意这个请求；如果不是，阻塞该进程知道同意该请求后系统状态仍然是安全的。
+银行家算法事先得知道所以每个进程需要分配的总的资源数。
 
 参考：https://blog.csdn.net/hd12370/article/details/82814348
 
@@ -3071,164 +3101,56 @@ public class ProductorCustomer {
 }
 ```
 
-## 14.7. 创建线程方法四：线程池
+### 14.6.4. 再探生产者消费者模型（基本模板）
 
-好处：
-1. 便于管理线程
-2. 提高响应速度，直接从线程池中拿线程的速度肯定快于创建一条线程
-3. 重复利用线程，避免增加创建线程和销毁线程的资源消耗
+线程操作资源类，高内聚低耦合
+判断 干活 通知
+防止虚假唤醒机制
 
+模板：
 ```java
-public class ThreadPoolExecutor extends AbstractExecutorService {}
-public abstract class AbstractExecutorService implements ExecutorService {}
-public interface ExecutorService extends Executor {}
-public interface Executor {
-    void execute(Runnable command);
-}
-```
-ExecutorService 是线程池接口，常见实现类有 ThreadPoolExecutor。
-
-### 14.7.1. 线程池各个参数的作用，如何进行的?
-
-**ThreadPoolExecutor 构造器**
-```java
-public ThreadPoolExecutor(
-    int corePoolSize,     // 线程池核心线程数最大值
-    int maximumPoolSize,  // 线程池最大线程数大小
-    long keepAliveTime,   // 程池中非核心线程空闲的存活时间大小
-    TimeUnit unit,        // 线程空闲存活时间单位
-    BlockingQueue<Runnable> workQueue, // 存放任务的阻塞队列
-    ThreadFactory threadFactory,       // 用于设置创建线程的工厂，可以给创建的线程设置有意义的名字，可方便排查问题
-    RejectedExecutionHandler handler   // 线城池的饱和策略事件，主要有四种类型。
-)
-```
-
-线程池执行流程：核心线程 — 任务队列 — 非核心线程 — 拒绝策略
-
-![img](https://user-gold-cdn.xitu.io/2019/7/7/16bca03a5a6fd78f?imageslim) 
-
-四种拒绝策略：
-
-1. AbortPolicy：抛出一个异常，默认的
-2. DiscardPolicy：直接丢弃任务
-3. DiscardOldestPolicy：丢弃队列里最老的任务，将当前这个任务继续提交给线程池
-4. CallerRunsPolicy：交给线程池调用所在的线程进行处理
-
-### 14.7.2. 线程池的工作队列
-
-1. ArrayBlockingQueue：有界队列，用数组实现的，FIFO
-2. LinkedBlockingQueue：有界队列，基于链表，FIFO。可设置容量队列，不设置容量则最大为 Integer.MAX_VALUE
-3. PriorityBlockingQueue：优先级队列
-4. DelayQueue：延迟无界队列，其中的对象到期时才能从队列中取走，使用优先级队列实现
-5. SynchronousQueue：同步队列，只有单个元素的队列。插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
-6. LinkedTransferQueue：无界队列，基于链表
-7. LinkedBlockingDeque：双向队列，基于链表
-
-### 14.7.3. 几种常用的线程池
-
-Executors 是一个工具类，线程池工厂，用于创建并返回不同类型的线程池。
-在 java.util.concurrent.Executors 中提供了一些方法去创建四种不同的线程池，这些方法实际上都是调用了 ThreadPoolExecutor 的构造器。返回值是线程池接口 ExecutorService。
-
-1. **newFixedThreadPool  固定线程数目的线程池**
-最大线程数目 和 核心线程数目 相等。
-keepAliveTime 非核心线程空闲的存活时间 为 0
-阻塞队列是 LinkedBlockingQueue   可能导致 OOM
-适用于处理CPU密集型的任务，即适用执行长期的任务。
-
-2. **newCachedThreadPool  可缓存的线程池**
-最大核心线程数目为 0   任务直接放入队列
-最大线程数为 Integer.MAX_VALUE
-非核心线程空闲的存活时间 为 60 秒
-阻塞队列是 SynchronousQueue
-用于并发执行大量短期的小任务。
-
-3. **newSingleThreadExecutor  单线程的线程池**
-核心线程数为 1
-最大线程数也为 1
-keepAliveTime为 0
-阻塞队列是 LinkedBlockingQueue
-适用于串行执行任务的场景，一个任务一个任务地执行。
-
-4. **newScheduledThreadPool  定时及周期执行的线程池**
-最大线程数为 Integer.MAX_VALUE
-阻塞队列是 DelayedWorkQueue
-keepAliveTime为 0
-scheduleAtFixedRate() ：按某种速率周期执行
-scheduleWithFixedDelay()：在某个延迟后执行
-周期性执行任务的场景，需要限制线程数量的场景
-
-### 14.7.4. 线程池异常处理
-
-1. try - catch 处理
-2. 通过 Future 对象的 get 方法接收抛出的异常，再处理
-3. 使用自己的ThreadFactory，创建线程时设置线程的 UncaughtExceptionHandler，在 uncaughtException方法中处理异常
-4. 重写 ThreadPoolExecutor 的 afterExecute方法，处理传递的异常引用
-
-### 14.7.5. 线程池状态
-
-1. **Running**
-该状态的线程池会接收新任务，并处理阻塞队列中的任务;
-调用线程池的 shutdown() 方法，可以切换到 Shutdown 状态;
-调用线程池的 shutdownNow() 方法，可以切换到 Stop 状态;
-
-2. **Shutdown**
-该状态的线程池不会接收新任务，但会处理阻塞队列中的任务；
-队列为空，并且线程池中执行的任务也为空,进入 Tidying 状态;
-
-3. **Stop**
-该状态的线程不会接收新任务，也不会处理阻塞队列中的任务，而且会中断正在运行的任务；
-线程池中执行的任务为空, 进入 Tidying 状态;
-
-4. **Tidying**
-该状态表明所有的任务已经运行终止，记录的任务数量为0。
-terminated() 执行完毕，进入 Terminated 状态
-
-5. **Terminated**
-该状态表示线程池彻底终止
-
-### 14.7.6. 使用方法
-
-execute 用来执行 Runnable 实现类；submit 用来执行 Callable 实现类。
-```java
-public static void main(String[] args) {
-    // 1、创建一个线程池
-    ExecutorService pool = Executors.newFixedThreadPool(1);
-
-    // 2、运行一个线程
-    pool.execute(new Runnable() {
-        @Override
-        public void run() {
-            for (int i = 0; i < 100; i++) {
-                if (i % 2 == 0) {
-                    System.out.println(Thread.currentThread().getName() + ": " +i);
-                }
-            }
+// 1、synchronized - wait - notify
+private volatile int num = 0;
+public void addOne() throws Exception {
+    // 0、加锁
+    synchronized (this) {
+        // 1、判断，不满足干活条件就阻塞
+        // 用 while 而不用 if：防止虚假唤醒机制
+        while (num != 0) {
+            this.wait();
         }
-    });
-    Future<Integer> future = pool.submit(new Callable<Integer>() {
-        @Override
-        public Integer call() {
-            int sum = 0;
-            for (int i = 0; i < 100; i++) {
-                if (i % 2 != 0) {
-                    System.out.println(Thread.currentThread().getName() + ": " +i);
-                    sum += i;
-                }
-            }
-            return sum;
-        }
-    });
-
-    try {
-        System.out.println("sum=" + future.get());
-    } catch (InterruptedException e) {
-        e.printStackTrace();
-    } catch (ExecutionException e) {
-        e.printStackTrace();
+        // 2、干活
+        num++;
+        System.out.println(Thread.currentThread().getName() + " " + num);
+        // 3、干完活唤醒其他线程
+        this.notify();
     }
+    // 0、解锁
+}
 
-    // 3、关闭线程池
-    pool.shutdown();
+// 2、lock/unlock - await - signal
+private volatile int num = 0;
+private Lock lock = new ReentrantLock();
+private Condition condition = lock.newCondition();
+public void addOne() throws Exception {
+    // 0、加锁
+    lock.lock();
+    try {
+        // 1、判断，不满足干活条件就阻塞
+        while (num != 0) {
+            condition.await();
+        }
+        // 2、干活
+        num++;
+        System.out.println(Thread.currentThread().getName()+" "+num);
+        // 3、干完活唤醒其他线程
+        condition.signal();
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        // 0、解锁
+        lock.unlock();
+    }
 }
 ```
 
@@ -3391,6 +3313,14 @@ public static void main( String args[] )
 
 - `<? extends T>` 表示该通配符所代表的类型是 T 类型的子类。
 - `<? super T>` 表示该通配符所代表的类型是 T 类型的父类。
+
+## 16.2. 类型擦除
+
+`List<String>、List<T>` 擦除后的类型为 `List`。
+`List<String>[]、List<T>[]` 擦除后的类型为 `List[]`。
+`List<? extends E>、List<? super E>` 擦除后的类型为 `List<E>`。
+`List<T extends Serialzable & Cloneable>` 擦除后类型为 `List<Serializable>`。
+
 
 # 17. 序列化
 
@@ -3771,9 +3701,9 @@ public static void copyFile(String src, String dist) throws IOException {
 }
 ```
 
-## 字符流：Reader 和 Writer
+## 19.3. 字符流：Reader 和 Writer
 
-### 字符编码
+### 19.3.1. 字符编码
 
 - GBK 编码中，中文字符占 2 个字节，英文字符占 1 个字节；
 - GB2312 编码中，中文字符占 2 个字节，英文字符占 1 个字节；
@@ -3849,7 +3779,7 @@ public class Unicode {
 // ----
 ```
 
-### BufferRead 和 BufferWriter
+### 19.3.2. BufferRead 和 BufferWriter
 
 ```
 Read
@@ -3859,7 +3789,7 @@ Read
 ```
 
 
-## 19.3. NIO
+## 19.4. NIO
 
 Non-blocking I/O 是一种同步非阻塞的I/O模型，也是I/O多路复用的基础，已经被越来越多地应用到大型应用服务器，成为解决高并发与大量连接、I/O处理问题的有效方式。
 

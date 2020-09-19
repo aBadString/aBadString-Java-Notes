@@ -12,8 +12,16 @@
   - [1.6. 依赖注入](#16-依赖注入)
   - [1.7. Spring IOC 相关注解](#17-spring-ioc-相关注解)
   - [1.8. Spring 整合 jUnit](#18-spring-整合-junit)
+  - [1.9. 循环依赖问题](#19-循环依赖问题)
+    - [1.9.1. 什么是循环依赖？](#191-什么是循环依赖)
+    - [1.9.2. 什么情况下循环依赖可以被处理？](#192-什么情况下循环依赖可以被处理)
+    - [1.9.3. Spring是如何解决的循环依赖？](#193-spring是如何解决的循环依赖)
+      - [1.9.3.1. 简单的循环依赖（没有AOP）](#1931-简单的循环依赖没有aop)
+      - [1.9.3.2. 结合了AOP的循环依赖](#1932-结合了aop的循环依赖)
 - [2. Spring AOP](#2-spring-aop)
   - [2.1. 动态代理](#21-动态代理)
+    - [2.1.1. Proxy 示例代码](#211-proxy-示例代码)
+    - [2.1.2. cglib 示例代码](#212-cglib-示例代码)
   - [2.2. AOP 面向切面编程](#22-aop-面向切面编程)
   - [2.3. AOP 中的注解](#23-aop-中的注解)
 - [3. Spring MVC](#3-spring-mvc)
@@ -464,13 +472,98 @@ classes：指定注解类所在地位置
 @SpringBootTest(classes = ReadingListApplication.class)
 ```
 
+## 1.9. 循环依赖问题
+
+> 图解Spring解决循环依赖·掘金 https://juejin.im/post/6844904122160775176#heading-4
+> 面试必杀技，讲一讲Spring中的循环依赖·博客园 https://www.cnblogs.com/daimzh/p/13256413.html
+
+只有在setter方式注入的情况下，循环依赖才能解决 **（错）**
+三级缓存的目的是为了提高效率 **（错）**
+
+### 1.9.1. 什么是循环依赖？
+
+两个或两个以上的类，按照一定顺序依次依赖，这个依赖图中形成了一个环。
+
+> 创建新的A时，发现要注入原型字段B，又创建新的B发现要注入原型字段A...
+> 这就套娃了, 你猜是先StackOverflow还是OutOfMemory?
+> Spring怕你不好猜，就先抛出了BeanCurrentlyInCreationException
+
+
+### 1.9.2. 什么情况下循环依赖可以被处理？
+
+Spring解决循环依赖的前置条件：
+1. 出现循环依赖的Bean必须要是单例
+2. 依赖注入的方式不能全是构造器注入的方式
+
+```java
+@Component
+public class A {
+    private B b;
+    public A(B b) {
+        this.b = b;
+    }
+}
+@Component
+public class B {
+    private A a;
+    public B(A a){
+        this.a = a;
+    }
+}
+```
+全构造器的循环依赖无法被解决：Spring 直接抛出异常
+```log
+Caused by: org.springframework.beans.factory.BeanCurrentlyInCreationException: Error creating bean with name 'a': Requested bean is currently in creation: Is there an unresolvable circular reference?
+```
+
+**不同注入方式的循环依赖解决**
+|依赖情况|依赖注入方式|循环依赖是否被解决|
+|:-:|:-:|:-:|
+|AB相互依赖（循环依赖）|均采用setter方法注入|是|
+|AB相互依赖（循环依赖）|均采用构造器注入|否|
+|AB相互依赖（循环依赖）|A中注入B的方式为setter方法，B中注入A的方式为构造器|是|
+|AB相互依赖（循环依赖）|B中注入A的方式为setter方法，A中注入B的方式为构造器|否|
+
+为什么 3 可以，4 不可以？
+
+Spring在创建Bean时默认会根据自然排序进行创建，所以A会先于B进行创建。
+对于 3，可以使用空参构造器创建出 A 对象并放入三级缓存，然后 set B 对象时会使用带参构造器创建B，可以创建成功，因为可以从缓存中拿到 A 对象。
+对于 4，使用带参构造器创建 A，由于没有 B 对象，无法创建 A 对象。
+
+
+### 1.9.3. Spring是如何解决的循环依赖？
+
+#### 1.9.3.1. 简单的循环依赖（没有AOP）
+
+**Spring在创建Bean的过程中分为三步:**
+1. 实例化，new了一个对象
+。对应方法：`AbstractAutowireCapableBeanFactory::createBeanInstance`
+2. 属性注入，为对象填充属性。对应方法：`AbstractAutowireCapableBeanFactory::populateBean`
+3. 初始化，执行aware接口中的方法，初始化方法，完成AOP代理。对应方法：`AbstractAutowireCapableBeanFactory::initializeBean`
+
+**Spring存储对象的三级缓存**
+1. singletonObjects：一级缓存，单例池，容器，存放创建完成的单例Bean。
+2. earlySingletonObjects：二级缓存，存放半成品Bean（完成实例化，但是还未进行属性注入及初始化的对象）。
+3. singletonFactories：三级缓存，存放Bean工厂的对象（二级缓存中存储的就是从这个工厂中获取到的对象）。
+
+![](/images/spring/简单循环依赖三级缓存.png)
+
+#### 1.9.3.2. 结合了AOP的循环依赖
+
+其实在普通循环依赖下只需要二级缓存就可。
+
+![](/images/spring/AOP循环依赖三级缓存.png)
+
 
 # 2. Spring AOP
 
 面向切面编程：将相同逻辑的重复代码横向抽取出来，使用**动态代理**技术将这些重复代码织入到目标对象方法中，实现和原来一样的功能。
 
+Spring AOP 无法代理 final 和 static 的方法，也不能代理 final 类。因为它们不能被重写。
 
 ## 2.1. 动态代理
+
+静态代理的代理类是在程序运行之前编写好的；而动态代理的代理类是在运行时动态生成的。
 
 > JDK动态代理-超详细源码分析 <https://www.jianshu.com/p/269afd0a52e6>
 
@@ -480,7 +573,7 @@ classes：指定注解类所在地位置
 - 基于接口的动态代理  Proxy - JDK
 - 基于子类的动态代理  Enhancer - cglib
 
-Proxy 示例代码
+### 2.1.1. Proxy 示例代码
 
 接口
 ```java
@@ -703,27 +796,97 @@ public static Object newProxyInstance(
 }
 ```
 
+### 2.1.2. cglib 示例代码
+
+```java
+public class Producer {
+
+    /**
+     * 销售
+     * @param money
+     */
+    public void saleProduct(float money){
+        System.out.println("销售产品，并拿到钱："+money);
+    }
+
+    /**
+     * 售后
+     * @param money
+     */
+    public void afterService(float money){
+        System.out.println("提供售后服务，并拿到钱："+money);
+    }
+}
+
+public static void main(String[] args) {
+    final Producer producer = new Producer();
+
+    /**
+        * 动态代理：
+        *  特点：字节码随用随创建，随用随加载
+        *  作用：不修改源码的基础上对方法增强
+        *  分类：
+        *      基于接口的动态代理
+        *      基于子类的动态代理
+        *  基于子类的动态代理：
+        *      涉及的类：Enhancer
+        *      提供者：第三方cglib库
+        *  如何创建代理对象：
+        *      使用Enhancer类中的create方法
+        *  创建代理对象的要求：
+        *      被代理类不能是最终类
+        *  create方法的参数：
+        *      Class：字节码
+        *          它是用于指定被代理对象的字节码。
+        *
+        *      Callback：用于提供增强的代码
+        *          它是让我们写如何代理。我们一般都是些一个该接口的实现类，通常情况下都是匿名内部类，但不是必须的。
+        *          此接口的实现类都是谁用谁写。
+        *          我们一般写的都是该接口的子接口实现类：MethodInterceptor
+        */
+    Producer cglibProducer = (Producer)Enhancer.create(producer.getClass(), new MethodInterceptor() {
+        /**
+            * 执行被代理对象的任何方法都会经过该方法
+            * @param proxy
+            * @param method
+            * @param args
+            *    以上三个参数和基于接口的动态代理中invoke方法的参数是一样的
+            * @param methodProxy ：当前执行方法的代理对象
+            * @return
+            * @throws Throwable
+            */
+        @Override
+        public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+            //提供增强的代码
+            Object returnValue = null;
+
+            //1.获取方法执行的参数
+            Float money = (Float)args[0];
+            //2.判断当前方法是不是销售
+            if("saleProduct".equals(method.getName())) {
+                returnValue = method.invoke(producer, money*0.8f);
+            }
+            return returnValue;
+        }
+    });
+    cglibProducer.saleProduct(12000f);
+}
+```
+
 
 ## 2.2. AOP 面向切面编程
 
 在 Spring 中, 会根据被代理目标类是否实现了接口来决定使用哪种动态代理的方式.
 
 - Joinpoint(连接点): 所谓连接点是指可以被拦截到的点。在 spring 中, 这些点指的是方法, 因为 spring 只支持方法类型的连接点。 
-
 - Pointcut(切入点): 所谓切入点是指我们要对哪些 Joinpoint 进行拦截的定义。 
- 
 - Advice(通知/增强): 所谓通知是指拦截到 Joinpoint 之后所要做的事情就是通知。   
-通知的类型：前置通知, 后置通知, 异常通知, 最终通知, 环绕通知。
-
+  通知的类型：前置通知, 后置通知, 异常通知, 最终通知, 环绕通知。
 - Introduction(引介): 引介是一种特殊的通知在不修改类代码的前提下, Introduction 可以在运行期为类动态地添加一些方法或 Field。 
-
 - Target(目标对象): 代理的目标对象。 
-
 - Weaving(织入): 是指把增强应用到目标对象来创建新的代理对象的过程。   
-spring 采用动态代理织入，而 AspectJ 采用编译期织入和类装载期织入。 
-
+  spring 采用动态代理织入，而 AspectJ 采用编译期织入和类装载期织入。 
 - Proxy（代理）:   一个类被 AOP 织入增强后，就产生一个结果代理类。
-
 - Aspect(切面):   是切入点和通知（引介）的结合。 **切面就是配置**
 
 ![通知的类型](/images/spring/通知的类型.jpg)
