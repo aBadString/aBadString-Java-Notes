@@ -502,7 +502,7 @@ public class AtomicStampedReferenceDemo {
 
 ### 3.1.1. 异常现象
 
-下面的程序，由于三个线程同时使用一个 list，会导致出现一些错误的情形。但还没有抛出异常
+下面的程序，由于三十个线程同时使用一个 list，会导致出现一些错误的情形。但还没有抛出异常
 ```java
 public static void main(String[] args) {
     List<String> list = new ArrayList<>();
@@ -571,6 +571,13 @@ public static void main(String[] args) {
 ### 3.1.2. 异常原因
 
 [Java 基础编程 · 17.5. 集合有关面试题](./01_Java基础编程.md#175-集合有关面试题)
+
+```java
+final void checkForComodification() {
+    if (modCount != expectedModCount)
+        throw new ConcurrentModificationException();
+}
+```
 
 ### 3.1.3. 解决方案
 
@@ -2151,4 +2158,47 @@ public class DeadLock {
         new Thread(new Resource(b, a)).start();
     }
 }
+// 输出：
+// Thread-0 获取了资源a，等待获取资源b
+// Thread-1 获取了资源b，等待获取资源a
+// 
+```
+
+**排查死锁：**
+
+先使用 jps 查看 VMID
+```shell
+PS > jps -l
+11072 sun.tools.jps.Jps
+13476 org.jetbrains.jps.cmdline.Launcher
+18324 priv.abadstring.threaddemo.DeadLock
+11832
+```
+
+再使用 jstack 跟踪线程堆栈信息
+```shell
+PS > jstack 18324
+Found one Java-level deadlock:
+=============================
+"Thread-1":
+  waiting to lock monitor 0x000002b874f7fdc8 (object 0x000000076b5642d8, a java.lang.String),
+  which is held by "Thread-0"
+"Thread-0":
+  waiting to lock monitor 0x000002b874f81108 (object 0x000000076b564308, a java.lang.String),
+  which is held by "Thread-1"
+
+Java stack information for the threads listed above:
+===================================================
+"Thread-1":
+        at priv.abadstring.threaddemo.Resource.run(DeadLock.java:34)
+        - waiting to lock <0x000000076b5642d8> (a java.lang.String)
+        - locked <0x000000076b564308> (a java.lang.String)
+        at java.lang.Thread.run(Thread.java:748)
+"Thread-0":
+        at priv.abadstring.threaddemo.Resource.run(DeadLock.java:34)
+        - waiting to lock <0x000000076b564308> (a java.lang.String)
+        - locked <0x000000076b5642d8> (a java.lang.String)
+        at java.lang.Thread.run(Thread.java:748)
+
+Found 1 deadlock.
 ```

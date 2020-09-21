@@ -948,8 +948,10 @@ java -XX:+PrintGCDetails HelloJVM
 例如：
 -XX:metaspace=2000000：设置Java元空间的值为2000000。
 -XX:MetaspaceSize=128m：设置Java元空间的值为128M。
--Xms参数代表-XX:InitialHeapSize ，初始化堆内存（默认只会用最大物理内存的1/64）
--Xmx:参数代表-XX:MaxHeapSize ，大堆内存（默认只会用最大物理内存的1/4）
+-Xms == -XX:InitialHeapSize ，初始化堆内存（默认只会用最大物理内存的1/64）
+-Xmx == -XX:MaxHeapSize ，最大堆内存（默认只会用最大物理内存的1/4）
+-Xss == -XX:ThreadStackSize ，设置单个线程的栈大小，一般默认为512K~1024K
+-Xmn ，堆内新生代的大小。通过这个值也可以得到老生代的大小：-Xmx减去-Xmn
 
 ```shell
 java -XX:InitialHeapSize=200m HelloJVM
@@ -991,6 +993,41 @@ java -XX:+PrintFlagsFinal HelloJVM
 # 查看 JVM 自动配置的或者用户手动设置的XX选项（非应用程序的）
 java -XX:+PrintCommandLineFlags -version
 ```
+
+### JVM 配置表
+
+1. 堆设置
+-Xms:初始堆大小
+-Xmx:最大堆大小
+-Xmn:新生代大小
+-XX:NewRatio:设置新生代和老年代的比值。如：为3，表示年轻代与老年代比值为1：3
+-XX:SurvivorRatio:新生代中Eden区与两个Survivor区的比值。注意Survivor区有两个。如：为3，表示Eden：Survivor=3：2，一个Survivor区占整个新生代的1/5  
+-XX:MaxTenuringThreshold:设置转入老年代的存活次数。如果是0，则直接跳过新生代进入老年代
+-XX:PermSize、-XX:MaxPermSize:分别设置永久代最小大小与最大大小（Java8以前）
+-XX:MetaspaceSize、-XX:MaxMetaspaceSize:分别设置元空间最小大小与最大大小（Java8以后）
+
+2. 收集器设置
+-XX:+UseSerialGC:设置串行收集器
+-XX:+UseParallelGC:设置并行收集器
+-XX:+UseParalledlOldGC:设置并行老年代收集器
+-XX:+UseConcMarkSweepGC:设置并发收集器
+
+3. 垃圾回收统计信息
+-XX:+PrintGC
+-XX:+PrintGCDetails
+-XX:+PrintGCTimeStamps
+-Xloggc:filename
+
+4. 并行收集器设置
+-XX:ParallelGCThreads=n:设置并行收集器收集时使用的CPU数。并行收集线程数。
+-XX:MaxGCPauseMillis=n:设置并行收集最大暂停时间
+-XX:GCTimeRatio=n:设置垃圾回收时间占程序运行时间的百分比。公式为1/(1+n)
+
+5. 并发收集器设置
+-XX:+CMSIncrementalMode:设置为增量模式。适用于单CPU情况。
+-XX:ParallelGCThreads=n:设置并发收集器新生代收集方式为并行收集时，使用的CPU数。并行收集线程数。
+
+
 
 ## 8.2. JDK 工具
 
