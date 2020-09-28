@@ -7,8 +7,12 @@
   - [1.1. 函数依赖与数据库范式](#11-函数依赖与数据库范式)
 - [2. MySQL 必知必会](#2-mysql-必知必会)
   - [2.1. MySQL 基础命令](#21-mysql-基础命令)
-  - [2.2. show 命令](#22-show-命令)
-  - [2.3. 表字段数据类型](#23-表字段数据类型)
+  - [2.2. 建表语句](#22-建表语句)
+    - [2.2.1. 表字段数据类型](#221-表字段数据类型)
+  - [2.3. 增改删语句](#23-增改删语句)
+    - [2.3.1. insert](#231-insert)
+    - [2.3.2. update](#232-update)
+    - [2.3.3. delete](#233-delete)
   - [2.4. select 检索数据](#24-select-检索数据)
     - [2.4.1. limit：限制返回前几行数据](#241-limit限制返回前几行数据)
     - [2.4.2. order by 子句](#242-order-by-子句)
@@ -72,7 +76,9 @@
     - [6.3.2. 多列索引](#632-多列索引)
     - [6.3.3. 索引列的顺序](#633-索引列的顺序)
     - [6.3.4. 建立索引的常用技巧](#634-建立索引的常用技巧httpsjuejinimpost5a6873fbf265da3e393a97fa)
-- [7. 其他](#7-其他)
+- [7. explain](#7-explain)
+- [8. 其他](#8-其他)
+- [9. 附录：常用SQL语法](#9-附录常用sql语法)
 
 <!-- /code_chunk_output -->
 
@@ -262,7 +268,7 @@ timestamp 保存UNIX 时间戳，使用 4 个字节，它和时区有关，也�
 
 ## 2.3. 增改删语句
 
-### insert
+### 2.3.1. insert
 
 ```sql
 INSERT INTO mytable(col1, col2)
@@ -279,7 +285,7 @@ CREATE TABLE newtable AS
   SELECT * FROM mytable;
 ```
 
-### update
+### 2.3.2. update
 
 ```sql
 UPDATE mytable
@@ -287,7 +293,7 @@ UPDATE mytable
   WHERE id = 1;
 ```
 
-### delete
+### 2.3.3. delete
 
 ```sql
 DELETE FROM mytable
@@ -1424,7 +1430,30 @@ WHERE a = 1 AND c = 3
 #以上SQL语句用不到索引
 ```
 
-# 7. 其他
+# 7. explain
+
+1. **id**：SELECT 识别符，sql 语句执行的顺序
+2. **select_type**：
+   - simple：简单查询
+   - primary：在有子查询的语句中，最外面的select查询就是primary
+   - union：union 语句的后面那一个
+   - dependent union
+   - union result
+3. **table**：输出的行所用的表
+4. **type**：连接类型
+   - system：表仅有一行数据， const 的特例
+   - const：表最多有一个匹配行
+   - eq_ref
+   - ref 
+   - ref_or_null 
+   - index_merge 
+   - unique_subquery 
+   - index_subquery
+   - range 
+   - index   
+   - ALL 
+
+# 8. 其他
 
 **触发器**
 
@@ -1459,7 +1488,7 @@ UPDATE A INNER JOIN B ON A.id = B.id SET A.c1 = B.c1,A.c2 = B.c2 WHERE B.age > 5
 https://juejin.im/entry/5b57ec015188251aa8292a69
 
 
-# 8. 附录：常用SQL语法
+# 9. 附录：常用SQL语法
 ```sql
 [] 可选 0次或1次
 {} 0次或多次

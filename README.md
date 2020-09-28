@@ -16,7 +16,7 @@
     
 
 - ## 数据库基础
-    - [MySQL 数据库](03_数据库基础/01_MySQL.md)
+    - [MySQL 数据库](03_数据库与中间件基础/01_MySQL.md)
 
 - ## Java Web 框架
     - [Spring 框架](04_JavaWeb框架/01_Spring.md)

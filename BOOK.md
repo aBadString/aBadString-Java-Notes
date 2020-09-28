@@ -38,7 +38,7 @@
 @import "02_计算机基础理论/02_计算机网络.md"
 @import "02_计算机基础理论/03_操作系统.md"
 
-@import "03_数据库基础/01_MySQL.md"
+@import "03_数据库与中间件基础/01_MySQL.md"
 
 @import "04_JavaWeb框架/01_Spring.md"
 
