@@ -123,9 +123,22 @@
 - [18. 集合](#18-集合)
   - [18.1. List](#181-list)
   - [18.2. Set](#182-set)
-  - [18.3. Map 集合](#183-map-集合)
+    - [18.2.1. HashSet](#1821-hashset)
+  - [18.3. Map](#183-map)
+    - [18.3.1. HashMap（面试的重点）](#1831-hashmap面试的重点)
+      - [18.3.1.1. 重要属性和常量](#18311-重要属性和常量)
+      - [18.3.1.2. 构造器 (4个)](#18312-构造器-4个)
+      - [18.3.1.3. 哈希函数](#18313-哈希函数)
+      - [18.3.1.4. 数据结构](#18314-数据结构)
+      - [18.3.1.5. public V put(K key, V value) 插入/更新](#18315-public-v-putk-key-v-value-插入更新)
+      - [18.3.1.6. final Node<K,V>[] resize() 扩容](#18316-final-nodekv-resize-扩容)
+      - [18.3.1.7. 面试题](#18317-面试题)
+    - [18.3.2. ConcurrentHashMap（jdk 1.7 源码）](#1832-concurrenthashmapjdk-17-源码)
+    - [18.3.3. TreeMap](#1833-treemap)
+      - [18.3.3.1. 红黑树](#18331-红黑树)
+      - [18.3.3.2. TreeMap 源码](#18332-treemap-源码)
   - [18.4. 集合遍历方式](#184-集合遍历方式)
-  - [18.5. 集合有关面试题](#185-集合有关面试题)
+  - [18.5. 快速失败 (fail-fast) 和安全失败 (fail-safe)](#185-快速失败-fail-fast-和安全失败-fail-safe)
 - [19. IO](#19-io)
   - [19.1. File (磁盘文件操作)](#191-file-磁盘文件操作)
   - [19.2. 字节流：InputStream 和 OutputStream （输入输出流）](#192-字节流inputstream-和-outputstream-输入输出流)
@@ -178,27 +191,18 @@
 # 1. Java 简介
 
 ## 1.1. Java语言版本迭代
-
 1995年发布JDK1.0；JDK1.5开始改名为JDK5.0,以后都是6.0，7.0 …。
-
 JavaSE（J2SE）：Java核心API + 桌面级应用开发
-
 JavaEE（J2EE）：企业级开发（Web应用）
-
 JavaME（J2ME）：移动端应用开发
 
 ## 1.2. JDK JRE JVM 三者间的关系
-
 JDK = JRE + Java开发工具集
-
 JRE = JVM + Java SE 标准类库
 
 ## 1.3. Hello World 程序
-
 (1) **创建**：创建一个以.java结尾的文件
-
 (2) **编辑**：
-
 ``` java  
 public class HelloWorld {    
     public  static void main(String[] args) {        
@@ -206,29 +210,22 @@ public class HelloWorld {
     }  
 } 
 ```
-
 (3) **编译**：javac 源文件名.Java     可以生成一个或多个字节码文件（有几个类就有几个字节码文件）
-
 (4) **运行**：java 字节码文件名（注意：不要.class拓展名）
 
 说明：
-
 1. 一个源文件中可以由多个类，但是只能有一个public类；
-
 2. public类的名字必须和源文件名一样
+3. main 返回值为 void
+> 最后，与 C/C++—样，关键字 void 表示这个方法没有返回值，所不同的是 main 方法没有为操作系统返回“退出代码”。如果 main 方法正常退出，那么 Java 应用程序的退出代码为 0，表示成功地运行了程序。如果希望在终止程序时返回其他的代码，那就需要调用 System.exit 方法。
+> —— 《Java核心技术 卷1 基础知识 原书第10版》P30
 
 ## 1.4. 注释
-
 (1) **单行注释**：//
-
 (2) **多行注释**：/* */
-
 ​    多行注释不能被嵌套使用
-
 (3) **文档注释**：/** */
-
 javadoc -d 目标路径 -author -version 源文件名.java
-
 
 
 # 2. 变量
@@ -236,7 +233,6 @@ javadoc -d 目标路径 -author -version 源文件名.java
 ## 2.1. 变量的声明和赋值
 
 第一种：声明变量，同时赋值
-
 ```java
 // 一个变量  
 int a = 1;  
@@ -245,7 +241,6 @@ int a = 1, b = 2, c = 3;
 ```
 
 第二种：先声明后赋值
-
 ```java
 // 一个变量  
 int a;  
@@ -256,13 +251,9 @@ a = b = c = 10;
 ```
 
 说明：
-
 1.  变量的作用域：声明变量所在的那对大括号内；
-
 2.  在同一个作用域内，变量命不允许重复；
-
 3.  变量应该先声明后使用；
-
 4.  同一个变量可以被多次赋值，后一次赋值覆盖前一次赋值。
 
 ## 2.2. Java 变量的分类
@@ -270,9 +261,7 @@ a = b = c = 10;
 ### 2.2.1. 按数据类型分
 
 (1) 整数类型：byte、short、int、long
-
 ​    Java的整数类型有固定的表数范围和字段长度，不受具体的操作系统的影响，以保证Java程序的可移植性。
-
 ​    Java整型常量默认为int类型，long类型常量必须在末尾加上“l”或者“L”。
 
 | **类型** | **占用的存储空间** | **表数范围**             |
@@ -283,15 +272,10 @@ a = b = c = 10;
 | long     | 8字节              | -2^63  ~ 2^63-1          |
 
 (2) 浮点类型：float、double
-
 ​    Java的浮点类型有固定的表数范围和字段长度，不受具体的操作系统的影响，以保证Java程序的可移植性。
-
 ​    Java浮点型常量默认为double类型（也可以在末尾加上“d”或者“D”），float类型常量必须在末尾加上“f”或者“F”。
-
 ​    浮点数表示形式：
-
 ​        十进制数表示法：5.12，512.0f，.512
-
 ​        科学计数表示法：5.12e2，512E2，100E-2
 
 | **类型** | **占用的存储空间** | **表数范围**           |
@@ -300,9 +284,7 @@ a = b = c = 10;
 | double   | 8字节              | -1.798E308 ~ 1.798E308 |
 
 (3) 字符类型：char 
-
 ​    Java中的字符类型是占两个字节的。其表示方式有以下三种：
-
 ```java
 // 单个普通字符  
 char c1 = 'A';
@@ -371,7 +353,6 @@ public class CalSize {
 ![image-20200319153805485](/images/image-20200319153805485.png) 
 
 ### 2.2.2. 按声明位置分
-
 （1）成员变量
 （2）局部变量
 ![image-20200319154014930](/images/image-20200319154014930.png) 
@@ -383,39 +364,29 @@ public class CalSize {
 **(1) 自动类型提升**
 
 自动类型提升：小容量的变量与大容量的变量做运算，结果用大容量的变量来接收。
-
 byte，short，char --> int --> long --> float --> double
 
 注意：
-
 1、容量指的是表数范围，而不是所占存储空间。float（4字节）的表数范围大于long（8字节）。
-
-​       2、byte，short，char三者之间的运算都会自动提升为int类型。
-
+2、byte，short，char三者之间的运算都会自动提升为int类型。
 ![image-20200319154117223](/images/image-20200319154117223.png) 
 
 **这是字段类型提升的一个坑：**
-
 自动类型提升有好处，但它也会引起令人疑惑的编译错误。例如，下面看起来正确的程序却会引起问题：
-
 ```java
 byte b = 50;
 b = b * 2;    // Type mismatch: cannot convert from int to byte
 ```
-
 如上所示，第二行会报“类型不匹配：无法从int转换为byte”错误。
-
 ![image-20200319154221155](/images/image-20200319154221155.png) 
 
 该程序试图将一个完全合法的 byte 型的值 50*2 再存储给一个 byte 型的变量。但是当表达式求值的时候，操作数被自动的提升为 int 型，计算结果也被提升为 int 型。这样表达式的结果现在是 int 型，不强制转换它就不能被赋为 byte 型。确实如此，在这个特别的情况下，被赋的值将仍然适合目标类型。
 
 所以应该使用一个显示的强制类型转换，例如：
-
 ```java
 byte b = 50;
 b = (byte)(b * 2);
 ```
-
 这样就能产生正确的值 100。
 
 注意：char 类型比较特殊，char 自动转换成 int、long、float 和 double，但 byte 和 short 不能自动转换为 char，而且 char 也不能自动转换为 byte 或 short。
@@ -423,19 +394,15 @@ b = (byte)(b * 2);
 引用自：http://c.biancheng.net/view/796.html
 
 **这是另一个坑**
-
 float和long运算，会自动类型提升为float。例如如下代码编译错误：
-
 ```java
 long l = 200L;
 float f = 10.0F;
 long r = l + f;
 ```
-
 ![image-20200319154315289](/images/image-20200319154315289.png) 
 
 需要使用float类型变量来存储运算结果。
-
 ```java
 long l = 200L;
 float f = 10.0F;
@@ -445,21 +412,15 @@ float r = l + f;
 **(2) 强制类型转换：自动类型提升的逆过程。**
 
 格式：目标类型 变量 = (目标类型)源类型变量/常量
-
 注意：
-
 ​    1、使用强制类型转换运算符号“(类型)”。
-
 ​    2、可能会损失精度或者类型溢出。
-
 ​    3、在强制类型转换中目标类型和源类型变量的类型始终没有发生改变。
 
 ### 2.3.2. 基本数据类型和String间的运算
 
 ​    1、 字符串和基本数据类型之间只能做连接运算，没有自动类型提升。
-
 ​    2、 字符串做链接运算的结果是字符串类型，只能用字符串来接受
-
 ​    3、 注意“+”号是做加法，还是做字符串连接符。
 
 # 3. 标识符和关键字
@@ -467,13 +428,9 @@ float r = l + f;
 ## 3.1. 关键字和保留字
 
 关键字的定义：Java关键字是Java语言里事先定义的，被赋予了特殊含义的标识符。
-
 关键字的特点：关键字均为小写。
-
 保留字的定义：现版本暂未使用，但以后版本可能用来作为关键字。
-
 ![image-20200321192912582](/images/image-20200321192912582.png)
-
 ![image-20200321192932199](/images/image-20200321192932199.png)
 
 注：java官方文档有说明: “An identifier cannot have the same spelling (Unicode character sequence) as a keyword (§3.9), boolean literal (§3.10.3), or the null literal (§3.10.7), or a compile-time error occurs. While true and false might appear to be keywords, they are technically boolean literals (§3.10.3). Similarly, while null might appear to be a keyword, it is technically the null literal (§3.10.7). ”
@@ -491,43 +448,26 @@ true false null不属于关键字，但是属于标识符。规定的关键字�
 ## 3.2. 标识符
 
 合法标识符：
-
 ​    1、 由大小写英文字母（a-z, A-Z），数字（0-9），下划线（_），美元符号（$）组成；
-
 ​    2、 不能以数字开头；
-
 ​    3、 不可以使用关键字、保留字、true、false、null
-
 ​    4、 标识符严格区分大小写，长度无限制
-
 ​    5、 标识符不能包含空格
 
 标识符命名风格：
-
 1.【强制】代码中的命名均不能以下划线或美元符号开始，也不能以下划线或美元符号结束。
-
 2.【强制】代码中的命名严禁使用拼音与英文混合的方式，更不允许直接使用中文的方式
-
 3.【强制】类名使用UpperCamelCase风格，但以下情形例外：DO / BO / DTO / VO / AO / PO / UID等。
-
 4.【强制】方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase风格，必须遵 从驼峰形式
-
 5.【强制】常量命名全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字 长。
-
 6.【强制】抽象类命名使用Abstract或Base开头；异常类命名使用Exception 结尾；测试类 命名以它要测试的类的名称开始，以Test结尾
-
 7.【强制】包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使 用单数形式，但是类名如果有复数含义，类名可以使用复数形式。
-
 8.【参考】枚举类名带上Enum后缀，枚举成员名称需要全大写，单词间用下划线隔开。
-
 引用自：《Java 开发手册》——阿里巴巴
 
 ![image-20200321193059390](/images/image-20200321193059390.png) 
-
 图片引用自：https://zhuanlan.zhihu.com/p/96100037
-
 单下划线作为标识符是不可行的，但是双下划线是可行的。
-
 ```java
 public class _ {
     public static void main(String[] args) {
@@ -536,7 +476,6 @@ public class _ {
     }
 }
 ```
-
 ![image-20200321193132879](/images/image-20200321193132879.png) 
 
 # 4. 运算符
@@ -546,19 +485,15 @@ public class _ {
 ![image-20200321193506653](/images/image-20200321193506653.png)
 
 注意：
-
-​        1、整数除法的结果是整数，即求整除的商。
-
-​        2、取余运算只适用于两个整数，结果的正负号和被取余数的正负号相同。
+1、整数除法的结果是整数，即求整除的商。
+2、取余运算只适用于两个整数，结果的正负号和被取余数的正负号相同。
 
 ## 4.2. 赋值运算符
 
 =、+=、-=、*=、/=、%=、<<=、>>=、&=、^=、|=
 
 设byte b = 10;，b += 2并不等于 b = b + 2。后者会进行数据类型提升，而前者数据类型不发生转换。
-
 设int i = 1;，i *= 0.1可以相当于i = (int)(i * 0.1)。结果为0。上面的b += 2可以相当于b = (byte)(b + 2)。
-
 ```java
 public class SetValue {
     public static void main(String[] args) {
@@ -577,15 +512,12 @@ int i = 1;
 ```
 
 【面试题】
-
 ![image-20200321193554367](/images/image-20200321193554367.png) 
-
 答：1 编译不通过，因为short在做运算时，会先自动类型提升为int类型，所以必须用int类型的变量来接收结果。2 编译通过，s的值变为5。+=不会改变原来的数据类型，相当于 s = (short)(s+2)。
 
 ## 4.3. 关系运算符（比较运算符）
 
 ![image-20200321193702557](/images/image-20200321193702557.png)
-
 关系运算符的结果都是boolean类型的，值要么是true，要么是false。
 
 这里说明一下，Java和C/C++不一样，在Java中if语句的小括号里面的值或者表达式的值必须为boolean类型，否则会报错：类型不兼容。因此如果是一条int类型的赋值语句，则不能作为if的条件（在C/C++中是可以的）。但需要注意的是如果赋值表达式的左值是boolean类型的，那么赋值表达式的值也会是boolean类型的。代码如下：
@@ -618,21 +550,15 @@ public class Equals {
 ## 4.4. 逻辑运算符
 
 & 逻辑与   | 逻辑或  ! 逻辑非
-
 && 短路与  || 短路或  ^ 逻辑异或
 
 ![image-20200321193755421](/images/image-20200321193755421.png)
 
 异或：异为真。不一样，则结果为真。
-
 说明：逻辑运算的操作数都是boolean类型，运算结果也是boolean类型。
 
-
-
 【面试题】 &与&&，|与||的区别。
-
 答：
-
 ![image-20200321193903747](/images/image-20200321193903747.png) 
 
 ```java
@@ -666,11 +592,8 @@ public class Logic {
     }
 }
 ```
-
 结果：
-
 ![image-20200321193935285](/images/image-20200321193935285.png) 
-
 这篇文章对&和|的理解思路很清奇，认真看完，不要看到第一个问题就不看了。文章地址：https://blog.csdn.net/websph/article/details/5669363
 
 ## 4.5. 位运算符
@@ -678,33 +601,21 @@ public class Logic {
 ### 4.5.1. 进制
 
 世界上有10种人，一种是都二进制的，另一种是不懂二进制的。
-
-l 二进制：0, 1，以0b或者0B开头；
-
-l 十进制：0-9；
-
-l 八进制：0-7，以0开头；
-
-l 十六进制：0-9及A-B，以0x或者0X开头。A-F大小写不区分。
+- 二进制：0, 1，以0b或者0B开头；
+- 十进制：0-9；
+- 八进制：0-7，以0开头；
+- 十六进制：0-9及A-B，以0x或者0X开头。A-F大小写不区分。
 
 ### 4.5.2. 原码 反码 补码
 
 (1)  正数的原码、反码、补码都相同。（9的原码：0000 1001）
-
 (2)  负数
-
 负数的原码：最高位为符号位，1表示负数。即把其对应的正数的原码的符号位改为1。（-9的原码：1000 1001）
-
 负数的反码：符号位不变，把负数的原码的其它位按位取反。（-9的反码：1111 0110）
-
 负数的补码：反码加一。（-9的补码：1111 0111）
 
- 
-
 (byte)128 => -128
-
 128：0000 0000, 0000 0000, 0000 0000, 1000 0000
-
 (byte)128：1000 0000 => -128
 
 ### 4.5.3. 位运算
@@ -716,13 +627,9 @@ Java定义了位运算符，应用于整数类型(int)，长整型(long)，短�
 << 左移： 规则是带符号位移，高位移出，低位补0，移动位数超过该类型的最大位数，则进行取模，如对Integer型左移34位，实际上只移动了两位。左移一位相当于乘以2的一次方，左移n位相当于乘以2的n次方。
 
 \>> 右移：规则是低位移出，高位补符号位，移动位数超过该类型的最大位数，则进行取模，如对Integer型左移34位，实际上只移动了两位。
-
 \>>> 无符号右移：无符号位移是什么意思呢，就是右移的时候，无论正负数，高位始终补0。当然，它也仅仅针对负数计算有意义。
 
- 
-
 直接上代码：
-
 ```java
 public class Bit {
     public static void main(String[] args) {
@@ -749,11 +656,9 @@ public class Bit {
     }
 }
 ```
-
 ![image-20200321194145034](/images/image-20200321194145034.png) 
 
 这个有意思哦~ 并不是循环左移
-
 ```java
 System.out.println(1 << 31);
 System.out.println(3 << 31);
@@ -764,22 +669,16 @@ System.out.println(-1 << 32);
 System.out.println(-1 << 33);
 System.out.println(-1 << 34); // 得-4 不是循环左移
 ```
-
 ![image-20200321194218013](/images/image-20200321194218013.png) 
 
 ## 4.6. 三元运算符
 
 (条件表达式) ? 表达式1 : 表达式2
-
-​        1、条件表达式的结果为boolean类型。
-
-​        2、条件表达式为true，执行表达式1；为false, 执行表达式2。
-
-​        3、表达式1和表达式2的类型必须相同。或者可以进行类型转换。
-
-​        4、三元运算符可以被嵌套使用，但不建议这样使用。
-
-​        5、三元运算符可以被if语句替代；反之，不成立。
+​1、条件表达式的结果为boolean类型。
+​2、条件表达式为true，执行表达式1；为false, 执行表达式2。
+​3、表达式1和表达式2的类型必须相同。或者可以进行类型转换。
+​4、三元运算符可以被嵌套使用，但不建议这样使用。
+​5、三元运算符可以被if语句替代；反之，不成立。
 
 ## 4.7. 运算符的优先级
 
@@ -967,17 +866,12 @@ public class Break {
 # 6. 数组
 
 数组：相同数据类型的变量的集合。
-
-​    1、在Java中数组本身属于引用数据类型。
-
-​    2、数组中的元素既可以是基本数据类型，也可以是引用数据类型。
-
-​    3、**Java的数组都是分配在堆上的。**
-
-​    4、数组创建完成后，长度不可以改变。
+​1、在Java中数组本身属于引用数据类型。
+​2、数组中的元素既可以是基本数据类型，也可以是引用数据类型。
+​3、**Java的数组都是分配在堆上的。**
+​4、数组创建完成后，长度不可以改变。
 
 数组的声明和初始化：
-
 ```java
 // 数组的声明
 String[] name;
@@ -991,7 +885,6 @@ double d[] = new double[10];
 ```
 
 数组元素的默认值：
-
 - byte、short、int、long = 0
 - float、double = 0.0
 - boolean = false
@@ -999,9 +892,7 @@ double d[] = new double[10];
 - 引用类型 = null
 
 数组的属性length用来表示数组长度。
-
 数组的下标从0开始到 (length - 1) 结束。
-
 ```java
 int[] arr = new int[10];
 for (int i = 0; i < arr.length; i++) {
@@ -1016,7 +907,6 @@ for (int i = 0; i < arr.length; i++) {
 - 空指针异常：NullPointerException
 
 Arrays 类
-
 ```java
 Arrays.sort();         // 排序
 Arrays.toString();     // 数组转字符串
@@ -1025,17 +915,12 @@ Arrays.fill();         // 内容填充
 ```
 
 
-
 # 7. 面向对象编程基础
 
 类是对象的抽象，对象是类的实例。
-
 类的成员：属性、方法、构造器、代码块、内部类。
-
 面向对象三大特征：封装性、继承性、多态性。
-
 面向过程强调的是功能行为；面向对象强调的是具备了功能的类。
-
 匿名对象：new Object()，一般用于方法的实参。
 
 ## 7.1. 包（package与import）
@@ -1053,23 +938,15 @@ Arrays.fill();         // 内容填充
 package位于源文件的首行，即package语句是代码的第一行非空行。
 
 import：
-
 1. 位于package语句后面，类的定义前面。
-
 2. 用于显示地导入指定包下的类或者接口。
-
 3. 如果需要导入多个类或者接口，则需要并列地写多条import语句。
-
-    4. 也可以使用“import java.util.*;”这种方式导入该包下的所有类或接口。
-     1. 但是不会导入子包，例如：import java.util.*; 可以导入Scanner类，而import java.*;不能。
-     2. 这种方法并不会导入所有的类，只会导入用到的类，编译时会替换成单类型导入。
-
+4. 也可以使用“import java.util.*;”这种方式导入该包下的所有类或接口。
+    4.1. 但是不会导入子包，例如：import java.util.*; 可以导入Scanner类，而import java.*;不能。
+    4.2. 这种方法并不会导入所有的类，只会导入用到的类，编译时会替换成单类型导入。
 5. 已经导入了一个包，如果还需要它的子包，那么子包还需另外导入。
-
 6. java.lang包下的类和接口是默认自动导入的,当前包的成员本身就在作用域内所以当前包和java.lang包的导入是可以省略的。
-
 7. 如果有使用到不同包下的同名类，只能使用类的全名来指明。
-
 8. import static 调用指定包下指定类或接口中的静态属性和方法。
 
 ``` java
@@ -1082,13 +959,10 @@ out.println("hello");
 ## 7.2. 访问权限修饰符
 
 对于class的访问权限只能用public和default（缺省）来修饰：
-
 ​    public：任何地方可以访问该类；
-
 ​    default：只有在同一个包下访问该类。
 
 代码块只能用static修饰。
-
 | **修饰符** | **类内部** | **同一个包** | **不同包的子类** | **任何地方** |
 | :--------: | :--------: | :----------: | :--------------: | :----------: |
 |  private   |     √      |              |                  |              |
@@ -1099,13 +973,9 @@ out.println("hello");
 ## 7.3. this
 
 this表示当前对象。可以用来使用类的属性、方法和构造器。
-
 this.属性名：用来指定当前对象的属性，this在不引起歧义时可以省略。
-
 this.方法名()：用来调用当前对象的非静态方法，this在不引起歧义时可以省略。
-
 this()用于调用类的其他构造器。可以多级调用，但禁止套娃。this()必须放在构造器的首行，一个构造器中只能出现一个this()。 à 推论：n个构造器中一共最多可出现n-1条this()语句。
-
 this不能出现在静态上下文中。
 
 ## 7.4. super
@@ -1131,39 +1001,24 @@ static可以用来修饰：属性、方法、代码块、内部类。
 ### 7.5.1. static修饰变量：类变量
 
 1、同一个类的所有对象共同拥有(共享)一份类变量；每个对象各自拥有一份实例变量。
-
 2、类变量随着类的加载而创建；实例变量随着对象的创建而创建。
-
 3、在程序的一次运行过程中，每个类只会被加载一次。
-
 4、使用类变量：类名.类变量名 / 对象名.类变量名。
 
 ### 7.5.2. static修饰方法：静态方法
 
 1、静态方法随着类的加载而加载。
-
 2、调用静态方法：类名.静态方法名(参数列表) / 对象名.静态方法名(参数列表)。
-
 3、静态方法中不能使用非静态的实例变量，可以使用静态的类变量。静态方法中不能调用非静态的方法，可以调用静态方法。
-
 4、非静态方法中可以使用类变量和静态方法。
-
 5、静态方法中不能使用“this”和“super”。
 
-
-
 【思考】什么时候使用static修饰属性和方法？
-
 static修饰属性：
-
 ​    1、当一个属性作为常量时，必须使用static修饰。
-
 ​    2、当多个对象共同使用一份属性时。
-
 static修饰方法：
-
 ​    1、工具类中的方法一般使用static修饰。
-
 ​    2、有时为了使用类变量，方法也会使用static修饰。
 
 ### 7.5.3. 类加载的过程
@@ -1193,13 +1048,10 @@ public static final double PI = 3.14159265358979323846;
 ## 7.7. JavaBean
 
 JavaBean是一种Java语言写成的可重用组件。
-
 所谓JavaBean，是指符合以下标准的Java类：
-
 - 类是具体的，且是public的；
 - 有一个无参数的public的构造器；
 - 有属性，且每一个属性具有对应的get、set方法。
-
 
 
 # 8. 类的成员
@@ -1207,20 +1059,15 @@ JavaBean是一种Java语言写成的可重用组件。
 ## 8.1. 属性 Field
 
 局部变量和成员变量的相同点和不同点：
-
 ​    **相同点：**
-
 ​        1、都是变量，都要先声明后使用
 ​        2、都可以被多次赋值
 ​        3、都有其作用域
 ​        4、声明方式：变量类型 变量名
-
 ​    **不同点：**
-
 ​        1、声明位置：
 ​            成员变量声明在类内部，方法、构造器等结构外部；
 ​            局部变量声明在方法中、方法的形参、构造器中、构造器的形成等。
-
 ​        2、默认值
 ​            成员变量默认值：
 ​                byte、short、int、long = 0
@@ -1228,13 +1075,10 @@ JavaBean是一种Java语言写成的可重用组件。
 ​                boolean = false
 ​                char = \u0000
 ​                引用类型 = null；
-
 ​            局部变量没有默认值。
-
 ​        3、权限修饰符
 ​            成员变量可以被权限修饰符修饰；
 ​            局部变量不能。
-
 ​        4、内存
 ​            成员变量存储在堆上；
 ​            局部变量存储在栈上。
@@ -1268,17 +1112,14 @@ JavaBean是一种Java语言写成的可重用组件。
 **方法重载的定义**
 
 方法重载：同一个类中，方法名相同，**形参列表不同**，则构成方法重载。
-
 不同的形参列表指：形参类型不同，个数不同，顺序不同。
 
 注意：
-
-      1、只有返回值不同，不是重载，会报错；
-      2、只有形参的变量名不同，不是重载，会报错；
-      3、只有权限修饰符不同，不是重载，会报错。
+1、只有返回值不同，不是重载，会报错；
+2、只有形参的变量名不同，不是重载，会报错；
+3、只有权限修饰符不同，不是重载，会报错。
 
 **方法重载时的调用选择**
-
 ```java
 public class MethodTest {
     public static void main(String[] args) {
@@ -1342,21 +1183,15 @@ public class MethodTest2 extends A{
 
 ### 8.2.3. 方法重写 override
 
-​        定义：在子类中可以根据需要对从父类中继承而来的方法进行改写，也称为方法的重置、覆盖。在程序执行时，子类的方法将覆盖掉父类的方法。
+定义：在子类中可以根据需要对从父类中继承而来的方法进行改写，也称为方法的重置、覆盖。在程序执行时，子类的方法将覆盖掉父类的方法。
 
-​        要求：
-
-​    1、重写方法必须和被重写方法具有相同的方法名、形参列表。
-
-​    2、重写方法不能使用比被重写方法更严格的访问权限。
-
-​    3、重写方法的返回值类型要么和被重写方法一致，要么是被重写方法返回值类型的子类。如果是基本数据类型或者void，那么两者必须一样。
-
-​    4、重写方法和被重写方法必须同时为非static的。如果同时为static的，不是方法重写。父类的静态方法可以被子类继承，但是不能重写，静态方法属于静态绑定。
-
-​    5、重写方法抛出的异常不能大于被重写方法的异常。
-
-​    6、父类中被private修饰的方法不可以被子类重写。如果子类中有相同的方法，则会被视作方法重载。
+要求：
+1、重写方法必须和被重写方法具有相同的方法名、形参列表。
+2、重写方法不能使用比被重写方法更严格的访问权限。
+​3、重写方法的返回值类型要么和被重写方法一致，要么是被重写方法返回值类型的子类。如果是基本数据类型或者void，那么两者必须一样。
+4、重写方法和被重写方法必须同时为非static的。如果同时为static的，不是方法重写。父类的静态方法可以被子类继承，但是不能重写，静态方法属于静态绑定。
+5、重写方法抛出的异常不能大于被重写方法的异常。
+6、父类中被private修饰的方法不可以被子类重写。如果子类中有相同的方法，则会被视作方法重载。
 
 可以使用【@Override】注解来说明当前方法是一个重写方法。
 
@@ -1365,14 +1200,12 @@ Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的�
 ### 8.2.4. 方法重载与方法重写的区别
 
 **【方法重载】**：
-
 ​    1、同一个类中
 ​    2、方法名相同，参数列表不同（参数顺序、个数、类型）
 ​    3、方法返回值、访问修饰符任意
 ​    4、与方法的参数名无关
 
 **【方法重写】**：
-
 ​    1、有继承关系的子类中
 ​    2、方法名相同，参数列表相同（参数顺序、个数、类型），方法返回值相同
 ​    3、访问修饰符，访问范围需要大于等于父类的访问范围
@@ -1383,16 +1216,10 @@ Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的�
 ### 8.2.5. 可变形参
 
 1、格式，对于方法的形参，数据类型… 可变形参的参数名。
-
 2、可变形参方法与同名的方法构成重载，与形参是数组的方法不构成重载(会报错)。例如：int sum(int[] array)与int sum(int... array)只能存在一个。
-
 3、可变参数在调用时传入的实参个数从0开始，到无穷都可以。可以有sum()。
-
 4、可变形参与数组的使用是一样的，可变形参的底层就是一个数组。
-
 5、可变形参只能声明在方法形参列表的最后，且只能有一个可变形参。
-
-
 
 ## 8.3. 构造器 Constructor
 
@@ -1403,29 +1230,21 @@ Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的�
 ```
 
 作用：1、创建对象；2、给对象进行初始化。
-
 特点：
-
 ​    1、构造器的名字和类命必须一致；
 ​    2、构造器不具有返回值；
 ​    3、不能被static、final、synchronization、abstract、native修饰；
 ​    4、可以有return语句，但return不能返回任何值。会认为只是一个与构造器同名的方法罢了
-
 说明：
-
 ​    1、构造器只能在创建对象时，在new语句中被调用一次。不能再其他地方**显示调用**。但可以再构造器中使用this()调用其他构造器，使用super()调用父类构造器。
 ​    2、如果类中没有定义构造器，那么Java免费送一个访问权限为 <del>缺省</del> ***public*** 的无参数的构造器；如果定义了构造器，就不会送了。
 ​    3、构造器可以重载。
 ​    4、构造器不会被继承给子类。
 
 属性赋值：默认值 —> 显示赋值(声明时赋值) /代码块 —> 构造器 —> set方法或赋值语句。
-
 显示赋值和代码块赋值属于同级的，按照由上到下的顺序执行(见图 9‑1)。
 
-
-
 构造的过程：
-
 ​    1、分配对象空间，并将对象中成员进行默认值初始化。
 ​    2、执行属性值的显式初始化（这里有一点变化，一会解释，但大体是这样的）。
 ​    3、执行构造器的方法体（先执行父类构造器，再执行子类构造器）。
@@ -1433,9 +1252,7 @@ Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的�
 关于构造器，好好看看这个：https://blog.csdn.net/yu422560654/article/details/7399566
 
 ![image-20200403133656622](/images/image-20200403133656622.png)
-
 ![image-20200403133701305](/images/image-20200403133701305.png) 
-
 
 
 ## 8.4. 代码块
@@ -1449,7 +1266,6 @@ Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的�
 ```
 
 代码块只能被static所修饰。
-
 代码块分为静态代码块和非静态代码块。
 
 静态代码块：
@@ -1466,10 +1282,7 @@ Java 中其实没有虚函数的概念，它的普通函数就相当于 C++ 的�
 ​    4、 多个非静态代码块按照从上到下的顺序依次执行。
 
 其实还有两种代码块：普通代码块，类的方法的方法体；同步代码块，使用synchronized(){}包裹起来的代码块。
-
 这篇文章https://blog.csdn.net/u012804721/article/details/52439311
-
-
 
 ## 8.5. 内部类
 
@@ -1526,13 +1339,10 @@ A.C c = new A.C();
 ```
 
 (2) 内部类如何调用外部类的结构（属性和方法）？
-
 - 属性：属性名(无冲突时)，外部类名.this.属性名(有冲突时)
 `name`或者`A.this.name`
-
 - 方法：方法名(无冲突时)，外部类名.this.方法名(有冲突时)
 `func()`或者`A.this.func()`
-
 - 静态内部类不能调用非静态的属性和方法；只能调用静态的属性和方法。调用时不要this关键字即可。同样如果非静态内部类调用静态的属性或方法也不要this关键字。
 
 (3) 如何使用局部内部类（很少）？
@@ -1690,8 +1500,8 @@ public class Son extends Father {
 ## 9.1. 封装性
 
 为什么要使用封装性：在创建对象后，可以通过对象名.属性名的方式给属性赋值，直接赋值的话，只有变量类型和范围的约束。但是在实际场景中，往往会有其他的约束。所以我们采用如下方法进行限制：
-​    1、对属性的访问权限进行限制，这样可以防止属性在类的外部被使用；
-​    2、创建对应的set方法，通过set方法来给属性赋值，在方法中对属性的值进行额外的限制。
+  1、对属性的访问权限进行限制，这样可以防止属性在类的外部被使用；
+  2、创建对应的set方法，通过set方法来给属性赋值，在方法中对属性的值进行额外的限制。
 
 封装性的体现（狭义上）：
   1、属性私有化；
@@ -1716,20 +1526,12 @@ class SubClass extends SuperClass
 ```
 
 1、子类继承父类以后，就拥有了父类的所有属性和方法（但能不能访问就不一定了）。
-
 2、子类不会继承父类的构造器。
-
 3、子类继承父类一定要满足“is a”的关系，即子类是一个父类。
-
 4、父类中private的属性和方法不能被子类直接访问，但是可以有get/set方法使用。
-
 5、父类的概念是相对的，父类分为直接父类和间接父类。
-
 6、Java中所有的类都继承Object类。如果一个类没有显示地继承某个类，那么这个类会默认继承Object类。
-
 7、Java中只有单继承，一个类只能继承一个父类。
-
- 
 
 继承的好处：1、减少了代码的冗余，提高了代码的复用性；2、提高了代码的扩展性；3、为多态提供了前提条件。
 
@@ -1745,23 +1547,14 @@ class SubClass extends SuperClass
 ## 9.3. 多态性
 
 多态性：一类事物的多种形态。
-
 多态性的理解（广义上）：方法的重载、重写；子类对象的多态性。
-
 多态性的理解（狭义上）：子类对象的多态性。
-
 子类对象的多态性：父类的引用指向子类的对象。（参考游戏开发大作业:NPC对象容器）
-
 虚拟方法的调用（动态绑定）：编译看父类，运行看子类。
-
 多态性的前提：继承与方法重写。
 
-
-
 - 在多态的情况下，如何调用子类中的独有的方法？
-
 答：向下转型。
-
 ```java
 Person p = new Women();
 Women w = (Women)p;
@@ -1770,9 +1563,7 @@ w.buy();
 ```
 
 - 如何防止类型转换异常？
-
 答：instanceof。
-
 ```java
 Person p = new Women();
 if(p instanceof Women) {
@@ -1780,8 +1571,6 @@ Women w = (Women)p;
 w.buy();
 }
 ```
-
-
 
 **注意：属性没有多态性！**因为属性不存在重写
 
@@ -1815,13 +1604,10 @@ public class Main {
     }
 }
 ```
-
 结果：
-
 ![image-20200403134740251](/images/image-20200403134740251.png) 
 
 看看上述代码在C++中的运行情况：
-
 ```C++
 #include <iostream>
 class Person 
@@ -1856,16 +1642,12 @@ int main()
     m->show();
 }
 ```
-
 结果： 
-
 ![image-20200403134815844](/images/image-20200403134815844.png) 
 
 把Person中的方法改成虚方法： ![image-20200403134831337](/images/image-20200403134831337.png)
 结果：
-
 ![image-20200403134824416](/images/image-20200403134824416.png) 
-
 
 
 ## 9.4. 面向对象的第四大特征：抽象性
@@ -1882,7 +1664,6 @@ abstract修饰的类：抽象类
   5、抽象类的子类可以还是抽象类，只实现了部分方法或完全没有实现。
 
 abstract不能修饰属性、私有方法、静态方法、代码块、构造器、final方法和final类。
-
 abstract不能和final、private、static一起使用。
 
 ### 9.4.1. 模板方法(TemplateMethod)设计模式
@@ -3444,11 +3225,52 @@ if (e != null) { // existing mapping for key
 }
 ```
 
-## 18.3. Map 集合
+### 18.2.1. HashSet
+
+![HashMap的UML图](/images/1.png) 
+
+HashSet内部基本使用HashMap来实现。HashMap的key为要存储的元素，value为一个固定的 Object 常量。
+```java
+public class HashSet<E>
+    extends AbstractSet<E>
+    implements Set<E>, Cloneable, java.io.Serializable
+{
+    static final long serialVersionUID = -5024744406713321676L;
+    private transient HashMap<E,Object> map;
+    private static final Object PRESENT = new Object();
+}
+```
+
+构造器
+```java
+public HashSet() {
+    map = new HashMap<>();
+}
+// 构造一个包含指定Collection中的元素的新set，容器大小为Collection大小的4/3倍，和16的最大值
+public HashSet(Collection<? extends E> c) {
+    map = new HashMap<>(Math.max((int) (c.size()/.75f) + 1, 16));
+    addAll(c);
+}
+// 传入初始容量和负载因子，构造一个空的HashSetLinkedHashMap
+public HashSet(int initialCapacity, float loadFactor) {
+    map = new HashMap<>(initialCapacity, loadFactor);
+}
+// 传入初始容量，构造一个空的HashSetLinkedHashMap
+public HashSet(int initialCapacity) {
+    map = new HashMap<>(initialCapacity);
+}
+// 传入初始容量、加载因子和标记，构造一个空的LinkedHashMap，此构造函数为包访问权限，不对外公开，实际只是是对LinkedHashSet的支持。
+HashSet(int initialCapacity, float loadFactor, boolean dummy) {
+    map = new LinkedHashMap<>(initialCapacity, loadFactor);
+}
+```
+
+## 18.3. Map
 
 ![](/images/HashMapHashTableTreeMap.png)
+![](/images/Map.png)
 
-HashMap、ConcurrentHashMap、Hashtable、LinkedHashMap、TreeMap。
+HashMap、Hashtable、LinkedHashMap、TreeMap、ConcurrentHashMap。
 
 - HashMap 数组(哈希表)+链表+红黑树
   HashMap是最常用的Map，它根据键的HashCode值存储数据，根据键可以直接获取它的值，具有很快的访问速度 o(1)。遍历时，取得数据的**顺序是完全随机**的。因为键对象不可以重复，所以HashMap最多**只允许一条记录的键为null**，允许多条记录的值为null，是**非同步的**。
@@ -3480,6 +3302,1096 @@ public class Hashtable<K,V>
     extends Dictionary<K,V>
     implements Map<K,V>, Cloneable, java.io.Serializable {}
 ```
+
+### 18.3.1. HashMap（面试的重点）
+
+> 参考文献
+> [一个HashMap跟面试官扯了半个小时](https://zhuanlan.zhihu.com/p/125628540)
+> [Java 8系列之重新认识HashMap](https://zhuanlan.zhihu.com/p/21673805)
+> [用漫画告诉你—什么是HashMap？](https://zhuanlan.zhihu.com/p/78079598)
+
+> 前置要求：
+> 1. [数据结构与算法 1.5. 散列表](/04_计算机基础理论/01_数据结构与算法.md#15-散列表)
+> 2. [两数之和（一次遍历+HashMap）](/04_计算机基础理论/01_数据结构与算法.md#34-两数之和一次遍历hashmaphttpsleetcode-cncomproblemstwo-sum)
+
+
+HashMap 是一个散列表，存储着键值对映射。
+> 以下源码均出自 JDK1.8
+
+```java
+public class HashMap<K,V> 
+    extends AbstractMap<K,V> 
+    implements Map<K,V>, Cloneable, Serializable 
+```
+Map 是 key-value 键值对接口
+AbstractMap 实现了键值对的通用函数接口
+它是线程不安全的，key 和 value 都可以为 null，并且它是无序的。
+
+
+#### 18.3.1.1. 重要属性和常量
+属性：
+- loadFactor 负载因子
+- threshold  扩容极限
+- size       键值对数量
+- modCount   修改次数
+- table      散列数组
+```java
+/**
+ * The next size value at which to resize (capacity * load factor).
+ * 超过 threshold 则需要进行扩容
+ * threshold = length(数组长度) * loadFactor
+ */
+// (The javadoc description is true upon serialization.
+// Additionally, if the table array has not been allocated, this
+// field holds the initial array capacity, or zero signifying
+// DEFAULT_INITIAL_CAPACITY.)
+int threshold;
+
+/**
+ * The load factor for the hash table.
+ * 负载因子
+ * 被 final 所修饰，只能赋值一次（构造器）
+ */
+final float loadFactor;
+
+/**
+ * The number of key-value mappings contained in this map.
+ */
+transient int size;
+
+/**
+ * 修改次数
+ * 快速失效 fail-fast
+ * 与 ConcurrentModificationException 有关
+ */
+transient int modCount;
+
+/**
+ * The table, initialized on first use, and resized as
+ * necessary. When allocated, length is always apower of two.
+ * (We also tolerate length zero in some operations to allow
+ * bootstrapping mechanics that are currently not needed.)
+ */
+transient Node<K,V>[] table;
+```
+负载因子默认值是 0.75（是对空间和时间效率的一个平衡选择）
+如果内存空间很多而又对时间效率要求很高，可以降低负载因子Load factor的值；
+相反，如果内存空间紧张而对时间效率要求不高，可以增加负载因子loadFactor的值，这个值可以大于1。
+
+常量：
+- DEFAULT_INITIAL_CAPACITY 默认初始容量 16
+- DEFAULT_LOAD_FACTOR      默认负载因子 0.75f
+- MAXIMUM_CAPACITY         最大容量
+```java
+/**
+ * The default initial capacity - MUST be a power of two.
+ * 默认初始容量
+ */
+static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
+
+/**
+ * The load factor used when none specified in constructor.
+ * 默认负载因子
+ */
+static final float DEFAULT_LOAD_FACTOR = 0.75f;
+/**
+ * The maximum capacity, used if a higher value is implicitly specified
+ * by either of the constructors with arguments.
+ * MUST be a power of two <= 1<<30.
+ *
+ * int 所能表示的最大的二次幂
+ * 1073741824
+ * 0100 0000 0000 0000 0000 0000 0000 0000
+ */
+static final int MAXIMUM_CAPACITY = 1 << 30;
+```
+
+#### 18.3.1.2. 构造器 (4个)
+**两个参数：初始容量和加载因子。**
+容量是HashMap中桶的数量；加载因子是HashMap在其容量自动增加之前可以达到多满的一种尺度。当键值对的数量超过加载因子与当前容量之积（即使用了百分之多少的桶），就要对HashMap进行 rehash 操作（重建内部数据结构），重建之后HashMap将具有之前两倍的桶数目。
+
+**【HashMap怎么设定初始容量大小】**
+默认初始容量大小是16，负载因子是 0.75。
+如果传入初始容量 n，则初始容量设定为 大于等于 n 的 2的整数次幂。
+
+```java
+// 指定“容量大小”和“加载因子”的构造函数
+/**
+ * 使用指定的初始容量和负载因子构造一个空的HashMap.
+ * @param  initialCapacity 初始容量.
+ * @param  loadFactor 负载因子.
+ * @throws IllegalArgumentException 如果初始容量为负，或负载因子为非正.
+ */
+public HashMap(int initialCapacity, float loadFactor) {
+    if (initialCapacity < 0)
+        throw new IllegalArgumentException("Illegal initial capacity: " + initialCapacity);
+    if (initialCapacity > MAXIMUM_CAPACITY)
+        initialCapacity = MAXIMUM_CAPACITY;
+    if (loadFactor <= 0 || Float.isNaN(loadFactor))
+        throw new IllegalArgumentException("Illegal load factor: " + loadFactor);
+    this.loadFactor = loadFactor;
+    this.threshold = tableSizeFor(initialCapacity);
+}
+
+// 指定“容量大小”的构造函数
+/**
+ * 使用指定的初始容量和默认的负载因子(0.75)构造一个空的HashMap.
+ * @param initialCapacity 初始容量.
+ * @throws IllegalArgumentException 如果初始容量是负的.
+ */
+public HashMap(int initialCapacity) {
+    this(initialCapacity, DEFAULT_LOAD_FACTOR);
+}
+
+// 默认空参构造函数.
+/**
+ * 使用默认初始容量(16)和默认负载因子(0.75)构造一个空的Hashmap.
+ */
+public HashMap() {
+    // 负载因子 = 0.75f
+    this.loadFactor = DEFAULT_LOAD_FACTOR;
+    // 所有其他字段默认
+    // threshold 的值不给力嘛？？？
+}
+
+// 包含“子Map”的构造函数
+/**
+ * 使用与指定映射相同的映射构造新的HashMap。HashMap是使用默认的负载因子(0.75)和足够容纳指定映射的初始容量创建的.
+ * @param   m the map whose mappings are to be placed in this map
+ * @throws  NullPointerException 如果指定的映射为空.
+ */
+public HashMap(Map<? extends K, ? extends V> m) {
+    this.loadFactor = DEFAULT_LOAD_FACTOR;
+    putMapEntries(m, false);
+}
+```
+
+**最接近的二次幂**
+```java
+/**
+ * Returns a power of two size for the given target capacity.
+ * 返回大于或等于 cap 的最小二次幂
+ */
+static final int tableSizeFor(int cap) {
+    int n = cap - 1;
+    n |= n >>> 1;
+    n |= n >>> 2;
+    n |= n >>> 4;
+    n |= n >>> 8;
+    n |= n >>> 16;
+    return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+}
+```
+解释：
+|||
+|-|-|
+|`cap = 50`    | 0011 0010     |
+|`n = cap - 1` | 00==1==1 0001 |
+|`n >>> 1`     | 000==1== 1000 |
+|`n |= n >>> 1`| 00==11== 1001 |
+|`n >>> 2`     | 0000 ==11==10 |
+|`n |= n >>> 2`| 00==11 11==11 |
+|||
+|`n + 1`| 0==1==00 0000 |
+|`return`| 0==1==00 0000 |
+
+|||
+|-|-|
+|`cap = MAXIMUM_CAPACITY + 1`| 01000000000000000000000000000001 |
+|`n = cap - 1`               | 01000000000000000000000000000000 |
+|`n >>> 1`                   | 00100000000000000000000000000000 |
+|`n |= n >>> 1`              | 01100000000000000000000000000000 |
+|`n >>> 2`                   | 00011000000000000000000000000000 |
+|`n |= n >>> 2`              | 01111000000000000000000000000000 |
+|`n >>> 4`                   | 00000111100000000000000000000000 |
+|`n |= n >>> 4`              | 01111111100000000000000000000000 |
+|`n >>> 8`                   | 00000000011111111000000000000000 |
+|`n |= n >>> 8`              | 01111111111111111000000000000000 |
+|`n >>> 16`                  | 00000000000000000111111111111111 |
+|`n |= n >>> 16`             | 01111111111111111111111111111111 |
+|`n + 1`                     | 10000000000000000000000000000000 |
+|`return`                    | 01000000000000000000000000000000 |
+
+```java
+System.out.println(MAXIMUM_CAPACITY);   // 1073741824
+
+System.out.println(tableSizeFor(-10));  // 1
+System.out.println(tableSizeFor(0));    // 1
+System.out.println(tableSizeFor(100));  // 128
+System.out.println(tableSizeFor(1023)); // 1024
+System.out.println(tableSizeFor(1025)); // 2048
+System.out.println(tableSizeFor(4096)); // 4096
+```
+【笔试题】
+> [快手2020校园招聘秋招笔试--工程C试卷 第2题](https://www.nowcoder.com/profile/208088206/test/37559227/907607#summary)
+> ![](/images/tableSizeFor.png)
+> 注意 return 少个 +1
+
+`>>` 右移：规则是低位移出，高位补符号位。
+`>>>` 无符号右移：高位始终补0。
+
+#### 18.3.1.3. 哈希函数
+设计要点
+- 扰动函数：尽可能降低hash碰撞，越分散越好；
+- 算法一定要尽可能高效，因为这是高频操作, 因此采用位运算；
+
+1. 取 key 的 hashcode()（如果 null -> 0）
+2. 将 hash 值的高 16 位与 hash 进行异或操作
+3. hash 对数组长度取余，得到应该存放的下标
+
+```java
+static final int hash(Object key) {
+    int h;
+    return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+}
+// 详细写
+// static final int hash(Object key) {
+//     if (key == null) {
+//         return 0;
+//     }
+//     int h = key.hashCode();
+//     int tem = h >>> 16;
+//     return h ^ tem;
+// }
+```
+```java
+// jdk 1.7 中有该函数
+// jdk 1.8 被删除了
+bucketIndex = indexFor(hash, table.length);
+static int indexFor(int h, int length) {
+     return h & (length-1);
+     // h % length  ==  h & (length-1)
+}
+// jdk 1.8 的操作
+tab[i = (n - 1) & hash])
+```
+
+**【HashMap 为啥桶大小（数组长度）必须为 $2^n$】**
+**将取余运算转化为位运算。**
+1. 提升计算效率，更快算出元素的位置
+  取余操作转化为异或操作（`x % length == x & (length-1)`，$length = 2^n$）
+2. <s>减少哈希碰撞，使得元素分布均匀
+  2的n次幂永远是偶数，length-1最后一位是 1。进行 & 操作后，会保留原数 x 的最后一位，即保留 x 的奇偶性。
+  如果 length 为奇数的话，length-1最后一位是 0。& 操作后，无论奇数偶数都会映射到偶数位置上，而奇数位置上没有元素。</s>
+（我觉得第二点是瞎扯，不过 使得元素分布均匀 还是有些道理）
+3. 扩容后，rehash操作，节点位置要么保持不变，要么向后移动原来数组大小。
+
+#### 18.3.1.4. 数据结构
+jdk 1.8 ：内部使用数组 + 链表/红黑树
+![img](https://pic3.zhimg.com/80/v2-4ce38fd1c36fc61e70d7687fae997e5a_720w.jpg) 
+当链表长度大于 8 时，转为红黑树；当红黑树节点小于 6 时，转为链表。
+
+```java
+static class Node<K,V> implements Map.Entry<K,V> {
+    final int hash;
+    final K key;
+    V value;
+    Node<K,V> next;
+
+    Node(int hash, K key, V value, Node<K,V> next) {
+        this.hash = hash;
+        this.key = key;
+        this.value = value;
+        this.next = next;
+    }
+
+    public final K getKey()        { return key; }
+    public final V getValue()      { return value; }
+    public final String toString() { return key + "=" + value; }
+
+    public final int hashCode() {
+        return Objects.hashCode(key) ^ Objects.hashCode(value);
+    }
+
+    public final V setValue(V newValue) {
+        V oldValue = value;
+        value = newValue;
+        return oldValue;
+    }
+
+    public final boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (o instanceof Map.Entry) {
+            Map.Entry<?,?> e = (Map.Entry<?,?>)o;
+            if (Objects.equals(key, e.getKey()) &&
+                Objects.equals(value, e.getValue()))
+                return true;
+        }
+        return false;
+    }
+}
+```
+关键信息：
+```java
+final int hash; // 经 hash(key) 计算后的值
+final K key;
+V value;
+Node<K,V> next; // 链表 next 指针
+```
+
+#### 18.3.1.5. public V put(K key, V value) 插入/更新
+**HashMap的数据插入原理**
+1. 判断数组是否为空。
+   1. 为空，则初始化数组（resize 扩容）
+   2. 不为空，继续。
+2. 计算 key 的 hash 值，通过`(n - 1) & hash`计算应当存放在数组中的下标 index
+3. 判断该位置是否存在数据
+   1. 不存在，则放置要插入的数据。
+   2. 存在，继续
+4. 判断 key 值是否相等
+   1. 相等，更新 value。
+   2. 不相等，继续 
+5. 查看当前位置是红黑树还是链表
+   1. 是红黑树，则放入红黑树节点
+   2. 是链表，则加入链表中
+6. 链表则要判断是否要转为红黑树。
+7. 红黑树则要判断是否需要扩容。
+<!-- ![](https://pic4.zhimg.com/80/v2-ff5fe3aac820fafb4cf34b2a801877cf_720w.jpg) -->
+![](https://pic3.zhimg.com/80/58e67eae921e4b431782c07444af824e_720w.png)
+
+**为什么 JDK 1.7 采用单链表的头插法？**
+根据局部性原理，最近插入的数据被访问可能性更大。（和操作系统中页面调度的 LRU 算法异曲同工之妙）
+**头插法的坏处**：在扩容时会改变链表中元素原本的顺序，会使链表发生反转，多线程环境下会产生**环**。
+
+#### 18.3.1.6. final Node<K,V>[] resize() 扩容
+
+1. 新建一个原来两倍大小的数组
+2. 遍历旧数组
+3. 重新计算每个元素的下标
+4. 将每个元素转移到新数组中
+5. 用新数组替换旧数组
+6. 重设 threshold
+
+因为 HashMap 的数组长度必须为 $2^n$。所有，扩容时rehash操作，节点位置要么保持不变，要么向后移动原来数组大小。
+
+oldIndex = (oldLength - 1) & hash
+newIndex = (newLength - 1) & hash
+||||||
+|-|-|-|-|-|
+|hash            | 0000 0101 ||hash            | 000==0== 0101 |
+|oldLength-1 (15)| 0000 1111 ||newLength-1 (31)| 000==1== 1111 |
+|oldIndex        | 0000 0101 ||newIndex        | 000==0== 0101 (不变)|
+||||||
+|hash            | 0001 1101 ||hash            | 000==1== 0101 |
+|oldLength-1 (15)| 0000 1111 ||newLength-1 (31)| 000==1== 1111 |
+|oldIndex        | 0000 0101 ||newIndex        | 000==1== 0101 (加16)|
+
+#### 18.3.1.7. public V get(Object key) 查询
+
+1. 通过 hash() 计算 key 的 hash 值，再计算下标
+2. 在给定下标处查找链表或红黑树
+3. 调用 key.equals(k) 查找元素
+
+```java
+class Person {
+
+}
+class Student {
+    private int age;
+
+    public Student(int age) {
+        this.age = age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return age == student.age;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(age);
+    }
+}
+
+public class HashMapGet {
+    public static void main(String[] args) {
+        Map<Person, String> personHashMap = new HashMap<Person, String>();
+        personHashMap.put(new Person(), "person");
+        
+        System.out.println(personHashMap.get(new Person())); // null
+
+        Person p = new Person();
+        personHashMap.put(p, "person");
+        System.out.println(personHashMap.get(p)); // person
+
+
+        System.out.println("--------------");
+        HashMap<Student, String> studentStringHashMap = new HashMap<>();
+        Student s = new Student(18);
+        studentStringHashMap.put(s, "student");
+
+        System.out.println(studentStringHashMap.get(s)); // student
+        System.out.println(studentStringHashMap.get(new Student(18))); // student
+
+        s.setAge(20);
+        System.out.println(studentStringHashMap.get(s)); // null
+
+        System.out.println(studentStringHashMap.get(new Student(18))); // null
+        System.out.println(studentStringHashMap.get(new Student(20))); // null
+
+
+        System.out.println("--------------");
+        HashMap<Integer, String> integerStringHashMap = new HashMap<>();
+        integerStringHashMap.put(new Integer(1), "1");
+        System.out.println(integerStringHashMap.get(new Integer(1)));
+    }
+}
+```
+
+**什么样的数据类型可以作为 Key?**
+1. 重写 hashcode 和 equals 方法，且遵循以下原则：equals 相等 -> hashcode 一定相等。
+2. 该类的对象具有不可变性。或者成员变量的改变不会引起 hashcode 的改变，以及 equals 的结果。
+
+#### 18.3.1.8. 面试题
+
+**jdk 1.8 后的改进**
+1. 数组+链表 改进为 数组+链表或红黑树
+2. 链表插入方式 头插法 改进为 尾插法
+3. 插入数据时，1.7 先判断是否要扩容，再插入；1.8 先插入，再判断
+4. 1.7 扩容时需要对原数组的元素重新进行 哈希定位；1.8 则要么位置不变，要么向后移动一个旧容量大小。
+
+好处？
+1. 使用红黑树：防止发生hash冲突，链表长度过长，将时间复杂度由`O(n)`降为`O(logn)`
+2. 头插法,在扩容时会改变链表中元素原本的顺序，会使链表发生反转，多线程环境下会产生环；而尾插法不会成环
+
+**HashMap是线程安全的吗？**
+不是，在多线程环境下，1.7 会产生死循环、数据丢失、数据覆盖的问题，1.8 中会有数据覆盖的问题。
+线程安全的：HashTable、ConcurrentHashMap、Collections.synchronizedMap
+- HashTable是直接在操作方法上加synchronized关键字，锁住整个数组，锁粒度比较大。
+- Collections.synchronizedMap是使用Collections集合工具的内部类，通过传入Map封装出一个SynchronizedMap对象，内部定义了一个对象锁，方法通过对象锁实现线程安全。
+- ConcurrentHashMap使用分段锁，降低了锁粒度，让并发度大大提高。
+
+**HashMap内部节点是有序的吗？**
+是无序的，根据hash值随机插入
+LinkedHashMap 是有序的，内部使用一个链表，有头尾节点。
+同时LinkedHashMap节点Entry内部除了继承HashMap的Node属性，还有before 和 after用于标识前置节点和后置节点。可以实现按插入的顺序或访问顺序排序。
+
+
+### 18.3.2. ConcurrentHashMap（jdk 1.7 源码）
+
+```java
+//默认的数组大小16(HashMap里的那个数组)
+static final int DEFAULT_INITIAL_CAPACITY = 16;
+
+//扩容因子0.75
+static final float DEFAULT_LOAD_FACTOR = 0.75f;
+
+//ConcurrentHashMap中的数组
+final Segment<K,V>[] segments;
+
+//默认并发标准16
+static final int DEFAULT_CONCURRENCY_LEVEL = 16;
+
+//Segment是ReentrantLock子类，因此拥有锁的操作
+static final class Segment<K,V> extends ReentrantLock implements Serializable {
+    //HashMap的那一套，分别是数组、键值对数量、阈值、负载因子
+    transient volatile HashEntry<K,V>[] table;
+    transient int count;
+    transient int threshold;
+    final float loadFactor;
+
+    Segment(float lf, int threshold, HashEntry<K,V>[] tab) {
+        this.loadFactor = lf;
+        this.threshold = threshold;
+        this.table = tab;
+    }
+}
+
+//换了马甲还是认识你！！！HashEntry对象，存key、value、hash值以及下一个节点
+static final class HashEntry<K,V> {
+    final int hash;
+    final K key;
+    volatile V value;
+    volatile HashEntry<K,V> next;
+}
+//segment中HashEntry[]数组最小长度
+static final int MIN_SEGMENT_TABLE_CAPACITY = 2;
+
+//用于定位在segments数组中的位置，下面介绍
+final int segmentMask;
+final int segmentShift;
+```
+
+**构造器：**
+```java
+public ConcurrentHashMap() {
+    this(
+        DEFAULT_INITIAL_CAPACITY, 
+        DEFAULT_LOAD_FACTOR, 	
+        DEFAULT_CONCURRENCY_LEVEL
+    );
+}
+
+public ConcurrentHashMap(
+    int initialCapacity,
+    float loadFactor, 
+    int concurrencyLevel
+) {
+    if (!(loadFactor > 0) || initialCapacity < 0 || concurrencyLevel <= 0)
+        throw new IllegalArgumentException();
+    if (concurrencyLevel > MAX_SEGMENTS)
+        concurrencyLevel = MAX_SEGMENTS;
+    // Find power-of-two sizes best matching arguments
+    //步骤① start
+    int sshift = 0;
+    int ssize = 1;
+    while (ssize < concurrencyLevel) {
+        ++sshift;
+        ssize <<= 1;
+    }
+    this.segmentShift = 32 - sshift;
+    this.segmentMask = ssize - 1;
+    //步骤① end
+    //步骤② start
+    if (initialCapacity > MAXIMUM_CAPACITY)
+        initialCapacity = MAXIMUM_CAPACITY;
+    int c = initialCapacity / ssize;
+    if (c * ssize < initialCapacity)
+        ++c;
+    int cap = MIN_SEGMENT_TABLE_CAPACITY;
+    while (cap < c)
+        cap <<= 1;
+    //步骤② end
+    // create segments and segments[0]
+    //步骤③ start
+    Segment<K,V> s0 =
+        new Segment<K,V>(loadFactor, (int)(cap * loadFactor),
+                         (HashEntry<K,V>[])new HashEntry[cap]);
+    Segment<K,V>[] ss = (Segment<K,V>[])new Segment[ssize];
+    UNSAFE.putOrderedObject(ss, SBASE, s0); // ordered write of segments[0]
+    this.segments = ss;
+    //步骤③ end
+}
+// 作者：HuYounger
+// 链接：https://juejin.im/post/5a2f2f7851882554b837823a
+```
+
+ **put 方法：**
+```java
+public V put(K key, V value) {
+    Segment<K,V> s;
+    //步骤①注意valus不能为空！！！
+    if (value == null)
+        throw new NullPointerException();
+    //根据key计算hash值，key也不能为null，否则hash(key)报空指针
+    int hash = hash(key);
+    //步骤②派上用场了，根据hash值计算在segments数组中的位置
+    int j = (hash >>> segmentShift) & segmentMask;
+    //步骤③查看当前数组中指定位置Segment是否为空
+    //若为空，先创建初始化Segment再put值，不为空，直接put值。
+    if ((s = (Segment<K,V>)UNSAFE.getObject // nonvolatile; recheck
+         (segments, (j << SSHIFT) + SBASE)) == null) //  in ensureSegment
+        s = ensureSegment(j);
+    return s.put(key, hash, value, false);
+}
+
+// 作者：HuYounger
+// 链接：https://juejin.im/post/5a2f2f7851882554b837823a
+```
+
+**ensureSegment() 方法：**
+```java
+private Segment<K,V> ensureSegment(int k) {
+    //获取segments
+    final Segment<K,V>[] ss = this.segments;
+    long u = (k << SSHIFT) + SBASE; // raw offset
+    Segment<K,V> seg;
+    if ((seg = (Segment<K,V>)UNSAFE.getObjectVolatile(ss, u)) == null) {
+        //拷贝一份和segment 0一样的segment
+        Segment<K,V> proto = ss[0]; // use segment 0 as prototype
+        //大小和segment 0一致，为2
+        int cap = proto.table.length;
+        //负载因子和segment 0一致，为0.75
+        float lf = proto.loadFactor;
+        //阈值和segment 0一致，为1
+        int threshold = (int)(cap * lf);
+        //根据大小创建HashEntry数组tab
+        HashEntry<K,V>[] tab = (HashEntry<K,V>[])new HashEntry[cap];
+        //再次检查
+        if ((seg = (Segment<K,V>)UNSAFE.getObjectVolatile(ss, u))
+            == null) { // recheck
+            根据已有属性创建指定位置的Segment
+                Segment<K,V> s = new Segment<K,V>(lf, threshold, tab);
+            while ((seg = (Segment<K,V>)UNSAFE.getObjectVolatile(ss, u))
+                   == null) {
+                if (UNSAFE.compareAndSwapObject(ss, u, null, seg = s))
+                    break;
+            }
+        }
+    }
+    return seg;
+}
+```
+
+**jdk 7 ConcurrentHashMap put 流程**
+![img](https://user-gold-cdn.xitu.io/2017/12/12/1604851702c89293?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+
+### 18.3.3. TreeMap
+
+#### 18.3.3.1. 红黑树
+**红黑树：**
+0. 满足二叉查找树
+1. 节点是红色或者黑色
+2. 根节点是黑色
+3. 每个叶子节点都是黑色的空节点（NIL 节点）
+4. 每个红色节点的两个子节点都是黑色（从每个叶子到根的路径不能有两个连续的红色节点）
+5. 从任何一个节点到其每个叶子节点的所用路径包含相同数目的黑色节点
+
+![image-20200403175646744](/images/image-20200403175646744.png)
+
+这些规则的限定，保证了红黑树的自平衡。红黑树从根节点到叶子的最长路径不会超过最短路径的 2 倍。
+
+**调整** https://juejin.im/post/5a27c6946fb9a04509096248
+1. 变色
+2. 旋转
+   - 左旋转
+   - 右旋转
+
+#### 18.3.3.2. TreeMap 源码
+
+![img](/images/TreeMap.png)
+
+- TreeMap实现了NavigableMap接口，而NavigableMap接口继承着SortedMap接口，致使我们的**TreeMap是有序的**
+- TreeMap底层是红黑树，它方法的时间复杂度：log(n)
+- **非同步**
+- 使用Comparator或者Comparable来比较key是否相等与排序的问题
+
+- TreeMap底层是红黑树，集合有序线程不安全。
+- 若比较器为空则key一定不能为null，若比较器不为空则key可以为null由TreeMap其比较器而定
+- containsValue方法采用中序遍历(LDR左根右)方式遍历整个TreeMap
+
+**TreeMap 重要字段**
+```java
+// 比较器用于排序，若为null使用自然排序维持key顺序 
+private final Comparator comparator; 
+
+// 根节点
+// java 的transient关键字为我们提供了便利，你只需要实现Serilizable接口，将不需要序列化的属性前添加关键字transient，序列化对象的时候，这个属性就不会序列化到指定的目的地中。
+private transient Entry root;
+
+// 节点数
+private transient int size = 0;
+
+// 修改次数，fail-fast
+private transient int modCount = 0;
+
+//节点颜色
+private static final boolean RED   = false;
+private static final boolean BLACK = true;
+
+/**
+ * 节点
+ */
+static final class Entry implements Map.Entry {
+    K key;                    //键
+    V value;                  //值    
+    Entry left;               //左子树
+    Entry right;              //右子树
+    Entry parent;             //父亲
+    boolean color = BLACK;    //颜色
+
+    Entry(K key, V value, Entry parent) {...}
+
+    public K getKey() {...}
+
+    public V getValue() {...}
+
+    public V setValue(V value) {...}
+
+    public boolean equals(Object o) {...}
+
+    public int hashCode() {...}
+
+    public String toString() {...}
+}
+
+```
+
+**构造器**
+```java
+/**
+ * 无参构造，自然排序(从小到大)。要求key实现Comparable接口，会调用key重写的compareTo方法进行比较
+ * 若key没有实现comparable接口，运行时报错(java.lang.ClassCastException)
+ */
+public TreeMap() {
+    comparator = null;
+}
+
+/**
+ * 指定比较器，若不为null会调用其compare方法进行比较，无需键实现comparable接口
+ */
+public TreeMap(Comparator comparator) {
+    this.comparator = comparator;
+}
+
+/**
+ * 将map转为treeMap，比较器为null，注意key
+ */
+public TreeMap(Map m) {
+    comparator = null;
+    putAll(m);
+}
+
+/**
+ * 将map转为treeMap，比较器为SortMap中的comparator
+ */
+public TreeMap(SortedMap m) {
+    comparator = m.comparator();
+    try {
+        buildFromSorted(m.size(), m.entrySet().iterator(), null, null);
+    } catch (java.io.IOException cannotHappen) {
+        
+    } catch (ClassNotFoundException cannotHappen) {
+        
+    }
+}
+```
+
+**put方法**
+```java
+public V put(K key, V value) {
+    // 根节点
+    Entry<K,V> t = root;
+    // 1、空树, 则直接插入
+    if (t == null) {
+        //若比较器为null则key必须实现Comparable接口，若不为null，key可为null
+        compare(key, key); // type (and possibly null) check
+		
+        // 插入节点
+        root = new Entry<>(key, value, null);
+        size = 1;
+        modCount++;
+        return null;
+    }
+    
+    // 2、非空树
+    // 记录key排序比较结果
+    int cmp;
+    // 记录父节点
+    Entry<K,V> parent;
+    // split comparator and comparable paths
+    Comparator<? super K> cpr = comparator;
+    // 2.1、若存在比较器，查找节点待插入的位置
+    // cmp 小于0往左找，大于0往右找，直至等于0进行替换
+    if (cpr != null) {
+        do {
+            parent = t;
+            cmp = cpr.compare(key, t.key);
+            if (cmp < 0)
+                t = t.left;
+            else if (cmp > 0)
+                t = t.right;
+            else
+                return t.setValue(value);
+        } while (t != null);
+    }
+    // 2.2、不存在比较器
+    // key必须实现Comparable接口
+    else {
+        if (key == null)
+            throw new NullPointerException();
+        // 使用 key 的比较器查找插入位置
+        @SuppressWarnings("unchecked")
+        Comparable<? super K> k = (Comparable<? super K>) key;
+        do {
+            parent = t;
+            cmp = k.compareTo(t.key);
+            if (cmp < 0)
+                t = t.left;
+            else if (cmp > 0)
+                t = t.right;
+            else
+                return t.setValue(value);
+        } while (t != null);
+    }
+    
+    Entry<K,V> e = new Entry<>(key, value, parent);
+    // 插入节点
+    if (cmp < 0)
+        parent.left = e;
+    else
+        parent.right = e;
+    // 修正红黑树
+    fixAfterInsertion(e);
+    size++;
+    modCount++;
+    return null;
+}
+
+final int compare(Object k1, Object k2) {
+    return comparator==null ? ((Comparable<? super K>)k1).compareTo((K)k2)
+        : comparator.compare((K)k1, (K)k2);
+}
+// 修正红黑树
+private void fixAfterInsertion(Entry<K,V> x) {
+    x.color = RED;
+
+    while (x != null && x != root && x.parent.color == RED) {
+        if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
+            Entry<K,V> y = rightOf(parentOf(parentOf(x)));
+            if (colorOf(y) == RED) {
+                setColor(parentOf(x), BLACK);
+                setColor(y, BLACK);
+                setColor(parentOf(parentOf(x)), RED);
+                x = parentOf(parentOf(x));
+            } else {
+                if (x == rightOf(parentOf(x))) {
+                    x = parentOf(x);
+                    rotateLeft(x);
+                }
+                setColor(parentOf(x), BLACK);
+                setColor(parentOf(parentOf(x)), RED);
+                rotateRight(parentOf(parentOf(x)));
+            }
+        } else {
+            Entry<K,V> y = leftOf(parentOf(parentOf(x)));
+            if (colorOf(y) == RED) {
+                setColor(parentOf(x), BLACK);
+                setColor(y, BLACK);
+                setColor(parentOf(parentOf(x)), RED);
+                x = parentOf(parentOf(x));
+            } else {
+                if (x == leftOf(parentOf(x))) {
+                    x = parentOf(x);
+                    rotateRight(x);
+                }
+                setColor(parentOf(x), BLACK);
+                setColor(parentOf(parentOf(x)), RED);
+                rotateLeft(parentOf(parentOf(x)));
+            }
+        }
+    }
+    root.color = BLACK;
+}
+```
+
+**get方法**
+```java
+public V get(Object key) {
+    Entry<K,V> p = getEntry(key);
+    return (p==null ? null : p.value);
+}
+
+final Entry<K,V> getEntry(Object key) {
+    // Offload comparator-based version for sake of performance
+    // 1、比较器存在情况
+    if (comparator != null)
+        return getEntryUsingComparator(key);
+    // 2、比较器不存在
+    // 要求 key 实现 Comparable接口，null不能抛异常 
+    if (key == null)
+        throw new NullPointerException();
+    // 取出 key 的比较器
+    @SuppressWarnings("unchecked")
+    Comparable<? super K> k = (Comparable<? super K>) key;
+    // 从根节点开始 依次寻找
+    Entry<K,V> p = root;
+    while (p != null) {
+        int cmp = k.compareTo(p.key);
+        if (cmp < 0)
+            p = p.left;
+        else if (cmp > 0)
+            p = p.right;
+        else
+            return p;
+    }
+    return null;
+}
+
+// 比较器查找
+// 和使用 key 的比较器查找一样
+final Entry<K,V> getEntryUsingComparator(Object key) {
+    @SuppressWarnings("unchecked")
+    K k = (K) key;
+    Comparator<? super K> cpr = comparator;
+    if (cpr != null) {
+        Entry<K,V> p = root;
+        while (p != null) {
+            int cmp = cpr.compare(k, p.key);
+            if (cmp < 0)
+                p = p.left;
+            else if (cmp > 0)
+                p = p.right;
+            else
+                return p;
+        }
+    }
+    return null;
+}
+```
+
+**containsValue方法**
+https://juejin.im/post/5acc277551882548fe4a7180
+
+采用中序遍历(LDR左根右)方式来遍历整个红黑树找到相应value
+二叉排序树的中序遍历是严格的单调遍历。
+```java
+public boolean containsValue(Object value) {
+    // 中序遍历 所有 Entry
+    for (Entry<K,V> e = getFirstEntry(); e != null; e = successor(e))
+        // 对比值
+        if (valEquals(value, e.value))
+            return true;
+    return false;
+}
+
+// 返回TreeMap中的第一个Entry
+final Entry<K,V> getFirstEntry() {
+    // 从根节点开始
+    Entry<K,V> p = root;
+    if (p != null)
+        // 一直向左 找到最左边的左孩子
+        while (p.left != null)
+            p = p.left;
+    return p;
+}
+
+// 返回指定Entry的后继节点；如果没有，则返回null
+static <K,V> TreeMap.Entry<K,V> successor(Entry<K,V> t) {
+    // 1、若节点为空没有后继 
+    if (t == null)
+        return null;
+    // 2、如果有 右孩子
+    else if (t.right != null) {
+        // 向右移动一下
+        // 找到右孩子的 最左边的左孩子
+        Entry<K,V> p = t.right;
+        while (p.left != null)
+            p = p.left;
+        return p;
+    } 
+    // 3、没有右孩子 则回退到双亲
+    else {
+        Entry<K,V> p = t.parent;
+        Entry<K,V> ch = t;
+        // 存在双亲 且 双亲的右孩子已经遍历过了
+        while (p != null && ch == p.right) {
+            ch = p;
+            p = p.parent;
+        }
+        return p;
+    }
+}
+```
+
+successor方法找节点的后继节点:
+1. 若节点为空没有后继 
+2. 若节点有右子树，后继为右子树的最左节点
+3. 若节点没有右子树，后继为该节点所在左子树的第一个祖先节点
+
+第 2 种：若节点有右子树，后继为右子树的最左节点  p -> s
+![image-20200403194459803](/images/image-20200403194459803.png) 
+
+第 3 种：若节点没有右子树，后继为该节点所在左子树的第一个祖先节点  p -> s
+​	1、若其父节点为空，说明 p 是根节点，没有右子树，遍历完成，返回null;
+​	2、若其有父节点 且 p 为父节点左子树，返回其父节点;  P -> A
+![image-20200403195027806](/images/image-20200403195027806.png)
+
+若其有父节点且 p 为父节点右子树，其所在左子树的第一个祖先节点 p -> s
+![image-20200403195211157](/images/image-20200403195211157.png) 
+
+**remove方法**
+```java
+public V remove(Object key) {
+    // 寻找要删除的节点
+    Entry<K,V> p = getEntry(key);
+    if (p == null)
+        return null;
+
+    V oldValue = p.value;
+    deleteEntry(p);
+    return oldValue;
+}
+
+// 删除节点, 并平衡红黑树
+private void deleteEntry(Entry<K,V> p) {
+    modCount++;
+    size--;
+
+    // If strictly internal, copy successor's element to p and then make p
+    // point to successor.
+    // 1、如果要删除的节点 存在左右子树
+    if (p.left != null && p.right != null) {
+        // s 是 p 的中序遍历后继节点
+        Entry<K,V> s = successor(p);
+        // 将 s 的 拷贝给 p，即 s 代替 p
+        p.key = s.key;
+        p.value = s.value;
+        // p 指向 s
+        p = s;
+        
+        // 上述操作后：情况变成了要删除 s
+        // 为什么这样？
+        // 因为二叉排序树的中序遍历是严格的单调遍历
+        // 所以删除 p 的话, s 一定会代替 p 的位置
+        
+        // 因为 p 有右孩子, 后继为右子树的最左节点, 所以 s 一定没有左孩子
+        
+    } // p has 2 children
+
+    // Start fixup at replacement node, if it exists.
+    // 取 p 的孩子
+    Entry<K,V> replacement = (p.left != null ? p.left : p.right);
+	// 2、p 有孩子
+    if (replacement != null) {
+        // Link replacement to parent
+        // p 孩子的双亲 改为 p 的双亲
+        replacement.parent = p.parent;
+        // p 是根节点
+        if (p.parent == null)
+            root = replacement;
+        // 看看放左节点还是右节点
+        else if (p == p.parent.left)
+            p.parent.left  = replacement;
+        else
+            p.parent.right = replacement;
+
+        // Null out links so they are OK to use by fixAfterDeletion.
+        p.left = p.right = p.parent = null;
+
+        // Fix replacement
+        if (p.color == BLACK)
+            fixAfterDeletion(replacement);
+    } 
+    // 3、p 没有孩子, 没有双亲
+    // 说明 p 是 根节点
+    else if (p.parent == null) { // return if we are the only node.
+        root = null;
+    } 
+    // 3、p 没有孩子, 不是根节点
+    else { //  No children. Use self as phantom replacement and unlink.
+        // p 是黑色
+        if (p.color == BLACK)
+            // 删除并修正
+            fixAfterDeletion(p);
+		
+        // 删除 p
+        // 把 p 的双亲的引用置空
+        if (p.parent != null) {
+            if (p == p.parent.left)
+                p.parent.left = null;
+            else if (p == p.parent.right)
+                p.parent.right = null;
+            p.parent = null;
+        }
+    }
+}
+```
+1. p 有两个孩子：
+   先找到后继 s，找到后，替换当前节点的内容为后继节点，然后再删除后继节点，因为这个后继节点一定没有左孩子，所以就将两个孩子的情况转换为了后面两种情况
+2. p 有一个孩子：用孩子替代自己
+3. p 没有孩子：直接将 p 的父节点对应自己的指针置空
+
 
 ## 18.4. 集合遍历方式
 1. Iterator：迭代输出，是使用最多的输出方式。
@@ -3554,9 +4466,7 @@ public static void main(String[] args) {
 }
 ```
 
-## 18.5. 集合有关面试题
-
-**1. 快速失败 (fail-fast) 和安全失败 (fail-safe) 的区别是什么？**
+## 18.5. 快速失败 (fail-fast) 和安全失败 (fail-safe)
 快速失败（fail-fast）：
 当多个线程对 Collection 进行操作时，若其中某一个线程通过iterator去遍历集合时，该集合的内容被其他线程所改变；则会抛出ConcurrentModificationException 并发修改异常。
 原理：迭代器在遍历时直接访问集合中的内容，并且在遍历过程中使用一个 modCount 变量。集合在被遍历期间如果内容发生变化，就会改变modCount的值。每当迭代器使用hashNext()/next()遍历下一个元素之前，都会检测modCount变量是否为expectedmodCount值，是的话就返回遍历；否则抛出异常，终止遍历。

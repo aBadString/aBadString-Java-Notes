@@ -4,10 +4,12 @@
 - [1. Java 基础编程](#Java基础编程)
 - [2. Java 并发编程](#Java并发编程)
 - [3. Java 虚拟机](#Java虚拟机)
-- [4. Java 常用 API 源码](#Java常用API源码)
-- [5. Spring 框架](#Spring)
+- [4. Spring 框架](#Spring)
 
-**数据库基础**
+**JavaScript 核心基础**
+- [1. JavaScript 基础编程](#JavaScript基础编程)
+
+**数据库与中间件基础**
 - [1. MySQL](#MySQL)
 
 **软件工程**
@@ -30,8 +32,9 @@
 @import "01_Java核心基础/01_Java基础编程.md"
 @import "01_Java核心基础/02_Java并发编程.md"
 @import "01_Java核心基础/03_Java虚拟机.md"
-@import "01_Java核心基础/04_Java常用API源码.md"
-@import "01_Java核心基础/05_Spring.md"
+@import "01_Java核心基础/04_Spring.md"
+
+@import "02_JavaScript核心基础/01_JavaScript基础编程.md"
 
 @import "03_数据库与中间件基础/01_MySQL.md"
 

@@ -6,10 +6,12 @@
     - [Java 基础编程](01_Java核心基础/01_Java基础编程.md)
     - [Java 并发编程](01_Java核心基础/02_Java并发编程.md)
     - [Java 虚拟机](01_Java核心基础/03_Java虚拟机.md)
-    - [Java 常用API源码](01_Java核心基础/04_Java常用API源码.md)
-    - [Spring 框架](01_Java核心基础/05_Spring.md)
+    - [Spring 框架](01_Java核心基础/04_Spring.md)
 
-- ## 数据库基础
+- ## JavaScript 核心基础
+    - [JavaScript 基础编程](02_JavaScript核心基础/01_JavaScript基础编程.md)
+
+- ## 数据库与中间件基础
     - [MySQL 数据库](03_数据库与中间件基础/01_MySQL.md)
 
 - ## 计算机基础理论
