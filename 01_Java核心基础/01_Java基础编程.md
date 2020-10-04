@@ -132,7 +132,8 @@
       - [18.3.1.4. 数据结构](#18314-数据结构)
       - [18.3.1.5. public V put(K key, V value) 插入/更新](#18315-public-v-putk-key-v-value-插入更新)
       - [18.3.1.6. final Node<K,V>[] resize() 扩容](#18316-final-nodekv-resize-扩容)
-      - [18.3.1.7. 面试题](#18317-面试题)
+      - [18.3.1.7. public V get(Object key) 查询](#18317-public-v-getobject-key-查询)
+      - [18.3.1.8. 面试题](#18318-面试题)
     - [18.3.2. ConcurrentHashMap（jdk 1.7 源码）](#1832-concurrenthashmapjdk-17-源码)
     - [18.3.3. TreeMap](#1833-treemap)
       - [18.3.3.1. 红黑树](#18331-红黑树)
@@ -3143,6 +3144,7 @@ Externalizable 给我们提供 writeExternal() 和 readExternal() 方法, 这让
   - TreeMap
   - ConcurrentHashMap
   - Hashtable
+    - Properties
 
 - Iterator 接口：所有的集合类都实现了它，这是一个用于遍历集合中元素的接口。
   > hasNext() 是否还有下一个元素。
@@ -3271,8 +3273,17 @@ HashSet(int initialCapacity, float loadFactor, boolean dummy) {
 ![](/images/Map.png)
 
 HashMap、Hashtable、LinkedHashMap、TreeMap、ConcurrentHashMap。
+```
+Map 接口：Map不能包含重复的key，但是可以包含相同的value。
+ |-- HashMap
+        |-- LinkedHashMap
+ |-- TreeMap
+ |-- ConcurrentHashMap
+ |-- Hashtable
+        |-- Properties
+```
 
-- HashMap 数组(哈希表)+链表+红黑树
+- HashMap 数组(哈希表)+链表/红黑树
   HashMap是最常用的Map，它根据键的HashCode值存储数据，根据键可以直接获取它的值，具有很快的访问速度 o(1)。遍历时，取得数据的**顺序是完全随机**的。因为键对象不可以重复，所以HashMap最多**只允许一条记录的键为null**，允许多条记录的值为null，是**非同步的**。
 
 - Hashtable
@@ -3284,10 +3295,10 @@ HashMap、Hashtable、LinkedHashMap、TreeMap、ConcurrentHashMap。
 - LinkedHashMap
   LinkedHashMap **是有序的**，内部使用一个**链表**，有头尾节点。LinkedHashMap保存了**记录的插入顺序**，在用Iteraor遍历LinkedHashMap时，先得到的记录肯定是先插入的，在遍历的时候会比HashMap慢，有HashMap的全部特性。
   使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用（LRU）顺序。
+  适合频繁遍历的场景（具体场景？？？）。
 
 - TreeMap 基于红黑树实现
   TreeMap实现SortMap接口，能够把它保存的记录**根据键排序**，默认是按键值的升序排序（自然顺序），也可以**指定排序的比较器**，当用Iterator遍历TreeMap时，得到的记录是排过序的。不允许key值为空，**非同步的**。
-
 
 **HashMap和Hashtable的区别**
 1、HashMap是非同步的；Hashtable是同步的
@@ -3330,11 +3341,11 @@ AbstractMap 实现了键值对的通用函数接口
 
 #### 18.3.1.1. 重要属性和常量
 属性：
-- loadFactor 负载因子
-- threshold  扩容极限
-- size       键值对数量
+- loadFactor 负载因子   0.75
+- threshold  扩容极限   24 = loadFactor * table.length
+- size       键值对数量 >= 12
 - modCount   修改次数
-- table      散列数组
+- table      散列数组   32
 ```java
 /**
  * The next size value at which to resize (capacity * load factor).
@@ -3407,15 +3418,15 @@ static final int MAXIMUM_CAPACITY = 1 << 30;
 ```
 
 #### 18.3.1.2. 构造器 (4个)
-**两个参数：初始容量和加载因子。**
-容量是HashMap中桶的数量；加载因子是HashMap在其容量自动增加之前可以达到多满的一种尺度。当键值对的数量超过加载因子与当前容量之积（即使用了百分之多少的桶），就要对HashMap进行 rehash 操作（重建内部数据结构），重建之后HashMap将具有之前两倍的桶数目。
+**两个参数：初始容量和负载因子。**
+容量是HashMap中桶的数量；负载因子是HashMap在其容量自动增加之前可以达到多满的一种尺度。当键值对的数量超过负载因子与当前容量之积（即使用了百分之多少的桶），就要对HashMap进行 rehash 操作（重建内部数据结构），重建之后HashMap将具有之前两倍的桶数目。
 
 **【HashMap怎么设定初始容量大小】**
 默认初始容量大小是16，负载因子是 0.75。
 如果传入初始容量 n，则初始容量设定为 大于等于 n 的 2的整数次幂。
 
 ```java
-// 指定“容量大小”和“加载因子”的构造函数
+// 指定“容量大小”和“负载因子”的构造函数
 /**
  * 使用指定的初始容量和负载因子构造一个空的HashMap.
  * @param  initialCapacity 初始容量.
@@ -3429,6 +3440,7 @@ public HashMap(int initialCapacity, float loadFactor) {
         initialCapacity = MAXIMUM_CAPACITY;
     if (loadFactor <= 0 || Float.isNaN(loadFactor))
         throw new IllegalArgumentException("Illegal load factor: " + loadFactor);
+
     this.loadFactor = loadFactor;
     this.threshold = tableSizeFor(initialCapacity);
 }
@@ -3474,7 +3486,7 @@ public HashMap(Map<? extends K, ? extends V> m) {
  */
 static final int tableSizeFor(int cap) {
     int n = cap - 1;
-    n |= n >>> 1;
+    n |= n >>> 1; // n = n | (n >>> 1)
     n |= n >>> 2;
     n |= n >>> 4;
     n |= n >>> 8;
@@ -3482,6 +3494,7 @@ static final int tableSizeFor(int cap) {
     return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
 }
 ```
+
 解释：
 |||
 |-|-|
@@ -3527,10 +3540,12 @@ System.out.println(tableSizeFor(4096)); // 4096
 > ![](/images/tableSizeFor.png)
 > 注意 return 少个 +1
 
-`>>` 右移：规则是低位移出，高位补符号位。
+`>>` 右移：规则是低位移出，高位补符号位。正数 0，负数 1
 `>>>` 无符号右移：高位始终补0。
 
 #### 18.3.1.3. 哈希函数
+Hash(x) = (x.hashCode()>>>16 ^ x.hashCode()) % n;
+
 设计要点
 - 扰动函数：尽可能降低hash碰撞，越分散越好；
 - 算法一定要尽可能高效，因为这是高频操作, 因此采用位运算；
@@ -3559,8 +3574,8 @@ static final int hash(Object key) {
 // jdk 1.8 被删除了
 bucketIndex = indexFor(hash, table.length);
 static int indexFor(int h, int length) {
-     return h & (length-1);
-     // h % length  ==  h & (length-1)
+    return h & (length-1);
+    // h % length  ==  h & (length-1)
 }
 // jdk 1.8 的操作
 tab[i = (n - 1) & hash])
@@ -3579,7 +3594,7 @@ tab[i = (n - 1) & hash])
 #### 18.3.1.4. 数据结构
 jdk 1.8 ：内部使用数组 + 链表/红黑树
 ![img](https://pic3.zhimg.com/80/v2-4ce38fd1c36fc61e70d7687fae997e5a_720w.jpg) 
-当链表长度大于 8 时，转为红黑树；当红黑树节点小于 6 时，转为链表。
+当链表长度大于 8 且 数组长度大于等于 64 时，转为红黑树；当红黑树节点小于 6 时，转为链表。
 
 ```java
 static class Node<K,V> implements Map.Entry<K,V> {
@@ -3646,7 +3661,7 @@ Node<K,V> next; // 链表 next 指针
    1. 是红黑树，则放入红黑树节点
    2. 是链表，则加入链表中
 6. 链表则要判断是否要转为红黑树。
-7. 红黑树则要判断是否需要扩容。
+7. 判断是否需要扩容。
 <!-- ![](https://pic4.zhimg.com/80/v2-ff5fe3aac820fafb4cf34b2a801877cf_720w.jpg) -->
 ![](https://pic3.zhimg.com/80/58e67eae921e4b431782c07444af824e_720w.png)
 
@@ -3747,14 +3762,14 @@ public class HashMapGet {
 }
 ```
 
-**什么样的数据类型可以作为 Key?**
+**什么样的数据类型（类）可以作为 Key?**
 1. 重写 hashcode 和 equals 方法，且遵循以下原则：equals 相等 -> hashcode 一定相等。
-2. 该类的对象具有不可变性。或者成员变量的改变不会引起 hashcode 的改变，以及 equals 的结果。
+2. 该类的对象具有不可变性（否则会丢失这个键值对，造成内存泄漏）。或者成员变量的改变不会引起 hashcode 的改变，以及 equals 的结果。
 
 #### 18.3.1.8. 面试题
 
 **jdk 1.8 后的改进**
-1. 数组+链表 改进为 数组+链表或红黑树
+1. 数组+链表 改进为 数组+链表/红黑树
 2. 链表插入方式 头插法 改进为 尾插法
 3. 插入数据时，1.7 先判断是否要扩容，再插入；1.8 先插入，再判断
 4. 1.7 扩容时需要对原数组的元素重新进行 哈希定位；1.8 则要么位置不变，要么向后移动一个旧容量大小。
@@ -3765,7 +3780,7 @@ public class HashMapGet {
 
 **HashMap是线程安全的吗？**
 不是，在多线程环境下，1.7 会产生死循环、数据丢失、数据覆盖的问题，1.8 中会有数据覆盖的问题。
-线程安全的：HashTable、ConcurrentHashMap、Collections.synchronizedMap
+线程安全的：Hashtable、ConcurrentHashMap、Collections.synchronizedMap
 - HashTable是直接在操作方法上加synchronized关键字，锁住整个数组，锁粒度比较大。
 - Collections.synchronizedMap是使用Collections集合工具的内部类，通过传入Map封装出一个SynchronizedMap对象，内部定义了一个对象锁，方法通过对象锁实现线程安全。
 - ConcurrentHashMap使用分段锁，降低了锁粒度，让并发度大大提高。
