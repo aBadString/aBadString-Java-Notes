@@ -9,6 +9,7 @@
   - [2.2. POM (Project Object Model 项目对象模型)](#22-pom-project-object-model-项目对象模型)
 - [3. Maven 命令](#3-maven-命令)
   - [3.1. package、install、deploy的联系与区别](#31-package-install-deploy的联系与区别)
+- [4. 常见问题](#4-常见问题)
 
 <!-- /code_chunk_output -->
 
@@ -780,3 +781,12 @@ mvn clean deploy  依次执行了clean、resources、compile、testResources、t
 package 命令完成了项目编译、单元测试、打包功能，但没有把打好的可执行jar包（war包或其它形式的包）布署到本地maven仓库和远程maven私服仓库  
 install 命令完成了项目编译、单元测试、打包功能，同时把打好的可执行jar包（war包或其它形式的包）布署到本地maven仓库，但没有布署到远程maven私服仓库  
 deploy  命令完成了项目编译、单元测试、打包功能，同时把打好的可执行jar包（war包或其它形式的包）布署到本地maven仓库和远程maven私服仓库
+
+# 4. 常见问题
+
+**IDEA 中创建 Maven 工程报错：**
+> Unable to import maven project: See logs for details
+
+问题出在：
+1. Maven 版本：之前使用的是 3.6.3，换成 3.3.9 就行了。https://bbs.csdn.net/topics/394531377
+2. Maven 的 running 和 importing 的 jdk 版本不一致，都换成 jdk1.8。https://blog.csdn.net/wangjin890620/article/details/101363943

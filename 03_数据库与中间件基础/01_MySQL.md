@@ -39,6 +39,7 @@
       - [2.10.4.2. distinct 执行去重](#21042-distinct-执行去重)
     - [2.10.5. order by 排序](#2105-order-by-排序)
     - [2.10.6. limit 子句](#2106-limit-子句)
+  - [2.11. 触发器](#211-触发器)
 - [3. MySQL 体系结构](#3-mysql-体系结构)
   - [3.1. MyISAM 与 InnoDB](#31-myisam-与-innodb)
   - [3.2. Innodb存储引擎缓冲池](#32-innodb存储引擎缓冲池)
@@ -60,7 +61,7 @@
   - [5.4. 阻塞](#54-阻塞)
   - [5.5. 死锁](#55-死锁)
   - [5.6. 锁升级](#56-锁升级)
-- [6. MySQL 索引](#6-mysql-索引)
+- [6. 索引](#6-索引)
   - [6.1. 索引优点与使用场景](#61-索引优点与使用场景)
   - [6.2. MySQL 索引种类](#62-mysql-索引种类)
     - [6.2.1. B+ 树索引](#621-b-树索引)
@@ -77,8 +78,9 @@
     - [6.3.3. 索引列的顺序](#633-索引列的顺序)
     - [6.3.4. 建立索引的常用技巧](#634-建立索引的常用技巧httpsjuejinimpost5a6873fbf265da3e393a97fa)
 - [7. explain](#7-explain)
-- [8. 其他](#8-其他)
-- [9. 附录：常用SQL语法](#9-附录常用sql语法)
+- [8. 附录：常用SQL语法](#8-附录常用sql语法)
+- [9. 附录：MySQL 安装](#9-附录mysql-安装)
+  - [9.1. 常见问题](#91-常见问题)
 
 <!-- /code_chunk_output -->
 
@@ -823,6 +825,16 @@ limit 1,2;
 |3|1|
 |4|1|
 
+## 2.11. 触发器
+
+在MySQL数据库中有如下六种触发器：
+- 1、Before Insert
+- 2、After Insert
+- 3、Before Update
+- 4、After Update
+- 5、Before Delete
+- 6、After Delete
+
 # 3. MySQL 体系结构
 
 数据库 database：物理操作系统文件或其他形式文件类型的集合。
@@ -1197,7 +1209,7 @@ InnoDB 存储引擎不存在锁升级的问题。
 ![image-20200328195006465](/images/image-20200328195006465.png)
 
 
-# 6. MySQL 索引
+# 6. 索引
 
 ## 6.1. 索引优点与使用场景
 
@@ -1430,6 +1442,18 @@ WHERE a = 1 AND c = 3
 #以上SQL语句用不到索引
 ```
 
+**以下三条sql 如何建索引，只建一条怎么建？**
+```sql
+WHERE a=1 AND b=1
+WHERE b=1
+WHERE b=1 ORDER BY time DESC
+```
+以顺序b,a,time建立联合索引，
+```sql
+CREATE INDEX table1_b_a_time ON index_test01(b,a,time)
+```
+因为最新MySQL版本会优化WHERE子句后面的列顺序，以匹配联合索引顺序。
+
 # 7. explain
 
 1. **id**：SELECT 识别符，sql 语句执行的顺序
@@ -1453,42 +1477,8 @@ WHERE a = 1 AND c = 3
    - index   
    - ALL 
 
-# 8. 其他
 
-**触发器**
-
-在MySQL数据库中有如下六种触发器：
-- 1、Before Insert
-- 2、After Insert
-- 3、Before Update
-- 4、After Update
-- 5、Before Delete
-- 6、After Delete
-
-**以下三条sql 如何建索引，只建一条怎么建？**
-```sql
-WHERE a=1 AND b=1
-WHERE b=1
-WHERE b=1 ORDER BY time DESC
-```
-以顺序b,a,time建立联合索引，
-```sql
-CREATE INDEX table1_b_a_time ON index_test01(b,a,time)
-```
-因为最新MySQL版本会优化WHERE子句后面的列顺序，以匹配联合索引顺序。
-
-
-**有A(id,sex,par,c1,c2),B(id,age,c1,c2)两张表，其中A.id与B.id关联，现在要求写出一条SQL语句，将B中age>50的记录的c1,c2更新到A表中同一记录中的c1,c2字段中** **考点分析**
-
-```sql
-UPDATE A,B SET A.c1 = B.c1, A.c2 = B.c2 WHERE A.id = B.id and B.age > 50;
-UPDATE A INNER JOIN B ON A.id = B.id SET A.c1 = B.c1,A.c2 = B.c2 WHERE B.age > 50
-```
-
-https://juejin.im/entry/5b57ec015188251aa8292a69
-
-
-# 9. 附录：常用SQL语法
+# 8. 附录：常用SQL语法
 ```sql
 [] 可选 0次或1次
 {} 0次或多次
@@ -1975,4 +1965,108 @@ BCNF: 3NF + 每个函数依赖的决定因子都是候选键
 	
 
 架构（schema，也称为模式）是数据库下的一个逻辑命名空间，可以存放表、视图等数据库对象，它是一个数据库对象的容器。
+```
+
+# 9. 附录：MySQL 安装
+
+在该MySQL根目录下创建 **my.ini** 配置文件
+```xml
+[client]
+# 设置mysql客户端默认字符集
+default-character-set=utf8
+ 
+[mysqld]
+# 设置3306端口
+port = 3306
+# 设置mysql的安装目录
+basedir=C:\\Program Files\\JavaDevelopmentTools\\mysql-8.0.15-winx64
+# 设置 mysql数据库的数据的存放目录，MySQL 8+ 不需要以下配置，系统自己生成即可，否则有可能报错
+# datadir=
+# 允许最大连接数
+max_connections=20
+# 服务端使用的字符集默认为8比特编码的latin1字符集
+character-set-server=utf8
+# 创建新表时将使用的默认存储引擎
+default-storage-engine=INNODB
+```
+
+cmd 进入MySQL根目录
+```
+cd C:\Program Files\JavaDevelopmentTools\mysql-8.0.15-winx64
+cd bin
+```
+
+初始化数据库：
+```
+mysqld --initialize --console
+```
+
+执行完成后，会输出 root 用户的初始默认密码
+```
+2020-03-12T12:56:28.384344Z 5 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: ifwtm%))p7qZ
+```
+
+输入以下安装命令：
+```
+mysqld install
+```
+
+启动输入以下命令即可：
+```
+net start mysql
+```
+
+登录MySQL：当 MySQL 服务已经运行时, 我们可以通过 MySQL 自带的客户端工具登录到 MySQL 数据库中, 首先打开命令提示符, 输入以下格式的命名:
+```
+mysql -h 主机名 -u 用户名 -p
+```
+一般输入这个即可：
+```
+mysql -u root -p
+```
+
+修改密码为 whoami
+```
+alter user user() identified by "whoami";
+```
+输入```quit;```可以退出。
+
+查看数据库文件存储位置：
+```
+show variables like 'datadir';
+```
+
+添加用户
+```
+create user abadstring@localhost identified by 'abadstring';
+```
+
+这样就创建了一个在本地，名为 abadbtring，密码为 abadstring的用户。
+*注意：此处的"localhost"，是指该用户只能在本地登录，不能在另外一台机器上远程登录。如果想远程登录的话，将"localhost"改为"%"，表示在任何一台电脑上都可以登录。也可以指定某台机器可以远程登录。*
+
+查看所有用户
+```
+select User, Host from mysql.user;
+```
+
+给用户授权
+```
+grant all privileges on mybatis.* to "abadstring"@"localhost";
+```
+
+上面命令授予用户 abadstring 在本地(localhost) 对于数据库 mybatis 的所有表(*) 的全部权限(all privileges)。
+```
+GRANT privileges ON databasename.tablename TO 'username'@'host';
+```
+privileges – 用户的操作权限,如SELECT , INSERT , UPDATE  等(详细列表见该文最后面).如果要授予所 的权限则使用ALL说明: 
+databasename –  数据库名
+tablename-表名,如果要授予该用户对所有数据库和表的相应操作权限则可用* 表示, 如*.*
+
+## 9.1. 常见问题
+
+**Connection error! ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client**
+```sql
+use mysql;
+alter user 'root'@'localhost' identified with mysql_native_password by '123456';
+flush privileges;
 ```

@@ -11,48 +11,48 @@
   - [1.5. 双重锁定检查的单例模式](#15-双重锁定检查的单例模式)
     - [1.5.1. 对象的发布和逸出](#151-对象的发布和逸出)
 - [2. CAS 比较并交换](#2-cas-比较并交换)
-- [3. 集合类的线程不安全情况](#3-集合类的线程不安全情况)
-  - [3.1. 并发修改异常 java.util.ConcurrentModificationException](#31-并发修改异常-javautilconcurrentmodificationexception)
-    - [3.1.1. 异常现象](#311-异常现象)
-    - [3.1.2. 异常原因](#312-异常原因)
-    - [3.1.3. 解决方案](#313-解决方案)
-    - [3.1.4. CopyOnWriteArrayList](#314-copyonwritearraylist)
-  - [3.2. 其它集合类](#32-其它集合类)
-    - [3.2.1. ConcurrentHashMap](#321-concurrenthashmap)
-  - [3.3. 同步容器](#33-同步容器)
-  - [3.4. 并发容器](#34-并发容器)
-- [4. 锁](#4-锁)
-  - [4.1. AbustactQueuedSynchronizer](#41-abustactqueuedsynchronizer)
-    - [4.1.1. 同步状态](#411-同步状态)
-    - [4.1.2. 同步队列](#412-同步队列)
-    - [4.1.3. 源码分析](#413-源码分析)
-  - [4.2. 公平锁和非公平锁](#42-公平锁和非公平锁)
-  - [4.3. 可重入锁（递归锁）](#43-可重入锁递归锁)
-    - [4.3.1. ReentrantLook 源码](#431-reentrantlook-源码)
-  - [4.4. 自旋锁（Unsafe类 CAS）](#44-自旋锁unsafe类-cas)
-  - [4.5. 独占锁(写锁、排他锁)和共享锁(读锁)](#45-独占锁写锁-排他锁和共享锁读锁)
-  - [4.6. 乐观锁和悲观锁](#46-乐观锁和悲观锁)
-  - [4.7. 补充：线程同步方式](#47-补充线程同步方式)
-  - [4.8. 补充：锁优化（jdk1.6）](#48-补充锁优化jdk16)
-- [5. 线程工具类](#5-线程工具类)
-  - [5.1. CountDownLatch](#51-countdownlatch)
-  - [5.2. CyclicBarrier](#52-cyclicbarrier)
-  - [5.3. Semaphore 信号量](#53-semaphore-信号量)
-- [6. 创建线程方法四：线程池](#6-创建线程方法四线程池)
-  - [6.1. 线程池各个参数的作用，线程池如何工作的?](#61-线程池各个参数的作用线程池如何工作的)
-  - [6.2. 线程池的工作队列](#62-线程池的工作队列)
-    - [6.2.1. BlockingQueue 核心方法](#621-blockingqueue-核心方法)
-  - [6.3. 默认的线程工厂](#63-默认的线程工厂)
-  - [6.4. 四种拒绝策略](#64-四种拒绝策略)
-  - [6.5. 几种常用的线程池](#65-几种常用的线程池)
-  - [6.6. 线程池异常处理](#66-线程池异常处理)
-  - [6.7. 线程池状态](#67-线程池状态)
-  - [6.8. 使用方法](#68-使用方法)
-  - [6.9. 实际中应该使用哪个线程池？](#69-实际中应该使用哪个线程池)
-  - [6.10. 如何合理的配置线程池参数？](#610-如何合理的配置线程池参数)
-    - [6.10.1. CPU 密集型](#6101-cpu-密集型)
-    - [6.10.2. IO 密集型](#6102-io-密集型)
-- [7. 死锁](#7-死锁)
+- [3. 锁](#3-锁)
+  - [3.1. AbustactQueuedSynchronizer](#31-abustactqueuedsynchronizer)
+    - [3.1.1. 同步状态](#311-同步状态)
+    - [3.1.2. 同步队列](#312-同步队列)
+    - [3.1.3. 源码分析](#313-源码分析)
+  - [3.2. 公平锁和非公平锁](#32-公平锁和非公平锁)
+  - [3.3. 可重入锁（递归锁）](#33-可重入锁递归锁)
+    - [3.3.1. ReentrantLook 源码](#331-reentrantlook-源码)
+  - [3.4. 自旋锁（Unsafe类 CAS）](#34-自旋锁unsafe类-cas)
+  - [3.5. 独占锁(写锁、排他锁)和共享锁(读锁)](#35-独占锁写锁-排他锁和共享锁读锁)
+  - [3.6. 乐观锁和悲观锁](#36-乐观锁和悲观锁)
+  - [3.7. 补充：线程同步方式](#37-补充线程同步方式)
+  - [3.8. 补充：锁优化（jdk1.6）](#38-补充锁优化jdk16)
+- [4. 创建线程方法四：线程池](#4-创建线程方法四线程池)
+  - [4.1. 线程池各个参数的作用，线程池如何工作的?](#41-线程池各个参数的作用线程池如何工作的)
+  - [4.2. 线程池的工作队列](#42-线程池的工作队列)
+    - [4.2.1. BlockingQueue 核心方法](#421-blockingqueue-核心方法)
+  - [4.3. 默认的线程工厂](#43-默认的线程工厂)
+  - [4.4. 四种拒绝策略](#44-四种拒绝策略)
+  - [4.5. 几种常用的线程池](#45-几种常用的线程池)
+  - [4.6. 线程池异常处理](#46-线程池异常处理)
+  - [4.7. 线程池状态](#47-线程池状态)
+  - [4.8. 使用方法](#48-使用方法)
+  - [4.9. 实际中应该使用哪个线程池？](#49-实际中应该使用哪个线程池)
+  - [4.10. 如何合理的配置线程池参数？](#410-如何合理的配置线程池参数)
+    - [4.10.1. CPU 密集型](#4101-cpu-密集型)
+    - [4.10.2. IO 密集型](#4102-io-密集型)
+- [5. 死锁](#5-死锁)
+- [6. 线程工具类](#6-线程工具类)
+  - [6.1. CountDownLatch](#61-countdownlatch)
+  - [6.2. CyclicBarrier](#62-cyclicbarrier)
+  - [6.3. Semaphore 信号量](#63-semaphore-信号量)
+- [7. 集合类的线程不安全情况](#7-集合类的线程不安全情况)
+  - [7.1. 并发修改异常 java.util.ConcurrentModificationException](#71-并发修改异常-javautilconcurrentmodificationexception)
+    - [7.1.1. 异常现象](#711-异常现象)
+    - [7.1.2. 异常原因](#712-异常原因)
+    - [7.1.3. 解决方案](#713-解决方案)
+    - [7.1.4. CopyOnWriteArrayList](#714-copyonwritearraylist)
+  - [7.2. 其它集合类](#72-其它集合类)
+    - [7.2.1. ConcurrentHashMap](#721-concurrenthashmap)
+  - [7.3. 同步容器](#73-同步容器)
+  - [7.4. 并发容器](#74-并发容器)
 
 <!-- /code_chunk_output -->
 
@@ -496,386 +496,14 @@ public class AtomicStampedReferenceDemo {
 // t1: 100	3
 ```
 
-# 3. 集合类的线程不安全情况
 
-## 3.1. 并发修改异常 java.util.ConcurrentModificationException
+# 3. 锁
 
-### 3.1.1. 异常现象
-
-下面的程序，由于三十个线程同时使用一个 list，会导致出现一些错误的情形。但还没有抛出异常
-```java
-public static void main(String[] args) {
-    List<String> list = new ArrayList<>();
-
-    for (int i = 1; i <= 30; i++) {
-        new Thread(() -> {
-            String s = UUID.randomUUID().toString().substring(0, 8);
-            list.add(s);
-            System.out.println(Thread.currentThread().getName() + " add " + s);
-        }, String.valueOf(i)).start();
-    }
-
-    while (Thread.activeCount() > 2) {
-        Thread.yield();
-    }
-    System.out.println(list.size());
-    System.out.println(list);
-}
-// 1 add 7e742601
-// 3 add 77548695
-// 2 add 2c5f0ed3
-// 3
-// [7e742601, 2c5f0ed3, 77548695]
-
-// 2 add 6aa654d0
-// 1 add c09d441b
-// 3 add 44605ac5
-// 3
-// [null, 6aa654d0, c09d441b]
-
-// 1 add 83ee8584
-// 2 add bc415695
-// 3 add 38d473e6
-// 2
-// [bc415695, 38d473e6]
-
-// 3 add 1a603579
-// 2 add 0ad81e3b
-// 1 add af204932
-// 1
-// [0ad81e3b]
-```
-但是当我们试图去读取list列表时，就会发生并发修改异常 java.util.ConcurrentModificationException
-```java
-public static void main(String[] args) {
-    List<String> list = new ArrayList<>();
-
-    for (int i = 1; i <= 30; i++) {
-        new Thread(() -> {
-            String s = UUID.randomUUID().toString().substring(0, 8);
-            list.add(s);
-            // 读取list的全部元素
-            list.forEach(System.out::println);
-            System.out.println(Thread.currentThread().getName() + " add " + s);
-        }, String.valueOf(i)).start();
-    }
-
-    while (Thread.activeCount() > 2) {
-        Thread.yield();
-    }
-    System.out.println(list.size());
-    System.out.println(list);
-}
-```
-
-### 3.1.2. 异常原因
-
-[Java 基础编程 · 17.5. 集合有关面试题](./01_Java基础编程.md#175-集合有关面试题)
-
-```java
-final void checkForComodification() {
-    if (modCount != expectedModCount)
-        throw new ConcurrentModificationException();
-}
-```
-
-### 3.1.3. 解决方案
-
-1. 使用 Vector 类（不建议，锁方法，导致并发现急剧下降）
-2. Collections.synchronizedList(new ArrayList<>());
-3. CopyOnWriteArrayList
-
-### 3.1.4. CopyOnWriteArrayList
-![image-20200326192142191](/images/image-20200326192142191.png)
-
-CopyOnWriteArrayList add 方法：写时复制，当要往list中添加元素时，不会在原list上直接修改，而是拷贝一份原list，在拷贝的list上做修改；修改完成之后用拷贝的数组更新原来的引用。
-```java
-public boolean add(E e) {
-    // 轻量级锁
-    final ReentrantLock lock = this.lock;
-    lock.lock();
-    try {
-        Object[] elements = getArray();
-        int len = elements.length;
-        // 复制
-        Object[] newElements = Arrays.copyOf(elements, len + 1);
-        // 写
-        newElements[len] = e;
-        // 更新最新的数组
-        setArray(newElements); // array = newElements;
-        return true;
-    } finally {
-        lock.unlock();
-    }
-}
-```
-
-
-## 3.2. 其它集合类
-
-HashSet 也会出现并发修改异常。
-1. Collections.synchronizedSet(new HashSet<>())
-2. CopyOnWriteArraySet
-CopyOnWriteArraySet 依赖的就是一个 CopyOnWriteArrayList（这 Set 家族这么不要脸么。HashSet 套壳 HashMap，真省事）
-```java
-public class CopyOnWriteArraySet<E> extends AbstractSet<E>
-        implements java.io.Serializable {
-    private static final long serialVersionUID = 5457747651344034263L;
-
-    private final CopyOnWriteArrayList<E> al;
-
-    /**
-     * Creates an empty set.
-     */
-    public CopyOnWriteArraySet() {
-        al = new CopyOnWriteArrayList<E>();
-    }
-}
-```
-
-HashMap 也会出现并发修改异常。
-1. HashTable （不推荐，锁方法，导致并发现急剧下降）
-1. Collections.synchronizedMap(new HashMap<>())
-2. ConcurrentHashMap
-
-### 3.2.1. ConcurrentHashMap
-
-- 线程安全，并且锁分离。
-- 使用 **分段锁**，降低了锁粒度，让并发度大大提高，允许更深层次的共享访问。ConcurrentHashMap内部使用段(Segment)来表示这些不同的部分，每个段其实就是一个小的HashTable，它们有自己的锁。
-- 任意数量的读线程可以并发访问；读者和写者也可以并发访问；有限数量的写线程可以并发修改（只要多个修改操作发生在不同的段上，它们就可以并发进行）。
-
-好处：
-- 为并发访问带来更高的吞吐量，并且几乎没有损失单个线程访问的性能。
-- 其迭代器不会抛出 ConcurrentModificationException  异常，不需要在迭代中加锁。返回的迭代器具有 **弱一致性**，可以感知 (但不保证) 在迭代器被创建后容器的修改。
-
-**jdk 1.8 源码**
-```java
-/**
- * Creates a new, empty map with the default initial table size (16).
- * 使用默认的初始表大小（16）创建一个新的空Map。
- */
-public ConcurrentHashMap() {
-}
-```
-构造时不会初始化数组，第一次加入元素时才初始化
-put 操作
-```java
-public V put(K key, V value) {
-    return putVal(key, value, false);
-}
-
-final V putVal(K key, V value, boolean onlyIfAbsent) {
-    // 不允许 key 和 value 为空
-    if (key == null || value == null) 
-        throw new NullPointerException();
-    
-    // 哈希值计算
-    int hash = spread(key.hashCode());
-    /*
-    static final int HASH_BITS = 0x7fffffff; // 31位
-    static final int spread(int h) {
-    	// 扰动函数
-        return (h ^ (h >>> 16)) & HASH_BITS;
-    }
-    */
-    
-    int binCount = 0;
-    for (Node<K,V>[] tab = table;;) {   
-        Node<K,V> f; int n, i, fh;
-        
-        // 1、初始化 tab
-        if (tab == null || (n = tab.length) == 0)
-            tab = initTable();
-        
-        // 2、直接插入节点
-        // 判断待插入位置是否为 null，
-        // 为空则通过创建新节点，通过CAS方法设置在指定位置
-        else if 
-        	( 
-            	( 
-                	f = tabAt(tab, i = (n - 1) & hash) 
-            	) == null 
-        	) 
-        {
-            // 插入节点
-            if 
-            (
-                casTabAt
-                (
-                    tab, i, null,
-                    new Node<K,V>(hash, key, value, null)
-                )
-            )
-            {
-                // 插入成功则退出循环
-                // 到 addCount(1L, binCount); 那里
-                break; // no lock when adding to empty bin
-            }
-        }
-        
-        // 3、当前节点正在扩容
-        else if ((fh = f.hash) == MOVED)
-            tab = helpTransfer(tab, f);
-        
-        // 4、插入位置不为空
-        else {
-            V oldVal = null;
-            synchronized (f) {
-                if (tabAt(tab, i) == f) {
-                    // 4.1、链表
-                    if (fh >= 0) {
-                        binCount = 1;
-                        // 遍历链表
-                        for (Node<K,V> e = f;; ++binCount) {
-                            K ek;
-                            // 更新值
-                            if 
-                              (han
-                                e.hash == hash // 哈希冲突了
-                                &&
-                                ( 
-                                    // key 相同
-                                    // 用 == 和 equals 两种判断
-                                    (ek = e.key) == key 
-                                    ||
-                                    ( ek != null && key.equals(ek) )
-                                )
-                              ) 
-                            {
-                                oldVal = e.val;
-                                if (!onlyIfAbsent) // onlyIfAbsent 为 false
-                                    // 替换旧值
-                                    e.val = value;
-                                break;
-                            }
-                            
-                            Node<K,V> pred = e;
-                            // 到达链表尾部
-                            if ((e = e.next) == null) {
-                                // 插入值
-                                pred.next = new Node<K,V>(hash, key, value, null);
-                                break;
-                            }
-                        }
-                        // 遍历链表结束
-                    }
-                    // 4.2、红黑树
-                    else if (f instanceof TreeBin) {
-                        Node<K,V> p;
-                        binCount = 2;
-                        
-                        if ((p = ((TreeBin<K,V>)f).putTreeVal(hash, key, value)) != null) 					      {
-                            oldVal = p.val;
-                            if (!onlyIfAbsent)
-                                p.val = value;
-                        }
-                    }
-                    
-                }
-            } // synchronized 结束
-            
-            if (binCount != 0) {
-                // 链表中节点个数超过8转成红黑树
-                if (binCount >= TREEIFY_THRESHOLD)
-                    treeifyBin(tab, i);
-                
-                if (oldVal != null)
-                    return oldVal;
-                break;
-            }
-        } // 4、插入位置不为空 结束
-    } // for结束
-    
-    
-    addCount(1L, binCount);
-    return null;
-}
-```
-```java
-private final Node<K,V>[] initTable() {
-    Node<K,V>[] tab; int sc;
-    while ((tab = table) == null || tab.length == 0) {
-        // sizeCtl小于0，当前线程让出初始化执行权
-        if ((sc = sizeCtl) < 0)
-            Thread.yield(); 
-        	// lost initialization race; just spin
-        	// 失去了初始化竞赛;只是自旋
-        
-        // CAS 操作将 sizeCtl = -1
-        else if (U.compareAndSwapInt(this, SIZECTL, sc, -1)) {
-            try {
-                // 再次判断table是否为空, 和单例模式一个道理
-                if ((tab = table) == null || tab.length == 0) {
-                    // 数组大小 sc 
-                    // 小于0 使用默认大小 16
-                    int n = (sc > 0) ? sc : DEFAULT_CAPACITY;
-                    @SuppressWarnings("unchecked")
-                    // 这里创建数组
-                    Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n];
-                    table = tab = nt;
-                    sc = n - (n >>> 2);
-                }
-            } finally {
-                sizeCtl = sc;
-            }
-            break;
-        }
-    }
-    return tab;
-}
-```
-
-
-## 3.3. 同步容器
-
-同步容器类包括：
-1. Vector 和 HashTable
-2. jdk 1.2 加入的 同步包装类 (wrapper)
-3. 由 Collections.synchronizedXxx 工厂方法创建
-
-这些类通过封装它们的状态，并对每个公共方法进行同步，来实现线程安全。
-会出现的问题：对于复合操作，需要额外的加锁处理。
-迭代器 ConcurrentModificationException 并发修改异常
-
-```java
-public static <K,V> Map<K,V> synchronizedMap(Map<K,V> m) {
-    return new SynchronizedMap<>(m);
-}
-// SynchronizedMap类是一个静态内部类。
-// SynchronizedMap的每个方法，都是对Map本身做了一次带锁的操作。该类本身并没有太多的应用，性能较差。
-private static class SynchronizedMap<K,V> implements Map<K,V>, Serializable {
-    private final Map<K,V> m;     // Backing Map
-    final Object mutex;           // Object on which to synchronize
-
-    public V put(K key, V value) {
-        synchronized (mutex) {return m.put(key, value);}
-    }
-    public V remove(Object key) {
-        synchronized (mutex) {return m.remove(key);}
-    }
-    public void putAll(Map<? extends K, ? extends V> map) {
-        synchronized (mutex) {m.putAll(map);}
-    }
-    public void clear() {
-        synchronized (mutex) {m.clear();}
-    }
-}
-```
-
-## 3.4. 并发容器
-
-jdk 5 提供了几种并发的容器类。
-ConcurrentHashMap、CopyOnWriteArrayList、CopyOnWriteArraySet
-用并发容器替换同步容器，这样以很小的风险带来并发性的显著提高。
-
-
-# 4. 锁
-
-## 4.1. AbustactQueuedSynchronizer
+## 3.1. AbustactQueuedSynchronizer
 
 AbustactQueuedSynchronizer 是J ava 提供的底层同步工具类，用一个int类型的变量表示同步状态，并提供了一系列的 CAS 操作来管理这个同步状态。
 
-### 4.1.1. 同步状态
+### 3.1.1. 同步状态
 
 AQS 维护了一个 int 类型的变量来表示同步状态。
 ```java
@@ -936,7 +564,7 @@ public class PlainLock {
 }
 ```
 
-### 4.1.2. 同步队列
+### 3.1.2. 同步队列
 
 AQS 还维护了一个同步队列。
 队列的节点定义如下，是一个静态内部类
@@ -974,7 +602,7 @@ private transient volatile Node tail;
 【我猜的】因为队列前面的线程等待时间都比较长，很大可能已经取消等待了。从前往后的话需要遍历次数较多。
 
 
-### 4.1.3. 源码分析
+### 3.1.3. 源码分析
 
 获取锁 acquire
 ```java
@@ -1253,7 +881,7 @@ private void unparkSuccessor(Node node) {
 }
 ```
 
-## 4.2. 公平锁和非公平锁
+## 3.2. 公平锁和非公平锁
 
 公平锁：线程按照申请锁的顺序来获取锁。
 非公平锁：并不严格按照或者完全不按照申请锁的顺序来获取锁，后申请锁的线程可以先获得锁。
@@ -1266,7 +894,7 @@ private void unparkSuccessor(Node node) {
 
 结合国赛出租车蓄车池：队列中走 N 个，刚来的走 1 个。
 
-## 4.3. 可重入锁（递归锁）
+## 3.3. 可重入锁（递归锁）
 
 同一个线程可以多次进入已经获取的同一个可重入锁的临界区。
 作用：避免死锁。
@@ -1309,7 +937,7 @@ public class ReentrantLookDemo {
 如果多解锁一次，则会抛出非法监视器状态异常 java.lang.IllegalMonitorStateException
 
 
-### 4.3.1. ReentrantLook 源码
+### 3.3.1. ReentrantLook 源码
 
 ReentrantLook 依赖 AQS 来实现，有的公平锁和非公平锁
 
@@ -1442,7 +1070,7 @@ protected final boolean tryRelease(int releases) {
 从源码可以看出，无论是公平锁还是非公平锁。都是使用了 AQS 的独占模式。所以 ReentrantLook 是独占锁。
 
 
-## 4.4. 自旋锁（Unsafe类 CAS）
+## 3.4. 自旋锁（Unsafe类 CAS）
 
 自旋锁：一个线程如果获取自旋锁失败，它不会立即被阻塞，而是进入一段盲循环代码，不断循环获取锁。
 好处：减少线程上下文的切换。阻塞线程是一个特权指令，需要系统转换到内核态。 
@@ -1496,7 +1124,7 @@ public class SpinLockDemo {
 // 200000
 ```
 
-## 4.5. 独占锁(写锁、排他锁)和共享锁(读锁)
+## 3.5. 独占锁(写锁、排他锁)和共享锁(读锁)
 
 独占锁：一次只能同时被一个线程所拥有，其他线程不可再获取到该锁。synchronized 和 ReentrantLook都是独占锁
 共享锁：可以同时被多个线程所拥有。ReentrantReadWriteLock 的读锁是共享锁，写锁是独占锁。
@@ -1581,7 +1209,7 @@ public class ReentrantReadWriteLock implements ReadWriteLock, java.io.Serializab
 }
 ```
 
-## 4.6. 乐观锁和悲观锁
+## 3.6. 乐观锁和悲观锁
 
 > https://juejin.im/post/6844903639207641096
 
@@ -1597,7 +1225,7 @@ public class ReentrantReadWriteLock implements ReadWriteLock, java.io.Serializab
 - 乐观锁适用于写比较少的情况下（多读场景），即冲突真的很少发生的时候，这样可以省去了锁的开销，加大了系统的整个吞吐量。
 - 但如果是多写的情况，一般会经常产生冲突，这就会导致上层应用会不断的进行retry，这样反倒是降低了性能，所以一般多写的场景下用悲观锁就比较合适。
 
-## 4.7. 补充：线程同步方式
+## 3.7. 补充：线程同步方式
 - **互斥同步（加锁，悲观锁，阻塞同步，悲观的并发策略）**
 
 synchronized 与 Lock 的区别：
@@ -1635,144 +1263,15 @@ synchronized 与 Lock 的区别：
 
 - 线程本地存储（Thread Local Storage）：如果一段代码必须和其他代码共享数据，可以尝试将临界区的代码保证在同一个线程中执行。（一个用户请求对应一个服务器线程）
 
-## 4.8. 补充：锁优化（jdk1.6）
+## 3.8. 补充：锁优化（jdk1.6）
 
 在JavaSE 1.6之后进行了主要包括为了减少获得锁和释放锁带来的性能消耗而引入的**偏向锁**和**轻量级锁**以及其它各种优化之后变得在某些情况下并不是那么重了。
 synchronized 的底层实现主要依靠 Lock-Free 的队列，基本思路是**自旋后阻塞，竞争切换后继续竞争锁，稍微牺牲了公平性，但获得了高吞吐量**。
 在线程冲突较少的情况下，可以获得和CAS类似的性能；而线程冲突严重的情况下，性能远高于CAS。
 
 
-# 5. 线程工具类
 
-## 5.1. CountDownLatch
-被 await 的线程需要等待前面 count 个线程完成，才继续进行。
-```java
-// 构造器指明 count
-public CountDownLatch(int count) {
-    if (count < 0) throw new IllegalArgumentException("count < 0");
-    this.sync = new Sync(count);
-}
-// 使 count 减一
-public void countDown() {
-    sync.releaseShared(1);
-}
-// 线程自旋，知道 count 为 0
-public void await() throws InterruptedException {
-    sync.acquireSharedInterruptibly(1);
-}
-```
-例子：
-```java
-public class CountDownLatchDemo {
-    public static void main(String[] args) {
-        CountDownLatch latch = new CountDownLatch(6);
-
-        for (int i = 1; i <= 6; i++) {
-            new Thread(()->{
-                System.out.println(Thread.currentThread().getName() + "线程完成工作");
-                latch.countDown();
-            }, String.valueOf(i)).start();
-        }
-
-        System.out.println("主线程等待其他线程完成工作");
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("主线程等待完毕");
-    }
-}
-// 主线程等待其他线程完成工作
-// 1线程完成工作
-// 2线程完成工作
-// 3线程完成工作
-// 4线程完成工作
-// 5线程完成工作
-// 6线程完成工作
-// 主线程等待完毕
-```
-
-## 5.2. CyclicBarrier
-让一组线程到达一个屏障（同步点）时被阻塞，直到所有线程都到齐时才放行。
-```java
-public class CyclicBarrierDemo {
-    public static void main(String[] args) {
-        CyclicBarrier barrier = new CyclicBarrier(4, () -> {
-            System.out.println("线程到齐");
-        });
-
-        for (int i = 1; i <= 4; i++) {
-            new Thread(()->{
-                System.out.println(Thread.currentThread().getName() + " 到达");
-                try {
-                    barrier.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (BrokenBarrierException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(Thread.currentThread().getName() + " 继续执行");
-            }, String.valueOf(i)).start();
-        }
-    }
-}
-// 1 到达
-// 3 到达
-// 2 到达
-// 4 到达
-// 线程到齐
-// 4 继续执行
-// 3 继续执行
-// 2 继续执行
-// 1 继续执行
-```
-
-## 5.3. Semaphore 信号量
-
-作用：
-1. 用于多个共享资源的互斥使用
-2. 用于并发线程数量的控制
-
-```java
-public class SemaphoreDemo {
-    public static void main(String[] args) {
-        Semaphore semaphore = new Semaphore(3);
-        for (int i = 1; i <= 6; i++) {
-            new Thread(()->{
-                try {
-                    semaphore.acquire();
-                    System.out.println(Thread.currentThread().getName() + "进入临界区");
-                    try {
-                        TimeUnit.SECONDS.sleep(3);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println(Thread.currentThread().getName() + "离开临界区");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    semaphore.release();
-                }
-            }, String.valueOf(i)).start();
-        }
-    }
-}
-// 1进入临界区
-// 3进入临界区
-// 2进入临界区
-// 3离开临界区
-// 2离开临界区
-// 1离开临界区
-// 5进入临界区
-// 4进入临界区
-// 6进入临界区
-// 5离开临界区
-// 6离开临界区
-// 4离开临界区
-```
-
-# 6. 创建线程方法四：线程池
+# 4. 创建线程方法四：线程池
 
 好处：
 1. 便于管理线程
@@ -1791,7 +1290,7 @@ public interface Executor {
 ```
 ExecutorService 是线程池接口，常见实现类有 ThreadPoolExecutor。
 
-## 6.1. 线程池各个参数的作用，线程池如何工作的?
+## 4.1. 线程池各个参数的作用，线程池如何工作的?
 
 **ThreadPoolExecutor 构造器**
 ```java
@@ -1820,7 +1319,7 @@ public ThreadPoolExecutor(
 4. 当一个线程无事可做超过一定的时间（keepAliveTime）时，线程池会判断: 如果当前运行的线程数大于corePoolSize，那么这个线程就被停掉。
 
 
-## 6.2. 线程池的工作队列
+## 4.2. 线程池的工作队列
 
 1. **ArrayBlockingQueue**：有界队列，用数组实现的，FIFO
 2. **LinkedBlockingQueue**：有界队列，基于链表，FIFO。可设置容量队列，不设置容量则最大为 Integer.MAX_VALUE
@@ -1830,7 +1329,7 @@ public ThreadPoolExecutor(
 6. LinkedTransferQueue：无界队列，基于链表
 7. LinkedBlockingDeque：双向队列，基于链表
 
-### 6.2.1. BlockingQueue 核心方法
+### 4.2.1. BlockingQueue 核心方法
 
 | 方法类型 | 抛出异常 | 返回特殊值 | 阻塞   | 超时间              |
 |:-------:|:--------:|:---------:|:------:|:------------------:|
@@ -1849,7 +1348,7 @@ public ThreadPoolExecutor(
 阻塞：
 put 和 take 在插入元素或移除元素失败时会阻塞线程，直到可以进行操作时唤醒
 
-## 6.3. 默认的线程工厂
+## 4.3. 默认的线程工厂
 
 ```java
 public interface ThreadFactory {
@@ -1879,7 +1378,7 @@ static class DefaultThreadFactory implements ThreadFactory {
 }
 ```
 
-## 6.4. 四种拒绝策略
+## 4.4. 四种拒绝策略
 
 1. AbortPolicy：抛出一个异常，默认的
 2. DiscardPolicy：直接丢弃任务
@@ -1927,7 +1426,7 @@ public class MyThreadPool {
 // ...
 ```
 
-## 6.5. 几种常用的线程池
+## 4.5. 几种常用的线程池
 
 Executors 是一个工具类，线程池工厂，用于创建并返回不同类型的线程池。
 在 java.util.concurrent.Executors 中提供了一些方法去创建四种不同的线程池，这些方法实际上都是调用了 ThreadPoolExecutor 的构造器。返回值是线程池接口 ExecutorService。
@@ -1998,14 +1497,14 @@ public static ExecutorService newWorkStealingPool() {
 }
 ```
 
-## 6.6. 线程池异常处理
+## 4.6. 线程池异常处理
 
 1. try - catch 处理
 2. 通过 Future 对象的 get 方法接收抛出的异常，再处理
 3. 使用自己的ThreadFactory，创建线程时设置线程的 UncaughtExceptionHandler，在 uncaughtException方法中处理异常
 4. 重写 ThreadPoolExecutor 的 afterExecute方法，处理传递的异常引用
 
-## 6.7. 线程池状态
+## 4.7. 线程池状态
 
 1. **Running**
 该状态的线程池会接收新任务，并处理阻塞队列中的任务;
@@ -2027,7 +1526,7 @@ terminated() 执行完毕，进入 Terminated 状态
 5. **Terminated**
 该状态表示线程池彻底终止
 
-## 6.8. 使用方法
+## 4.8. 使用方法
 
 execute 用来执行 Runnable 实现类；submit 用来执行 Callable 实现类。
 ```java
@@ -2073,7 +1572,7 @@ public static void main(String[] args) {
 }
 ```
 
-## 6.9. 实际中应该使用哪个线程池？
+## 4.9. 实际中应该使用哪个线程池？
 
 不要用 JDK 预设的五大线程池。直接使用 ThreadPoolExecutor 的构造器去创建。
 
@@ -2090,11 +1589,11 @@ public static void main(String[] args) {
 >    2） CachedThreadPool：
 >       允许的创建线程数量为 Integer.MAX_VALUE，可能会创建大量的线程，从而导致 OOM。
 
-## 6.10. 如何合理的配置线程池参数？
+## 4.10. 如何合理的配置线程池参数？
 
 > https://blog.csdn.net/lixinkuan328/article/details/94501073
 
-### 6.10.1. CPU 密集型
+### 4.10.1. CPU 密集型
 
 定义：CPU密集型的意思就是该任务需要大量运算，而没有阻塞，CPU一直全速运行。
 CPU密集型任务只有在真正的多核CPU上才可能得到加速（通过多线程）。
@@ -2102,7 +1601,7 @@ CPU密集型任务配置尽可能少的线程数。
 CPU密集型线程数配置公式：(CPU核数+1) 个线程的线程池
 Runtime.getRuntime().availableProcessors() // 获取 Java 虚拟机可用CPU数量
 
-### 6.10.2. IO 密集型
+### 4.10.2. IO 密集型
 
 定义：IO密集型，即该任务需要大量的IO，即大量的阻塞。
 在单线程上运行IO密集型任务会导致浪费大量的CPU运算能力浪费在等待。
@@ -2118,7 +1617,7 @@ IO密集型时，大部分线程都阻塞，故需要多配置线程数。
 比如：8核 / (1 – 0.9) = 80个线程数
 
 
-# 7. 死锁
+# 5. 死锁
 
 不废话，直接上代码
 ```java
@@ -2202,3 +1701,506 @@ Java stack information for the threads listed above:
 
 Found 1 deadlock.
 ```
+
+# 6. 线程工具类
+
+## 6.1. CountDownLatch
+被 await 的线程需要等待前面 count 个线程完成，才继续进行。
+```java
+// 构造器指明 count
+public CountDownLatch(int count) {
+    if (count < 0) throw new IllegalArgumentException("count < 0");
+    this.sync = new Sync(count);
+}
+// 使 count 减一
+public void countDown() {
+    sync.releaseShared(1);
+}
+// 线程自旋，知道 count 为 0
+public void await() throws InterruptedException {
+    sync.acquireSharedInterruptibly(1);
+}
+```
+例子：
+```java
+public class CountDownLatchDemo {
+    public static void main(String[] args) {
+        CountDownLatch latch = new CountDownLatch(6);
+
+        for (int i = 1; i <= 6; i++) {
+            new Thread(()->{
+                System.out.println(Thread.currentThread().getName() + "线程完成工作");
+                latch.countDown();
+            }, String.valueOf(i)).start();
+        }
+
+        System.out.println("主线程等待其他线程完成工作");
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("主线程等待完毕");
+    }
+}
+// 主线程等待其他线程完成工作
+// 1线程完成工作
+// 2线程完成工作
+// 3线程完成工作
+// 4线程完成工作
+// 5线程完成工作
+// 6线程完成工作
+// 主线程等待完毕
+```
+
+## 6.2. CyclicBarrier
+让一组线程到达一个屏障（同步点）时被阻塞，直到所有线程都到齐时才放行。
+```java
+public class CyclicBarrierDemo {
+    public static void main(String[] args) {
+        CyclicBarrier barrier = new CyclicBarrier(4, () -> {
+            System.out.println("线程到齐");
+        });
+
+        for (int i = 1; i <= 4; i++) {
+            new Thread(()->{
+                System.out.println(Thread.currentThread().getName() + " 到达");
+                try {
+                    barrier.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(Thread.currentThread().getName() + " 继续执行");
+            }, String.valueOf(i)).start();
+        }
+    }
+}
+// 1 到达
+// 3 到达
+// 2 到达
+// 4 到达
+// 线程到齐
+// 4 继续执行
+// 3 继续执行
+// 2 继续执行
+// 1 继续执行
+```
+
+## 6.3. Semaphore 信号量
+
+作用：
+1. 用于多个共享资源的互斥使用
+2. 用于并发线程数量的控制
+
+```java
+public class SemaphoreDemo {
+    public static void main(String[] args) {
+        Semaphore semaphore = new Semaphore(3);
+        for (int i = 1; i <= 6; i++) {
+            new Thread(()->{
+                try {
+                    semaphore.acquire();
+                    System.out.println(Thread.currentThread().getName() + "进入临界区");
+                    try {
+                        TimeUnit.SECONDS.sleep(3);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(Thread.currentThread().getName() + "离开临界区");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    semaphore.release();
+                }
+            }, String.valueOf(i)).start();
+        }
+    }
+}
+// 1进入临界区
+// 3进入临界区
+// 2进入临界区
+// 3离开临界区
+// 2离开临界区
+// 1离开临界区
+// 5进入临界区
+// 4进入临界区
+// 6进入临界区
+// 5离开临界区
+// 6离开临界区
+// 4离开临界区
+```
+
+
+# 7. 集合类的线程不安全情况
+
+## 7.1. 并发修改异常 java.util.ConcurrentModificationException
+
+### 7.1.1. 异常现象
+
+下面的程序，由于三十个线程同时使用一个 list，会导致出现一些错误的情形。但还没有抛出异常
+```java
+public static void main(String[] args) {
+    List<String> list = new ArrayList<>();
+
+    for (int i = 1; i <= 30; i++) {
+        new Thread(() -> {
+            String s = UUID.randomUUID().toString().substring(0, 8);
+            list.add(s);
+            System.out.println(Thread.currentThread().getName() + " add " + s);
+        }, String.valueOf(i)).start();
+    }
+
+    while (Thread.activeCount() > 2) {
+        Thread.yield();
+    }
+    System.out.println(list.size());
+    System.out.println(list);
+}
+// 1 add 7e742601
+// 3 add 77548695
+// 2 add 2c5f0ed3
+// 3
+// [7e742601, 2c5f0ed3, 77548695]
+
+// 2 add 6aa654d0
+// 1 add c09d441b
+// 3 add 44605ac5
+// 3
+// [null, 6aa654d0, c09d441b]
+
+// 1 add 83ee8584
+// 2 add bc415695
+// 3 add 38d473e6
+// 2
+// [bc415695, 38d473e6]
+
+// 3 add 1a603579
+// 2 add 0ad81e3b
+// 1 add af204932
+// 1
+// [0ad81e3b]
+```
+但是当我们试图去读取list列表时，就会发生并发修改异常 java.util.ConcurrentModificationException
+```java
+public static void main(String[] args) {
+    List<String> list = new ArrayList<>();
+
+    for (int i = 1; i <= 30; i++) {
+        new Thread(() -> {
+            String s = UUID.randomUUID().toString().substring(0, 8);
+            list.add(s);
+            // 读取list的全部元素
+            list.forEach(System.out::println);
+            System.out.println(Thread.currentThread().getName() + " add " + s);
+        }, String.valueOf(i)).start();
+    }
+
+    while (Thread.activeCount() > 2) {
+        Thread.yield();
+    }
+    System.out.println(list.size());
+    System.out.println(list);
+}
+```
+
+### 7.1.2. 异常原因
+
+[Java 基础编程 · 17.5. 集合有关面试题](./01_Java基础编程.md#175-集合有关面试题)
+
+```java
+final void checkForComodification() {
+    if (modCount != expectedModCount)
+        throw new ConcurrentModificationException();
+}
+```
+
+### 7.1.3. 解决方案
+
+1. 使用 Vector 类（不建议，锁方法，导致并发现急剧下降）
+2. Collections.synchronizedList(new ArrayList<>());
+3. CopyOnWriteArrayList
+
+### 7.1.4. CopyOnWriteArrayList
+![image-20200326192142191](/images/image-20200326192142191.png)
+
+CopyOnWriteArrayList add 方法：写时复制，当要往list中添加元素时，不会在原list上直接修改，而是拷贝一份原list，在拷贝的list上做修改；修改完成之后用拷贝的数组更新原来的引用。
+```java
+public boolean add(E e) {
+    // 轻量级锁
+    final ReentrantLock lock = this.lock;
+    lock.lock();
+    try {
+        Object[] elements = getArray();
+        int len = elements.length;
+        // 复制
+        Object[] newElements = Arrays.copyOf(elements, len + 1);
+        // 写
+        newElements[len] = e;
+        // 更新最新的数组
+        setArray(newElements); // array = newElements;
+        return true;
+    } finally {
+        lock.unlock();
+    }
+}
+```
+
+
+## 7.2. 其它集合类
+
+HashSet 也会出现并发修改异常。
+1. Collections.synchronizedSet(new HashSet<>())
+2. CopyOnWriteArraySet
+CopyOnWriteArraySet 依赖的就是一个 CopyOnWriteArrayList（这 Set 家族这么不要脸么。HashSet 套壳 HashMap，真省事）
+```java
+public class CopyOnWriteArraySet<E> extends AbstractSet<E>
+        implements java.io.Serializable {
+    private static final long serialVersionUID = 5457747651344034263L;
+
+    private final CopyOnWriteArrayList<E> al;
+
+    /**
+     * Creates an empty set.
+     */
+    public CopyOnWriteArraySet() {
+        al = new CopyOnWriteArrayList<E>();
+    }
+}
+```
+
+HashMap 也会出现并发修改异常。
+1. HashTable （不推荐，锁方法，导致并发现急剧下降）
+1. Collections.synchronizedMap(new HashMap<>())
+2. ConcurrentHashMap
+
+### 7.2.1. ConcurrentHashMap
+
+- 线程安全，并且锁分离。
+- 使用 **分段锁**，降低了锁粒度，让并发度大大提高，允许更深层次的共享访问。ConcurrentHashMap内部使用段(Segment)来表示这些不同的部分，每个段其实就是一个小的HashTable，它们有自己的锁。
+- 任意数量的读线程可以并发访问；读者和写者也可以并发访问；有限数量的写线程可以并发修改（只要多个修改操作发生在不同的段上，它们就可以并发进行）。
+
+好处：
+- 为并发访问带来更高的吞吐量，并且几乎没有损失单个线程访问的性能。
+- 其迭代器不会抛出 ConcurrentModificationException  异常，不需要在迭代中加锁。返回的迭代器具有 **弱一致性**，可以感知 (但不保证) 在迭代器被创建后容器的修改。
+
+**jdk 1.8 源码**
+```java
+/**
+ * Creates a new, empty map with the default initial table size (16).
+ * 使用默认的初始表大小（16）创建一个新的空Map。
+ */
+public ConcurrentHashMap() {
+}
+```
+构造时不会初始化数组，第一次加入元素时才初始化
+put 操作
+```java
+public V put(K key, V value) {
+    return putVal(key, value, false);
+}
+
+final V putVal(K key, V value, boolean onlyIfAbsent) {
+    // 不允许 key 和 value 为空
+    if (key == null || value == null) 
+        throw new NullPointerException();
+    
+    // 哈希值计算
+    int hash = spread(key.hashCode());
+    /*
+    static final int HASH_BITS = 0x7fffffff; // 31位
+    static final int spread(int h) {
+    	// 扰动函数
+        return (h ^ (h >>> 16)) & HASH_BITS;
+    }
+    */
+    
+    int binCount = 0;
+    for (Node<K,V>[] tab = table;;) {   
+        Node<K,V> f; int n, i, fh;
+        
+        // 1、初始化 tab
+        if (tab == null || (n = tab.length) == 0)
+            tab = initTable();
+        
+        // 2、直接插入节点
+        // 判断待插入位置是否为 null，
+        // 为空则通过创建新节点，通过CAS方法设置在指定位置
+        else if 
+        	( 
+            	( 
+                	f = tabAt(tab, i = (n - 1) & hash) 
+            	) == null 
+        	) 
+        {
+            // 插入节点
+            if 
+            (
+                casTabAt
+                (
+                    tab, i, null,
+                    new Node<K,V>(hash, key, value, null)
+                )
+            )
+            {
+                // 插入成功则退出循环
+                // 到 addCount(1L, binCount); 那里
+                break; // no lock when adding to empty bin
+            }
+        }
+        
+        // 3、当前节点正在扩容
+        else if ((fh = f.hash) == MOVED)
+            tab = helpTransfer(tab, f);
+        
+        // 4、插入位置不为空
+        else {
+            V oldVal = null;
+            synchronized (f) {
+                if (tabAt(tab, i) == f) {
+                    // 4.1、链表
+                    if (fh >= 0) {
+                        binCount = 1;
+                        // 遍历链表
+                        for (Node<K,V> e = f;; ++binCount) {
+                            K ek;
+                            // 更新值
+                            if 
+                              (han
+                                e.hash == hash // 哈希冲突了
+                                &&
+                                ( 
+                                    // key 相同
+                                    // 用 == 和 equals 两种判断
+                                    (ek = e.key) == key 
+                                    ||
+                                    ( ek != null && key.equals(ek) )
+                                )
+                              ) 
+                            {
+                                oldVal = e.val;
+                                if (!onlyIfAbsent) // onlyIfAbsent 为 false
+                                    // 替换旧值
+                                    e.val = value;
+                                break;
+                            }
+                            
+                            Node<K,V> pred = e;
+                            // 到达链表尾部
+                            if ((e = e.next) == null) {
+                                // 插入值
+                                pred.next = new Node<K,V>(hash, key, value, null);
+                                break;
+                            }
+                        }
+                        // 遍历链表结束
+                    }
+                    // 4.2、红黑树
+                    else if (f instanceof TreeBin) {
+                        Node<K,V> p;
+                        binCount = 2;
+                        
+                        if ((p = ((TreeBin<K,V>)f).putTreeVal(hash, key, value)) != null) 					      {
+                            oldVal = p.val;
+                            if (!onlyIfAbsent)
+                                p.val = value;
+                        }
+                    }
+                    
+                }
+            } // synchronized 结束
+            
+            if (binCount != 0) {
+                // 链表中节点个数超过8转成红黑树
+                if (binCount >= TREEIFY_THRESHOLD)
+                    treeifyBin(tab, i);
+                
+                if (oldVal != null)
+                    return oldVal;
+                break;
+            }
+        } // 4、插入位置不为空 结束
+    } // for结束
+    
+    
+    addCount(1L, binCount);
+    return null;
+}
+```
+```java
+private final Node<K,V>[] initTable() {
+    Node<K,V>[] tab; int sc;
+    while ((tab = table) == null || tab.length == 0) {
+        // sizeCtl小于0，当前线程让出初始化执行权
+        if ((sc = sizeCtl) < 0)
+            Thread.yield(); 
+        	// lost initialization race; just spin
+        	// 失去了初始化竞赛;只是自旋
+        
+        // CAS 操作将 sizeCtl = -1
+        else if (U.compareAndSwapInt(this, SIZECTL, sc, -1)) {
+            try {
+                // 再次判断table是否为空, 和单例模式一个道理
+                if ((tab = table) == null || tab.length == 0) {
+                    // 数组大小 sc 
+                    // 小于0 使用默认大小 16
+                    int n = (sc > 0) ? sc : DEFAULT_CAPACITY;
+                    @SuppressWarnings("unchecked")
+                    // 这里创建数组
+                    Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n];
+                    table = tab = nt;
+                    sc = n - (n >>> 2);
+                }
+            } finally {
+                sizeCtl = sc;
+            }
+            break;
+        }
+    }
+    return tab;
+}
+```
+
+
+## 7.3. 同步容器
+
+同步容器类包括：
+1. Vector 和 HashTable
+2. jdk 1.2 加入的 同步包装类 (wrapper)
+3. 由 Collections.synchronizedXxx 工厂方法创建
+
+这些类通过封装它们的状态，并对每个公共方法进行同步，来实现线程安全。
+会出现的问题：对于复合操作，需要额外的加锁处理。
+迭代器 ConcurrentModificationException 并发修改异常
+
+```java
+public static <K,V> Map<K,V> synchronizedMap(Map<K,V> m) {
+    return new SynchronizedMap<>(m);
+}
+// SynchronizedMap类是一个静态内部类。
+// SynchronizedMap的每个方法，都是对Map本身做了一次带锁的操作。该类本身并没有太多的应用，性能较差。
+private static class SynchronizedMap<K,V> implements Map<K,V>, Serializable {
+    private final Map<K,V> m;     // Backing Map
+    final Object mutex;           // Object on which to synchronize
+
+    public V put(K key, V value) {
+        synchronized (mutex) {return m.put(key, value);}
+    }
+    public V remove(Object key) {
+        synchronized (mutex) {return m.remove(key);}
+    }
+    public void putAll(Map<? extends K, ? extends V> map) {
+        synchronized (mutex) {m.putAll(map);}
+    }
+    public void clear() {
+        synchronized (mutex) {m.clear();}
+    }
+}
+```
+
+## 7.4. 并发容器
+
+jdk 5 提供了几种并发的容器类。
+ConcurrentHashMap、CopyOnWriteArrayList、CopyOnWriteArraySet
+用并发容器替换同步容器，这样以很小的风险带来并发性的显著提高。

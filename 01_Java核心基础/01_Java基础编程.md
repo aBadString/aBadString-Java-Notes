@@ -4,10 +4,11 @@
 <!-- code_chunk_output -->
 
 - [1. Java 简介](#1-java-简介)
-  - [1.1. Java语言版本迭代](#11-java语言版本迭代)
-  - [1.2. JDK JRE JVM 三者间的关系](#12-jdk-jre-jvm-三者间的关系)
-  - [1.3. Hello World 程序](#13-hello-world-程序)
-  - [1.4. 注释](#14-注释)
+  - [1.1. 配置环境变量](#11-配置环境变量)
+  - [1.2. Java语言版本迭代](#12-java语言版本迭代)
+  - [1.3. JDK JRE JVM 三者间的关系](#13-jdk-jre-jvm-三者间的关系)
+  - [1.4. Hello World 程序](#14-hello-world-程序)
+  - [1.5. 注释](#15-注释)
 - [2. 变量](#2-变量)
   - [2.1. 变量的声明和赋值](#21-变量的声明和赋值)
   - [2.2. Java 变量的分类](#22-java-变量的分类)
@@ -81,127 +82,133 @@
   - [12.1. jdk内置的三个常用注解](#121-jdk内置的三个常用注解)
   - [12.2. 自定义注解](#122-自定义注解)
   - [12.3. 元注解](#123-元注解)
-- [13. 异常体系结构](#13-异常体系结构)
-  - [13.1. Exception和Error](#131-exception和error)
-  - [13.2. try – catch – finally](#132-try-catch-finally)
-  - [13.3. throws](#133-throws)
-  - [13.4. throw](#134-throw)
-  - [13.5. 自定义异常类](#135-自定义异常类)
-- [14. 多线程](#14-多线程)
-  - [14.1. 程序、进程、线程](#141-程序-进程-线程)
-  - [14.2. 线程安全](#142-线程安全)
-  - [14.3. 线程的使用](#143-线程的使用)
-    - [14.3.1. 创建线程方法一：继承Thread类](#1431-创建线程方法一继承thread类)
-    - [14.3.2. 创建线程方法二：实现Runnable接口](#1432-创建线程方法二实现runnable接口)
-    - [14.3.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）](#1433-创建线程方法三实现-callable-接口jdk50新增)
-    - [14.3.4. 线程的调度](#1434-线程的调度)
-  - [14.4. 线程的生命周期](#144-线程的生命周期)
-  - [14.5. 线程同步](#145-线程同步)
-    - [14.5.1. synchronized 同步代码块](#1451-synchronized-同步代码块)
-    - [14.5.2. synchronized 同步方法](#1452-synchronized-同步方法)
-    - [14.5.3. 同步锁 Lock ReentrantLock (jdk5.0 新增)](#1453-同步锁-lock-reentrantlock-jdk50-新增)
-    - [14.5.4. 死锁](#1454-死锁)
-  - [14.6. 线程通讯](#146-线程通讯)
-    - [14.6.1. PV 操作](#1461-pv-操作)
-    - [14.6.2. 两个线程交替打印 1~100](#1462-两个线程交替打印-1~100)
-      - [14.6.2.1. 【面试题】sleep 和 wait 的异同？](#14621-面试题sleep-和-wait-的异同)
-    - [14.6.3. 生产者消费者问题](#1463-生产者消费者问题)
-    - [14.6.4. 再探生产者消费者模型（基本模板）](#1464-再探生产者消费者模型基本模板)
-- [15. 反射](#15-反射)
-  - [15.1. 动态语言](#151-动态语言)
-  - [15.2. 反射机制](#152-反射机制)
-  - [15.3. Java 反射 API](#153-java-反射-api)
-    - [15.3.1. 获取 Class 对象的三种方法](#1531-获取-class-对象的三种方法)
-    - [15.3.2. Class 类常用方法](#1532-class-类常用方法)
-    - [15.3.3. 创建对象的两种方式](#1533-创建对象的两种方式)
-    - [15.3.4. 调用方法和设置属性](#1534-调用方法和设置属性)
+- [13. 反射](#13-反射)
+  - [13.1. 动态语言](#131-动态语言)
+  - [13.2. 反射机制](#132-反射机制)
+  - [13.3. Java 反射 API](#133-java-反射-api)
+    - [13.3.1. 获取 Class 对象的三种方法](#1331-获取-class-对象的三种方法)
+    - [13.3.2. Class 类常用方法](#1332-class-类常用方法)
+    - [13.3.3. 创建对象的两种方式](#1333-创建对象的两种方式)
+    - [13.3.4. 调用方法和设置属性](#1334-调用方法和设置属性)
+- [14. 异常体系结构](#14-异常体系结构)
+  - [14.1. Exception和Error](#141-exception和error)
+  - [14.2. try – catch – finally](#142-try-catch-finally)
+  - [14.3. throws](#143-throws)
+  - [14.4. throw](#144-throw)
+  - [14.5. 自定义异常类](#145-自定义异常类)
+- [15. 多线程](#15-多线程)
+  - [15.1. 程序、进程、线程](#151-程序-进程-线程)
+  - [15.2. 线程安全](#152-线程安全)
+  - [15.3. 线程的使用](#153-线程的使用)
+    - [15.3.1. 创建线程方法一：继承Thread类](#1531-创建线程方法一继承thread类)
+    - [15.3.2. 创建线程方法二：实现Runnable接口](#1532-创建线程方法二实现runnable接口)
+    - [15.3.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）](#1533-创建线程方法三实现-callable-接口jdk50新增)
+    - [15.3.4. 线程的调度](#1534-线程的调度)
+  - [15.4. 线程的生命周期](#154-线程的生命周期)
+  - [15.5. 线程同步](#155-线程同步)
+    - [15.5.1. synchronized 同步代码块](#1551-synchronized-同步代码块)
+    - [15.5.2. synchronized 同步方法](#1552-synchronized-同步方法)
+    - [15.5.3. 同步锁 Lock ReentrantLock (jdk5.0 新增)](#1553-同步锁-lock-reentrantlock-jdk50-新增)
+    - [15.5.4. 死锁](#1554-死锁)
+  - [15.6. 线程通讯](#156-线程通讯)
+    - [15.6.1. PV 操作](#1561-pv-操作)
+    - [15.6.2. 两个线程交替打印 1~100](#1562-两个线程交替打印-1~100)
+      - [15.6.2.1. 【面试题】sleep 和 wait 的异同？](#15621-面试题sleep-和-wait-的异同)
+    - [15.6.3. 生产者消费者问题](#1563-生产者消费者问题)
+    - [15.6.4. 再探生产者消费者模型（基本模板）](#1564-再探生产者消费者模型基本模板)
 - [16. 泛型](#16-泛型)
   - [16.1. 泛型方法](#161-泛型方法)
   - [16.2. 类型擦除](#162-类型擦除)
-- [17. 序列化](#17-序列化)
-  - [17.1. 序列化相关问题](#171-序列化相关问题)
-- [18. 集合](#18-集合)
-  - [18.1. List](#181-list)
-  - [18.2. Set](#182-set)
-    - [18.2.1. HashSet](#1821-hashset)
-  - [18.3. Map](#183-map)
-    - [18.3.1. HashMap（面试的重点）](#1831-hashmap面试的重点)
-      - [18.3.1.1. 重要属性和常量](#18311-重要属性和常量)
-      - [18.3.1.2. 构造器 (4个)](#18312-构造器-4个)
-      - [18.3.1.3. 哈希函数](#18313-哈希函数)
-      - [18.3.1.4. 数据结构](#18314-数据结构)
-      - [18.3.1.5. public V put(K key, V value) 插入/更新](#18315-public-v-putk-key-v-value-插入更新)
-      - [18.3.1.6. final Node<K,V>[] resize() 扩容](#18316-final-nodekv-resize-扩容)
-      - [18.3.1.7. public V get(Object key) 查询](#18317-public-v-getobject-key-查询)
-      - [18.3.1.8. 面试题](#18318-面试题)
-    - [18.3.2. ConcurrentHashMap（jdk 1.7 源码）](#1832-concurrenthashmapjdk-17-源码)
-    - [18.3.3. TreeMap](#1833-treemap)
-      - [18.3.3.1. 红黑树](#18331-红黑树)
-      - [18.3.3.2. TreeMap 源码](#18332-treemap-源码)
-  - [18.4. 集合遍历方式](#184-集合遍历方式)
-  - [18.5. 快速失败 (fail-fast) 和安全失败 (fail-safe)](#185-快速失败-fail-fast-和安全失败-fail-safe)
-- [19. IO](#19-io)
-  - [19.1. File (磁盘文件操作)](#191-file-磁盘文件操作)
-  - [19.2. 字节流：InputStream 和 OutputStream （输入输出流）](#192-字节流inputstream-和-outputstream-输入输出流)
-  - [19.3. 字符流：Reader 和 Writer](#193-字符流reader-和-writer)
-    - [19.3.1. 字符编码](#1931-字符编码)
-    - [19.3.2. BufferRead 和 BufferWriter](#1932-bufferread-和-bufferwriter)
-  - [19.4. NIO](#194-nio)
-- [20. JNI](#20-jni)
-- [21. Java 常用类](#21-java-常用类)
-  - [21.1. Object 类](#211-object-类)
-    - [21.1.1. equals方法](#2111-equals方法)
-    - [21.1.2. hashCode方法](#2112-hashcode方法)
-    - [21.1.3. toString方法](#2113-tostring方法)
-    - [21.1.4. clone方法](#2114-clone方法)
-  - [21.2. 包装类(Wrapper)](#212-包装类wrapper)
-    - [21.2.1. 基本数据类型、包装类、String之间的转换](#2121-基本数据类型-包装类-string之间的转换)
-    - [21.2.2. 拆箱与装箱](#2122-拆箱与装箱)
-  - [21.3. String类和常量池](#213-string类和常量池)
-    - [21.3.1. String 的不可变性](#2131-string-的不可变性)
-      - [21.3.1.1. 不可变性的好处](#21311-不可变性的好处)
-    - [21.3.2. String 的几种构造器](#2132-string-的几种构造器)
-    - [21.3.3. String 常用 API](#2133-string-常用-api)
-    - [21.3.4. String 与其他结构的转换](#2134-string-与其他结构的转换)
-    - [21.3.5. StringBuffer 和 StringBuilder](#2135-stringbuffer-和-stringbuilder)
-  - [21.4. 时间有关类](#214-时间有关类)
-    - [21.4.1. java.util.Date](#2141-javautildate)
-    - [21.4.2. java.sql.Date](#2142-javasqldate)
-    - [21.4.3. SimpleDateFormat](#2143-simpledateformat)
-    - [21.4.4. java.util.Calendar 日历类](#2144-javautilcalendar-日历类)
-    - [21.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增）](#2145-localdate-localtime-localdatetimejdk8-新增)
-- [22. Java 8 新特性](#22-java-8-新特性)
-  - [22.1. 函数式接口](#221-函数式接口)
-  - [22.2. Lambda 表达式](#222-lambda-表达式)
-  - [22.3. 方法引用](#223-方法引用)
-  - [22.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#224-接口实现类-匿名内部类-lambda表达式-方法引用)
-  - [22.5. 默认方法](#225-默认方法)
-  - [22.6. Stream API](#226-stream-api)
-  - [22.7. Date Time API](#227-date-time-api)
-  - [22.8. Optional 类](#228-optional-类)
-  - [22.9. 新工具](#229-新工具)
-  - [22.10. Nashorn, JavaScript 引擎](#2210-nashorn-javascript-引擎)
-- [23. Java Web 三大组件](#23-java-web-三大组件)
-  - [23.1. Servlet](#231-servlet)
-  - [23.2. Filter](#232-filter)
-    - [23.2.1. Filter的四种拦截方式](#2321-filter的四种拦截方式)
-  - [23.3. Listener](#233-listener)
+- [17. 集合](#17-集合)
+  - [17.1. List](#171-list)
+  - [17.2. Set](#172-set)
+    - [17.2.1. HashSet](#1721-hashset)
+  - [17.3. Map](#173-map)
+    - [17.3.1. HashMap（面试的重点）](#1731-hashmap面试的重点)
+      - [17.3.1.1. 重要属性和常量](#17311-重要属性和常量)
+      - [17.3.1.2. 构造器 (4个)](#17312-构造器-4个)
+      - [17.3.1.3. 哈希函数](#17313-哈希函数)
+      - [17.3.1.4. 数据结构](#17314-数据结构)
+      - [17.3.1.5. public V put(K key, V value) 插入/更新](#17315-public-v-putk-key-v-value-插入更新)
+      - [17.3.1.6. final Node<K,V>[] resize() 扩容](#17316-final-nodekv-resize-扩容)
+      - [17.3.1.7. public V get(Object key) 查询](#17317-public-v-getobject-key-查询)
+      - [17.3.1.8. 面试题](#17318-面试题)
+    - [17.3.2. ConcurrentHashMap（jdk 1.7 源码）](#1732-concurrenthashmapjdk-17-源码)
+    - [17.3.3. TreeMap](#1733-treemap)
+      - [17.3.3.1. 红黑树](#17331-红黑树)
+      - [17.3.3.2. TreeMap 源码](#17332-treemap-源码)
+  - [17.4. 集合遍历方式](#174-集合遍历方式)
+  - [17.5. 快速失败 (fail-fast) 和安全失败 (fail-safe)](#175-快速失败-fail-fast-和安全失败-fail-safe)
+- [18. IO](#18-io)
+  - [18.1. File (磁盘文件操作)](#181-file-磁盘文件操作)
+  - [18.2. 字节流：InputStream 和 OutputStream （输入输出流）](#182-字节流inputstream-和-outputstream-输入输出流)
+  - [18.3. 字符流：Reader 和 Writer](#183-字符流reader-和-writer)
+    - [18.3.1. 字符编码](#1831-字符编码)
+    - [18.3.2. BufferRead 和 BufferWriter](#1832-bufferread-和-bufferwriter)
+  - [18.4. 序列化](#184-序列化)
+    - [18.4.1. 序列化相关问题](#1841-序列化相关问题)
+  - [18.5. NIO](#185-nio)
+- [19. JNI](#19-jni)
+- [20. Java 常用类](#20-java-常用类)
+  - [20.1. Object 类](#201-object-类)
+    - [20.1.1. equals方法](#2011-equals方法)
+    - [20.1.2. hashCode方法](#2012-hashcode方法)
+    - [20.1.3. toString方法](#2013-tostring方法)
+    - [20.1.4. clone方法](#2014-clone方法)
+  - [20.2. 包装类(Wrapper)](#202-包装类wrapper)
+    - [20.2.1. 基本数据类型、包装类、String之间的转换](#2021-基本数据类型-包装类-string之间的转换)
+    - [20.2.2. 拆箱与装箱](#2022-拆箱与装箱)
+  - [20.3. String类和常量池](#203-string类和常量池)
+    - [20.3.1. String 的不可变性](#2031-string-的不可变性)
+      - [20.3.1.1. 不可变性的好处](#20311-不可变性的好处)
+    - [20.3.2. String 的几种构造器](#2032-string-的几种构造器)
+    - [20.3.3. String 常用 API](#2033-string-常用-api)
+    - [20.3.4. String 与其他结构的转换](#2034-string-与其他结构的转换)
+    - [20.3.5. StringBuffer 和 StringBuilder](#2035-stringbuffer-和-stringbuilder)
+  - [20.4. 时间有关类](#204-时间有关类)
+    - [20.4.1. java.util.Date](#2041-javautildate)
+    - [20.4.2. java.sql.Date](#2042-javasqldate)
+    - [20.4.3. SimpleDateFormat](#2043-simpledateformat)
+    - [20.4.4. java.util.Calendar 日历类](#2044-javautilcalendar-日历类)
+    - [20.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增）](#2045-localdate-localtime-localdatetimejdk8-新增)
+- [21. Java 8 新特性](#21-java-8-新特性)
+  - [21.1. 函数式接口](#211-函数式接口)
+  - [21.2. Lambda 表达式](#212-lambda-表达式)
+  - [21.3. 方法引用](#213-方法引用)
+  - [21.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#214-接口实现类-匿名内部类-lambda表达式-方法引用)
+  - [21.5. 默认方法](#215-默认方法)
+  - [21.6. Stream API](#216-stream-api)
+  - [21.7. Date Time API](#217-date-time-api)
+  - [21.8. Optional 类](#218-optional-类)
+  - [21.9. 新工具](#219-新工具)
+  - [21.10. Nashorn, JavaScript 引擎](#2110-nashorn-javascript-引擎)
+- [22. Java Web 三大组件](#22-java-web-三大组件)
+  - [22.1. Servlet](#221-servlet)
+  - [22.2. Filter](#222-filter)
+    - [22.2.1. Filter的四种拦截方式](#2221-filter的四种拦截方式)
+  - [22.3. Listener](#223-listener)
 
 <!-- /code_chunk_output -->
 
 # 1. Java 简介
 
-## 1.1. Java语言版本迭代
+## 1.1. 配置环境变量
+```
+JAVA_HOME = C:\Program Files\JavaDevelopmentTools\jdk1.8.0_131;
+Path = %JAVA_HOME%\bin;
+```
+
+## 1.2. Java语言版本迭代
 1995年发布JDK1.0；JDK1.5开始改名为JDK5.0,以后都是6.0，7.0 …。
 JavaSE（J2SE）：Java核心API + 桌面级应用开发
 JavaEE（J2EE）：企业级开发（Web应用）
 JavaME（J2ME）：移动端应用开发
 
-## 1.2. JDK JRE JVM 三者间的关系
+## 1.3. JDK JRE JVM 三者间的关系
 JDK = JRE + Java开发工具集
 JRE = JVM + Java SE 标准类库
 
-## 1.3. Hello World 程序
+## 1.4. Hello World 程序
 (1) **创建**：创建一个以.java结尾的文件
 (2) **编辑**：
 ``` java  
@@ -221,7 +228,7 @@ public class HelloWorld {
 > 最后，与 C/C++—样，关键字 void 表示这个方法没有返回值，所不同的是 main 方法没有为操作系统返回“退出代码”。如果 main 方法正常退出，那么 Java 应用程序的退出代码为 0，表示成功地运行了程序。如果希望在终止程序时返回其他的代码，那就需要调用 System.exit 方法。
 > —— 《Java核心技术 卷1 基础知识 原书第10版》P30
 
-## 1.4. 注释
+## 1.5. 注释
 (1) **单行注释**：//
 (2) **多行注释**：/* */
 ​    多行注释不能被嵌套使用
@@ -2010,9 +2017,127 @@ public enum RetentionPolicy {
 如果定义一个注解 @A 时使用了@Inherited 修饰的，那么 @A 被用于修饰一个类 C，则这个注解 @A 将被继承给类 C 的子类。
 
 
-# 13. 异常体系结构
+# 13. 反射
 
-## 13.1. Exception和Error
+## 13.1. 动态语言
+
+动态语言，是指程序在运行时可以改变其结构：新的函数可以引进，已有的函数可以被删除等结构上的变化。
+比如常见的 JavaScript 就是动态语言，除此之外 Ruby,Python 等也属于动态语言，而 C、C++则不属于动态语言。从反射角度说 JAVA 属于半动态语言。
+
+## 13.2. 反射机制
+
+反射：运行状态中知道类所有的属性和方法等。
+反射：主要是指程序可以访问，检测和修改它本身状态或行为的一种能力，并能根据自身行为的状态和结果，调整或修改应用所描述行为的状态和相关的语义。
+
+Java 的反射：在运行状态中，对于任意一个类都能够知道这个类所有的属性和方法；并且对于任意一个对象，都能够调用它的任意一个方法；这种动态获取信息以及动态调用对象方法的功能成为 Java 语言的反射机制。
+
+反射机制主要提供以下功能：
+1. 在运行时判断任意一个对象所属的类；
+2. 在运行时构造任意一个类的对象；
+3. 在运行时判断任意一个类所具有的成员变量和方法；
+4. 在运行时调用任意一个对象的方法；
+5. 生成动态代理。
+
+## 13.3. Java 反射 API
+
+```java
+// 类
+java.lang.Class;
+// 构造器
+java.lang.reflect.Constructor;
+// 属性
+java.lang.reflect.Field;
+// 方法
+java.lang.reflect.Method;
+// 访问修饰符
+java.lang.reflect.Modifier;
+```
+
+**优点：** 
+（1）能够运行时动态获取类的实例，大大提高系统的灵活性和扩展性。
+（2）与Java动态编译相结合，可以实现无比强大的功能 
+**缺点：** 
+（1）使用反射的性能较低
+（2）使用反射相对来说不安全
+（3）破坏了类的封装性，可以通过反射获取这个类的私有方法和属性
+
+### 13.3.1. 获取 Class 对象的三种方法
+
+1. 调用某个对象的 getClass() 方法，getClass() 在 Object 中
+```java
+Person p = new Person();
+Class clazz = p.getClass();
+```
+2. 调用某个类的 class 属性来获取该类对应的 Class 对象
+```java
+Class clazz = Person.class;
+```
+3. 使用 Class 类中的 forName() 静态方法 (最安全/性能最好)
+```java
+Class clazz = Class.forName("类的全路径"); (最常用)
+```
+
+### 13.3.2. Class 类常用方法
+
+```java
+// 获取全限定类名
+public String getName()
+
+// 获取直接父类全限定类名
+public native Class<? super T> getSuperclass()
+// 获取实现的所有接口的全限定类名
+public Class<?>[] getInterfaces()
+
+// 获取所有 public 构造器
+public Constructor<?>[] getConstructors()
+
+
+// 获得某个类的所有的公共（public）的字段，包括父类中的字段
+public Field[] getFields() 
+// 获得某个类的所有声明的字段，即包括public、private和proteced，但是不包括父类的申明字段。
+public Field[] getDeclaredFields()
+
+// 获取某个类的所有 public 方法，包括继承自父类的
+public Method[] getMethods()
+// 获取某个类的所有方法，仅包含自己定义的
+public Method[] getDeclaredMethods()
+
+// 调用空参构造器创建对象
+public T newInstance()
+```
+
+### 13.3.3. 创建对象的两种方式
+
+1. 使用 Class 对象的 newInstance()方法来创建该 Class 对象对应类的实例，但是这种方法要求该 Class 对象对应的类有默认的空构造器。
+```java
+Class clazz = Class.forName("reflection.Person"); 
+Person p = (Person) clazz.newInstance();
+```
+2. 使用 Constructor 对象的 newInstance() 方法来创建 Class 对象对应类的实例，通过这种方法可以选定构造方法创建实例。
+```java
+Class clazz = Class.forName("reflection.Person"); 
+Constructor c = clazz.getDeclaredConstructor(String.class, String.class, int.class);
+Person p = (Person) c.newInstance("李四", "男", 20);
+```
+
+### 13.3.4. 调用方法和设置属性
+
+调用方法：使用 Method 类的 invoke 方法
+```java
+public Object invoke(Object obj, Object... args)
+```
+第一个参数是一个对象的引用，用来指明通过哪个对象调用方法。
+
+设置属性值：使用 Filed 类的 set 方法
+```java
+public void set(Object obj, Object value)
+```
+第一个参数是一个对象的引用，用来指明设置哪个对象属性。
+
+
+# 14. 异常体系结构
+
+## 14.1. Exception和Error
 异常：在Java语言中，将程序执行过程中发生的不正常情况称为异常。（开发过程中的语法错误和逻辑错误不是异常）
 Error错误：Java虚拟机无法解决的严重问题。如，JVM系统内部错误、资源耗尽等严重情况。比如，StackOverflowError和OOM（什么是OOM？OutOfMemoryError：程序申请内存过大，虚拟机无法满足我们，然后自杀了）。一般不编写针对性代码进行处理。
 Exception异常：其他因编程错误或偶然的外在因素导致的一般性问题，可以使用针对性的代码进行处理。
@@ -2046,7 +2171,7 @@ int[] p = new int[1024 * 1024 * 1024];
             |-- ...
 ```
 
-## 13.2. try – catch – finally
+## 14.2. try – catch – finally
 ``` java
 try {
     可能会发生异常的代码
@@ -2110,14 +2235,14 @@ public static void main(String[] args) {
 ```
 
 
-## 13.3. throws
+## 14.3. throws
 格式：方法名(形参列表) throws 异常类型1, 异常类型2, … { 方法体 }
 
 throws并没有真正处理掉异常，而是将异常向上抛出，抛给方法的调用者，由其处理。
 如果父类被重写方法没有抛出异常，那么子类重写方法也不能抛出异常。
 子类重写方法所抛出的异常不大于父类被重写方法所抛出的异常。
 
-## 13.4. throw
+## 14.4. throw
 格式：throw 异常类对象;
 一般throw编译时异常的时候，我们都使用throws将其抛给上层方法处理。
 
@@ -2144,7 +2269,7 @@ static void show () {
 // 哈哈
 ```
 
-## 13.5. 自定义异常类
+## 14.5. 自定义异常类
 
 ```java
 public class MyException extends Exception {
@@ -2155,15 +2280,15 @@ public class MyException extends Exception {
 ![](/images/异常处理总结.png)
 
 
-# 14. 多线程
-## 14.1. 程序、进程、线程
+# 15. 多线程
+## 15.1. 程序、进程、线程
 程序：是为完成特定任务、用某种语言编写的一组指令的有序集合。是指一段静态的代码。
 进程：是一个程序在一个数据集合上的一次运行。是操作系统分配资源的最小单位。进程具有生命周期，是一个动态的过程。
 线程：是进程的一个实体，是进程内部的一条执行路径。是处理器调度的基本单位。
 
 一个Java应用至少有三个线程：main主线程、GC垃圾回收线程、异常处理线程。
 
-## 14.2. 线程安全
+## 15.2. 线程安全
 
 编写线程安全的代码，本质上就是管理对对象的状态的访问，而且这些状态通常都是**共享的、可变的**。
 一个对象的**状态**就是它的数据，存储在状态变量中。**共享**就是一个变量可以被多个线程访问。可变是指变量的值在其生命周期内是可以被**改变**的。
@@ -2196,9 +2321,9 @@ public class MyException extends Exception {
 3. 制定一个管理并发访问对象状态的策略
 
 
-## 14.3. 线程的使用
+## 15.3. 线程的使用
 
-### 14.3.1. 创建线程方法一：继承Thread类
+### 15.3.1. 创建线程方法一：继承Thread类
 ```java
 // 1、继承 Thread 类
 class MyThread extends Thread {
@@ -2258,7 +2383,7 @@ new Thread("t1") {
 10、	isAlive()：判断线程是否存活。
 
 
-### 14.3.2. 创建线程方法二：实现Runnable接口
+### 15.3.2. 创建线程方法二：实现Runnable接口
 ```java
 // 1、实现 Runnable 接口
 class MyRunnable implements Runnable {
@@ -2288,7 +2413,7 @@ public class RunnableTest {
 推荐使用实现Runnable接口的方式，因为继承是is-a的关系。一个类不应该is-a线程，正确的应该是一个类具有多线程运行的功能。第二，通过Runnable实现类创建几个线程对象，这些线程共享一个Runnable实现类对象，该对象的成员变量由所有线程共享。
 Thread本身也是实现了Runnable接口：public class Thread implements Runnable
 
-### 14.3.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）
+### 15.3.3. 创建线程方法三：实现 Callable 接口（jdk5.0新增）
 
 与 Runnable 相比 Callable 接口：
 1. 相比 run() 方法，call() 方法可以用返回值
@@ -2367,7 +2492,7 @@ Thread 类只有传 Runnable 接口的构造器，而没有传 Callable 的；�
 FutureTask 类实现了 RunnableFuture 接口，RunnableFuture 继承自 Runnable 接口；同时 FutureTask 类提供了一个 Callable 的构造器。FutureTask 相当于一个适配器。
 
 
-### 14.3.4. 线程的调度
+### 15.3.4. 线程的调度
 时间片轮转：时间片到，放弃CPU
 优先级调度：高优先级线程先使用CPU
 Java的调度策略：同级线程先来先服务，使用时间片轮转；高优先级线程优先调度。
@@ -2378,7 +2503,7 @@ NORM_PRIORITY 	5	默认的
 MAX_PRIORITY 	10
 
 
-## 14.4. 线程的生命周期
+## 15.4. 线程的生命周期
 ```java
 public enum State {
 NEW,
@@ -2400,9 +2525,9 @@ TIMED_WAITING,
 
 ![](/images/线程的生命周期.png)
 
-## 14.5. 线程同步
+## 15.5. 线程同步
 
-### 14.5.1. synchronized 同步代码块
+### 15.5.1. synchronized 同步代码块
 
 执行线程进入 synchronized 块之前会自动获得对象的内部锁，离开 synchronized 块时自动释放锁。获得内部锁的唯一途径是进入这个内部锁保护的同步块或方法。
 内部锁是互斥锁，至多只有一个线程可以拥有内部锁。其他线程会被阻塞，直到锁被释放。
@@ -2498,12 +2623,12 @@ class WindowThreadTest {
 
 为了方便起见，锁可以直接使用 **this 对象** 或者 **getClass() / 类名.class**
 
-### 14.5.2. synchronized 同步方法
+### 15.5.2. synchronized 同步方法
 
 如果整个方法都是临界区，不妨把改方法声明为同步方法。
 非静态同步方法的锁是 this；静态方法的锁是当前类。
 
-### 14.5.3. 同步锁 Lock ReentrantLock (jdk5.0 新增)
+### 15.5.3. 同步锁 Lock ReentrantLock (jdk5.0 新增)
 
 java.util.concurrent.locks.Lock 接口
 ```java
@@ -2592,7 +2717,7 @@ class WindowRunnableTest {
 1.synchronzied关键字修饰static方法：该锁由该类持有，相同类只可持有一把锁。
 2.synchronzied关键字修饰普通方法：该锁由类对象持有，相同对象只可持有一把锁。
 
-### 14.5.4. 死锁
+### 15.5.4. 死锁
 
 定义：两个或两个以上的进程/线程，在并发运行的情况下，因为竞争多个互斥资源，而造成它们互相等待对方无法释放的资源的现象，这种现象在无外力的作用时不可解除。
 
@@ -2619,9 +2744,9 @@ class WindowRunnableTest {
 
 参考：https://blog.csdn.net/hd12370/article/details/82814348
 
-## 14.6. 线程通讯
+## 15.6. 线程通讯
 
-### 14.6.1. PV 操作
+### 15.6.1. PV 操作
 
 ```java
 int S = 1;
@@ -2657,7 +2782,7 @@ V（S）；             V（S）；                     V（S）；
 参考：https://www.cnblogs.com/litaoyang/p/6606499.html
 
 
-### 14.6.2. 两个线程交替打印 1~100
+### 15.6.2. 两个线程交替打印 1~100
 
 wait()：执行改方法的线程进入阻塞状态，并释放同步监视器
 notify()：唤醒一个被wait的线程，多个线程按照优先级最高的被唤醒
@@ -2666,7 +2791,7 @@ notifyAll()：唤醒所有被wait的线程
 上面这三个方法都必须在 synchronized 块中出现，否则会抛出 java.lang.IllegalMonitorStateException 异常
 并且 synchronized(xxx) 的同步监视器必须和 xxx.wait() 的同步监视器相同
 
-#### 14.6.2.1. 【面试题】sleep 和 wait 的异同？
+#### 15.6.2.1. 【面试题】sleep 和 wait 的异同？
 相同：
     1. 两个方法执行都会使当前线程进入阻塞状态
     2. wait 和 sleep 都可以通过 interrupt() 方法打断线程的暂停状态 
@@ -2730,7 +2855,7 @@ public class ThreadCommunication {
 }
 ```
 
-### 14.6.3. 生产者消费者问题
+### 15.6.3. 生产者消费者问题
 
 ![](/images/生产者消费者问题.png)
 
@@ -2862,7 +2987,7 @@ public class ProductorCustomer {
 }
 ```
 
-### 14.6.4. 再探生产者消费者模型（基本模板）
+### 15.6.4. 再探生产者消费者模型（基本模板）
 
 线程操作资源类，高内聚低耦合
 判断 干活 通知
@@ -2915,123 +3040,6 @@ public void addOne() throws Exception {
 }
 ```
 
-# 15. 反射
-
-## 15.1. 动态语言
-
-动态语言，是指程序在运行时可以改变其结构：新的函数可以引进，已有的函数可以被删除等结构上的变化。
-比如常见的 JavaScript 就是动态语言，除此之外 Ruby,Python 等也属于动态语言，而 C、C++则不属于动态语言。从反射角度说 JAVA 属于半动态语言。
-
-## 15.2. 反射机制
-
-反射：运行状态中知道类所有的属性和方法等。
-反射：主要是指程序可以访问，检测和修改它本身状态或行为的一种能力，并能根据自身行为的状态和结果，调整或修改应用所描述行为的状态和相关的语义。
-
-Java 的反射：在运行状态中，对于任意一个类都能够知道这个类所有的属性和方法；并且对于任意一个对象，都能够调用它的任意一个方法；这种动态获取信息以及动态调用对象方法的功能成为 Java 语言的反射机制。
-
-反射机制主要提供以下功能：
-1. 在运行时判断任意一个对象所属的类；
-2. 在运行时构造任意一个类的对象；
-3. 在运行时判断任意一个类所具有的成员变量和方法；
-4. 在运行时调用任意一个对象的方法；
-5. 生成动态代理。
-
-## 15.3. Java 反射 API
-
-```java
-// 类
-java.lang.Class;
-// 构造器
-java.lang.reflect.Constructor;
-// 属性
-java.lang.reflect.Field;
-// 方法
-java.lang.reflect.Method;
-// 访问修饰符
-java.lang.reflect.Modifier;
-```
-
-**优点：** 
-（1）能够运行时动态获取类的实例，大大提高系统的灵活性和扩展性。
-（2）与Java动态编译相结合，可以实现无比强大的功能 
-**缺点：** 
-（1）使用反射的性能较低
-（2）使用反射相对来说不安全
-（3）破坏了类的封装性，可以通过反射获取这个类的私有方法和属性
-
-### 15.3.1. 获取 Class 对象的三种方法
-
-1. 调用某个对象的 getClass() 方法，getClass() 在 Object 中
-```java
-Person p = new Person();
-Class clazz = p.getClass();
-```
-2. 调用某个类的 class 属性来获取该类对应的 Class 对象
-```java
-Class clazz = Person.class;
-```
-3. 使用 Class 类中的 forName() 静态方法 (最安全/性能最好)
-```java
-Class clazz = Class.forName("类的全路径"); (最常用)
-```
-
-### 15.3.2. Class 类常用方法
-
-```java
-// 获取全限定类名
-public String getName()
-
-// 获取直接父类全限定类名
-public native Class<? super T> getSuperclass()
-// 获取实现的所有接口的全限定类名
-public Class<?>[] getInterfaces()
-
-// 获取所有 public 构造器
-public Constructor<?>[] getConstructors()
-
-
-// 获得某个类的所有的公共（public）的字段，包括父类中的字段
-public Field[] getFields() 
-// 获得某个类的所有声明的字段，即包括public、private和proteced，但是不包括父类的申明字段。
-public Field[] getDeclaredFields()
-
-// 获取某个类的所有 public 方法，包括继承自父类的
-public Method[] getMethods()
-// 获取某个类的所有方法，仅包含自己定义的
-public Method[] getDeclaredMethods()
-
-// 调用空参构造器创建对象
-public T newInstance()
-```
-
-### 15.3.3. 创建对象的两种方式
-
-1. 使用 Class 对象的 newInstance()方法来创建该 Class 对象对应类的实例，但是这种方法要求该 Class 对象对应的类有默认的空构造器。
-```java
-Class clazz = Class.forName("reflection.Person"); 
-Person p = (Person) clazz.newInstance();
-```
-2. 使用 Constructor 对象的 newInstance() 方法来创建 Class 对象对应类的实例，通过这种方法可以选定构造方法创建实例。
-```java
-Class clazz = Class.forName("reflection.Person"); 
-Constructor c = clazz.getDeclaredConstructor(String.class, String.class, int.class);
-Person p = (Person) c.newInstance("李四", "男", 20);
-```
-
-### 15.3.4. 调用方法和设置属性
-
-调用方法：使用 Method 类的 invoke 方法
-```java
-public Object invoke(Object obj, Object... args)
-```
-第一个参数是一个对象的引用，用来指明通过哪个对象调用方法。
-
-设置属性值：使用 Filed 类的 set 方法
-```java
-public void set(Object obj, Object value)
-```
-第一个参数是一个对象的引用，用来指明设置哪个对象属性。
-
 
 # 16. 泛型
 
@@ -3083,44 +3091,7 @@ public static void main( String args[] )
 `List<T extends Serialzable & Cloneable>` 擦除后类型为 `List<Serializable>`。
 
 
-# 17. 序列化
-
-**序列化**是把对象改成可以存到磁盘或通过网络发送到其他运行中的 Java 虚拟机的二进制格式的过程, 并可以通过反序列化恢复对象状态。需要实现 `java.io.Serializable` 接口。**序列化保存的时对象的状态，瞬态和静态变量会不会得到序列化**
-
-序列化一个对象需调用 `ObjectOutputStream.writeObject(saveThisObject)`, 并用 `ObjectInputStream.readObject()` 读取对象
-
-序列化可以看作是深拷贝的一种实现。
-
-## 17.1. 序列化相关问题
-
-【1、Java 中的可序列化接口和可外部接口之间的区别是什么？】
-Externalizable 给我们提供 writeExternal() 和 readExternal() 方法, 这让我们灵活地控制 Java 序列化机制, 而不是依赖于 Java 的默认序列化。 正确实现 Externalizable 接口可以显著提高应用程序的性能。
-
-【2、可序列化的方法有多少？如果没有方法,那么可序列化接口的用途是什么？】
-它没有任何方法, 在 Java 中也称为标记接口。当类实现 `java.io.Serializable` 接口时, 它将在 Java 中变得可序列化, 并指示编译器使用 Java 序列化机制序列化此对象。
-
-【3、如果可序列化类中的一个成员未实现可序列化接口，会发生什么情况？】
-在运行时将引发不可序列化异常 `NotSerializableException`。可以将其设置瞬态(**transient**)变量。
-
-【4、如果类是可序列化的, 但其超类不是, 则反序列化后从超级类继承的实例变量的状态如何？】
-超级类继承的实例变量的值将通过调用构造函数初始化。且一旦**构造函数链**启动, 就不可能停止，因此即使层次结构中更高的类成员变量实现了可序列化接口， 也将通过执行构造函数创建，而不再是反序列化得到。
-
-【5、是否可以自定义序列化过程, 或者是否可以覆盖 Java 中的默认序列化过程？】
-对于序列化一个对象需调用 `ObjectOutputStream.writeObject(saveThisObject)`, 并用 `ObjectInputStream.readObject()` 读取对象。
-如果在类中定义这两种方法, 则 JVM 将调用这两种方法, 而不是应用默认序列化机制。
-需要注意的重要一点是要声明这些方法为私有方法, 以避免被继承、重写或重载。 由于只有 Java 虚拟机可以调用类的私有方法, 你的类的完整性会得到保留, 并且 Java 序列化将正常工作。
-
-【6、假设新类的超级类实现可序列化接口, 如何避免新类被序列化？】
-为了避免 Java 序列化,你需要在类中实现 `writeObject()` 和 `readObject()` 方法, 并且需要从该方法引发不序列化异常`NotSerializableException`。 
-这是自定义 Java 序列化过程的另一个好处。
-
-【7、在 Java 序列化期间,哪些变量未序列化？】
-**瞬态和静态变量会不会得到序列化**
-由于静态变量属于类, 而不是对象, 因此它们不是对象状态的一部分；
-由于序列化仅保留**对象的状态**而不是对象本身，瞬态变量也不包含在 Java 序列化过程中。
-
-
-# 18. 集合
+# 17. 集合
 
 ![img](/images/集合.gif)
 
@@ -3153,7 +3124,7 @@ Externalizable 给我们提供 writeExternal() 和 readExternal() 方法, 这让
 
 综上：List（有序可重复）、Set（无序不能重复）、Map（键值对：键唯一，值可重复）
 
-## 18.1. List
+## 17.1. List
 
 ![](/images/ArrayListVectorLinkedList.png)
 
@@ -3201,7 +3172,7 @@ public class Vector<E>
 ​	1、ArrayList是非同步的；Vector是同步的。可以使用Collections工具类来构建出同步的ArrayList。
 ​	2、Vector 每次增长原来的一倍，ArrayList 每次增长原来的0.5倍。
 
-## 18.2. Set
+## 17.2. Set
 
 HashSet、TreeSet、LinkedHashSet
 所有的 Set 都是基于 Map 实现的。
@@ -3227,7 +3198,7 @@ if (e != null) { // existing mapping for key
 }
 ```
 
-### 18.2.1. HashSet
+### 17.2.1. HashSet
 
 ![HashMap的UML图](/images/1.png) 
 
@@ -3267,7 +3238,7 @@ HashSet(int initialCapacity, float loadFactor, boolean dummy) {
 }
 ```
 
-## 18.3. Map
+## 17.3. Map
 
 ![](/images/HashMapHashTableTreeMap.png)
 ![](/images/Map.png)
@@ -3314,7 +3285,7 @@ public class Hashtable<K,V>
     implements Map<K,V>, Cloneable, java.io.Serializable {}
 ```
 
-### 18.3.1. HashMap（面试的重点）
+### 17.3.1. HashMap（面试的重点）
 
 > 参考文献
 > [一个HashMap跟面试官扯了半个小时](https://zhuanlan.zhihu.com/p/125628540)
@@ -3339,7 +3310,7 @@ AbstractMap 实现了键值对的通用函数接口
 它是线程不安全的，key 和 value 都可以为 null，并且它是无序的。
 
 
-#### 18.3.1.1. 重要属性和常量
+#### 17.3.1.1. 重要属性和常量
 属性：
 - loadFactor 负载因子   0.75
 - threshold  扩容极限   24 = loadFactor * table.length
@@ -3417,7 +3388,7 @@ static final float DEFAULT_LOAD_FACTOR = 0.75f;
 static final int MAXIMUM_CAPACITY = 1 << 30;
 ```
 
-#### 18.3.1.2. 构造器 (4个)
+#### 17.3.1.2. 构造器 (4个)
 **两个参数：初始容量和负载因子。**
 容量是HashMap中桶的数量；负载因子是HashMap在其容量自动增加之前可以达到多满的一种尺度。当键值对的数量超过负载因子与当前容量之积（即使用了百分之多少的桶），就要对HashMap进行 rehash 操作（重建内部数据结构），重建之后HashMap将具有之前两倍的桶数目。
 
@@ -3543,7 +3514,7 @@ System.out.println(tableSizeFor(4096)); // 4096
 `>>` 右移：规则是低位移出，高位补符号位。正数 0，负数 1
 `>>>` 无符号右移：高位始终补0。
 
-#### 18.3.1.3. 哈希函数
+#### 17.3.1.3. 哈希函数
 Hash(x) = (x.hashCode()>>>16 ^ x.hashCode()) % n;
 
 设计要点
@@ -3591,7 +3562,7 @@ tab[i = (n - 1) & hash])
 （我觉得第二点是瞎扯，不过 使得元素分布均匀 还是有些道理）
 3. 扩容后，rehash操作，节点位置要么保持不变，要么向后移动原来数组大小。
 
-#### 18.3.1.4. 数据结构
+#### 17.3.1.4. 数据结构
 jdk 1.8 ：内部使用数组 + 链表/红黑树
 ![img](https://pic3.zhimg.com/80/v2-4ce38fd1c36fc61e70d7687fae997e5a_720w.jpg) 
 当链表长度大于 8 且 数组长度大于等于 64 时，转为红黑树；当红黑树节点小于 6 时，转为链表。
@@ -3645,7 +3616,7 @@ V value;
 Node<K,V> next; // 链表 next 指针
 ```
 
-#### 18.3.1.5. public V put(K key, V value) 插入/更新
+#### 17.3.1.5. public V put(K key, V value) 插入/更新
 **HashMap的数据插入原理**
 1. 判断数组是否为空。
    1. 为空，则初始化数组（resize 扩容）
@@ -3669,7 +3640,7 @@ Node<K,V> next; // 链表 next 指针
 根据局部性原理，最近插入的数据被访问可能性更大。（和操作系统中页面调度的 LRU 算法异曲同工之妙）
 **头插法的坏处**：在扩容时会改变链表中元素原本的顺序，会使链表发生反转，多线程环境下会产生**环**。
 
-#### 18.3.1.6. final Node<K,V>[] resize() 扩容
+#### 17.3.1.6. final Node<K,V>[] resize() 扩容
 
 1. 新建一个原来两倍大小的数组
 2. 遍历旧数组
@@ -3692,7 +3663,7 @@ newIndex = (newLength - 1) & hash
 |oldLength-1 (15)| 0000 1111 ||newLength-1 (31)| 000==1== 1111 |
 |oldIndex        | 0000 0101 ||newIndex        | 000==1== 0101 (加16)|
 
-#### 18.3.1.7. public V get(Object key) 查询
+#### 17.3.1.7. public V get(Object key) 查询
 
 1. 通过 hash() 计算 key 的 hash 值，再计算下标
 2. 在给定下标处查找链表或红黑树
@@ -3766,7 +3737,7 @@ public class HashMapGet {
 1. 重写 hashcode 和 equals 方法，且遵循以下原则：equals 相等 -> hashcode 一定相等。
 2. 该类的对象具有不可变性（否则会丢失这个键值对，造成内存泄漏）。或者成员变量的改变不会引起 hashcode 的改变，以及 equals 的结果。
 
-#### 18.3.1.8. 面试题
+#### 17.3.1.8. 面试题
 
 **jdk 1.8 后的改进**
 1. 数组+链表 改进为 数组+链表/红黑树
@@ -3791,7 +3762,7 @@ LinkedHashMap 是有序的，内部使用一个链表，有头尾节点。
 同时LinkedHashMap节点Entry内部除了继承HashMap的Node属性，还有before 和 after用于标识前置节点和后置节点。可以实现按插入的顺序或访问顺序排序。
 
 
-### 18.3.2. ConcurrentHashMap（jdk 1.7 源码）
+### 17.3.2. ConcurrentHashMap（jdk 1.7 源码）
 
 ```java
 //默认的数组大小16(HashMap里的那个数组)
@@ -3951,9 +3922,9 @@ private Segment<K,V> ensureSegment(int k) {
 ![img](https://user-gold-cdn.xitu.io/2017/12/12/1604851702c89293?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 
-### 18.3.3. TreeMap
+### 17.3.3. TreeMap
 
-#### 18.3.3.1. 红黑树
+#### 17.3.3.1. 红黑树
 **红黑树：**
 0. 满足二叉查找树
 1. 节点是红色或者黑色
@@ -3972,7 +3943,7 @@ private Segment<K,V> ensureSegment(int k) {
    - 左旋转
    - 右旋转
 
-#### 18.3.3.2. TreeMap 源码
+#### 17.3.3.2. TreeMap 源码
 
 ![img](/images/TreeMap.png)
 
@@ -4408,7 +4379,7 @@ private void deleteEntry(Entry<K,V> p) {
 3. p 没有孩子：直接将 p 的父节点对应自己的指针置空
 
 
-## 18.4. 集合遍历方式
+## 17.4. 集合遍历方式
 1. Iterator：迭代输出，是使用最多的输出方式。
 2. ListIterator：是Iterator的子接口，专门用于输出List中的内容。
 3. foreach输出：JDK1.5之后提供的新功能，可以输出数组或集合。
@@ -4481,7 +4452,7 @@ public static void main(String[] args) {
 }
 ```
 
-## 18.5. 快速失败 (fail-fast) 和安全失败 (fail-safe)
+## 17.5. 快速失败 (fail-fast) 和安全失败 (fail-safe)
 快速失败（fail-fast）：
 当多个线程对 Collection 进行操作时，若其中某一个线程通过iterator去遍历集合时，该集合的内容被其他线程所改变；则会抛出ConcurrentModificationException 并发修改异常。
 原理：迭代器在遍历时直接访问集合中的内容，并且在遍历过程中使用一个 modCount 变量。集合在被遍历期间如果内容发生变化，就会改变modCount的值。每当迭代器使用hashNext()/next()遍历下一个元素之前，都会检测modCount变量是否为expectedmodCount值，是的话就返回遍历；否则抛出异常，终止遍历。
@@ -4507,7 +4478,7 @@ final void checkForComodification() {
 3. ArrayList的Iterator实现类中调用next()时，会“调用checkForComodification()比较‘expectedModCount’和‘modCount’的大小”；但是，CopyOnWriteArrayList的Iterator实现类中，没有所谓的checkForComodification()，更不会抛出ConcurrentModificationException异常！
 
 
-# 19. IO
+# 18. IO
 Java 的 I/O 大概可以分成以下几类：
 - 磁盘操作：File
 - 字节操作：InputStream 和 OutputStream
@@ -4519,7 +4490,7 @@ Java 的 I/O 大概可以分成以下几类：
 ![](/images/IO.png)
 
 
-## 19.1. File (磁盘文件操作)
+## 18.1. File (磁盘文件操作)
 File 用于表示文件和目录的信息，但是它不表示文件的内容
 ```java
 /**
@@ -4539,7 +4510,7 @@ public static void listAllFiles(File dir) {
 }
 ```
 
-## 19.2. 字节流：InputStream 和 OutputStream （输入输出流）
+## 18.2. 字节流：InputStream 和 OutputStream （输入输出流）
 ```java
 InputStream f = new FileInputStream("C:/java/hello");
 OutputStream f = new FileOutputStream("C:/java/hello")
@@ -4605,9 +4576,9 @@ public static void copyFile(String src, String dist) throws IOException {
 }
 ```
 
-## 19.3. 字符流：Reader 和 Writer
+## 18.3. 字符流：Reader 和 Writer
 
-### 19.3.1. 字符编码
+### 18.3.1. 字符编码
 
 - GBK 编码中，中文字符占 2 个字节，英文字符占 1 个字节；
 - GB2312 编码中，中文字符占 2 个字节，英文字符占 1 个字节；
@@ -4683,7 +4654,7 @@ public class Unicode {
 // ----
 ```
 
-### 19.3.2. BufferRead 和 BufferWriter
+### 18.3.2. BufferRead 和 BufferWriter
 
 ```
 Read
@@ -4692,15 +4663,51 @@ Read
         | -- FileReader
 ```
 
+## 18.4. 序列化
 
-## 19.4. NIO
+**序列化**是把对象改成可以存到磁盘或通过网络发送到其他运行中的 Java 虚拟机的二进制格式的过程, 并可以通过反序列化恢复对象状态。需要实现 `java.io.Serializable` 接口。**序列化保存的时对象的状态，瞬态和静态变量会不会得到序列化**
+
+序列化一个对象需调用 `ObjectOutputStream.writeObject(saveThisObject)`, 并用 `ObjectInputStream.readObject()` 读取对象
+
+序列化可以看作是深拷贝的一种实现。
+
+### 18.4.1. 序列化相关问题
+
+【1、Java 中的可序列化接口和可外部接口之间的区别是什么？】
+Externalizable 给我们提供 writeExternal() 和 readExternal() 方法, 这让我们灵活地控制 Java 序列化机制, 而不是依赖于 Java 的默认序列化。 正确实现 Externalizable 接口可以显著提高应用程序的性能。
+
+【2、可序列化的方法有多少？如果没有方法,那么可序列化接口的用途是什么？】
+它没有任何方法, 在 Java 中也称为标记接口。当类实现 `java.io.Serializable` 接口时, 它将在 Java 中变得可序列化, 并指示编译器使用 Java 序列化机制序列化此对象。
+
+【3、如果可序列化类中的一个成员未实现可序列化接口，会发生什么情况？】
+在运行时将引发不可序列化异常 `NotSerializableException`。可以将其设置瞬态(**transient**)变量。
+
+【4、如果类是可序列化的, 但其超类不是, 则反序列化后从超级类继承的实例变量的状态如何？】
+超级类继承的实例变量的值将通过调用构造函数初始化。且一旦**构造函数链**启动, 就不可能停止，因此即使层次结构中更高的类成员变量实现了可序列化接口， 也将通过执行构造函数创建，而不再是反序列化得到。
+
+【5、是否可以自定义序列化过程, 或者是否可以覆盖 Java 中的默认序列化过程？】
+对于序列化一个对象需调用 `ObjectOutputStream.writeObject(saveThisObject)`, 并用 `ObjectInputStream.readObject()` 读取对象。
+如果在类中定义这两种方法, 则 JVM 将调用这两种方法, 而不是应用默认序列化机制。
+需要注意的重要一点是要声明这些方法为私有方法, 以避免被继承、重写或重载。 由于只有 Java 虚拟机可以调用类的私有方法, 你的类的完整性会得到保留, 并且 Java 序列化将正常工作。
+
+【6、假设新类的超级类实现可序列化接口, 如何避免新类被序列化？】
+为了避免 Java 序列化,你需要在类中实现 `writeObject()` 和 `readObject()` 方法, 并且需要从该方法引发不序列化异常`NotSerializableException`。 
+这是自定义 Java 序列化过程的另一个好处。
+
+【7、在 Java 序列化期间,哪些变量未序列化？】
+**瞬态和静态变量会不会得到序列化**
+由于静态变量属于类, 而不是对象, 因此它们不是对象状态的一部分；
+由于序列化仅保留**对象的状态**而不是对象本身，瞬态变量也不包含在 Java 序列化过程中。
+
+
+## 18.5. NIO
 
 Non-blocking I/O 是一种同步非阻塞的I/O模型，也是I/O多路复用的基础，已经被越来越多地应用到大型应用服务器，成为解决高并发与大量连接、I/O处理问题的有效方式。
 
 https://zhuanlan.zhihu.com/p/23488863
 
 
-# 20. JNI
+# 19. JNI
 
 1、创建一个包 `mkdir -p priv/abadstring/jni/`
 2、创建一个java文件 `vi priv/abadstring/jni/JNIDemo.java`
@@ -4818,9 +4825,9 @@ hello, jni. I am C.
 
 -D 必须在类前面，这种不行 `java priv.abadstring.jni.JNIDemo -Djava.library.path="./priv/abadstring/jni"`
 
-# 21. Java 常用类
+# 20. Java 常用类
 
-## 21.1. Object 类
+## 20.1. Object 类
 
 Object类是所有Java类的根父类。
 
@@ -4880,7 +4887,7 @@ public class Object {
 }
 ```
 
-### 21.1.1. equals方法
+### 20.1.1. equals方法
 
 **equals()方法需要具有如下特点：**
 
@@ -4933,19 +4940,19 @@ public boolean equals(Object anObject) {
 }
 ```
 
-### 21.1.2. hashCode方法
+### 20.1.2. hashCode方法
 
 这个方法返回一个整型值（hash code value），如果两个对象被equals()方法判断为相等，那么它们就应该拥有同样的 hash code。
 
 Object类的hashCode()方法为不同的对象返回不同的值，Object类的hashCode值表示的是对象的地址。
 
-### 21.1.3. toString方法
+### 20.1.3. toString方法
 
 输出一个引用时，实际上是先默认调用了toString方法得到一个字符串，然后调用重载方法public void System.out.println(String x)。
 
 ![image-20200403141045044](/images/image-20200403141045044.png) 
 
-### 21.1.4. clone方法
+### 20.1.4. clone方法
 
 1、想要重写clone方法的类必须实现 java.lang.Cloneable 接口，否则会抛出CloneNotSupportedException异常。Cloneable接口中不包含任何方法，所以实现它时只要在类声明中加上implements语句即可。
 
@@ -4989,11 +4996,11 @@ protected Object clone() throws CloneNotSupportedException {
 ![image-20200403151718701](/images/image-20200403151718701.png) 
 
 
-## 21.2. 包装类(Wrapper)
+## 20.2. 包装类(Wrapper)
 
 ![](/images/包装类.png)
 
-### 21.2.1. 基本数据类型、包装类、String之间的转换
+### 20.2.1. 基本数据类型、包装类、String之间的转换
  
 ![](/images/基本数据类型和包装类之间的转化.png)
 
@@ -5005,7 +5012,7 @@ protected Object clone() throws CloneNotSupportedException {
 - 基本数据类型 -> String：调用String类的valueOf()静态方法，String str = String.valueOf(10);
 - 包装类 -> String：调用包装类的toString()方法，String str = String.valueOf(integer);
 
-### 21.2.2. 拆箱与装箱
+### 20.2.2. 拆箱与装箱
 
 拆箱：将包装类直接赋值给基本数据类型。底层是调用了intValue方法。
 装箱：将基本数据类型直接赋值给包装类。底层是调用了valueOf方法。
@@ -5115,7 +5122,7 @@ static {
 }
 ```
 
-## 21.3. String类和常量池
+## 20.3. String类和常量池
 1、String类被final所修饰，所有该类不能被继承。
 2、实现了Serializable接口可以被序列化，被序列化后才能在不同的进程间或前后端进行数据传输。
 3、实现了Compareable接口可以用来比较内容。
@@ -5146,14 +5153,14 @@ public final class String
 value 数组被声明为 final，这意味着 value 数组初始化之后就不能再引用其它数组。并且 String 内部没有改变 value 数组的方法，因此可以保证 String 不可变。
 
 
-### 21.3.1. String 的不可变性
+### 20.3.1. String 的不可变性
 
 当对字符串引用重新赋值或者改变字符串的内容时，会重新创建一个字符串对象，而不会去改变原来对象的内容。
 
 通过字面量的方式给字符串赋值，字符串对象会创建在方法区的常量池当中，栈中的引用直接引用常量池地址，多个相同内容的字符串共用一个常量池中的对象。
 如果给字符串重新赋值，那么会重写在常量池中创建一个字符串对象，让栈上的引用重新指向改对象，而不会改变原来的字符串对象。
 
-#### 21.3.1.1. 不可变性的好处
+#### 20.3.1.1. 不可变性的好处
 
 1. 可缓存 hash 值
 
@@ -5168,7 +5175,7 @@ String 经常作为参数，String 不可变性可以保证参数不可变。
 String 不可变性天生具备线程安全，可以在多个线程中安全地使用。
 
 
-### 21.3.2. String 的几种构造器
+### 20.3.2. String 的几种构造器
 
 ```java
 // 这种就是引用间赋值，把地址值拷贝给引用变量
@@ -5253,7 +5260,7 @@ public void test4(){
 }
 ```
 
-### 21.3.3. String 常用 API
+### 20.3.3. String 常用 API
 **基本：**
 `int length()`：返回字符串的长度： return value.length
 `boolean isEmpty()`：判断是否是空字符串：return value.length == 0
@@ -5290,7 +5297,7 @@ public void test4(){
 `String[] split(String regex)`：根据给定正则表达式的匹配拆分此字符串。
 `String[] split(String regex, int limit)`：根据匹配给定的正则表达式来拆分此字符串，最多不超过limit个，如果超过了，剩下的全部都放到最后一个元素中。
 
-### 21.3.4. String 与其他结构的转换
+### 20.3.4. String 与其他结构的转换
 
 - **String 与基本数据类型和包装类的转换**
 [基本数据类型、包装类、String之间的转换](#921-基本数据类型-包装类-string之间的转换)
@@ -5351,7 +5358,7 @@ public void test2(){
 }
 ```
 
-### 21.3.5. StringBuffer 和 StringBuilder
+### 20.3.5. StringBuffer 和 StringBuilder
 
 - String: 不可变的字符序列；底层使用char[]存储
 - StringBuffer: 可变的字符序列；线程安全的，效率低；底层使用char[]存储
@@ -5444,7 +5451,7 @@ public static void main(String[] args) {
 // String的执行时间：1637
 ```
 
-## 21.4. 时间有关类
+## 20.4. 时间有关类
 
 System 类中的时间 API
 ```java
@@ -5453,7 +5460,7 @@ System 类中的时间 API
 long time = System.currentTimeMillis();
 ```
 
-### 21.4.1. java.util.Date
+### 20.4.1. java.util.Date
 java.util.Date 有多个重载的构造器，但许多都过时啦，这里介绍两个
 1. Date()：创建一个对应当前时间的Date对象
 2. Date(long date)：创建指定毫秒数的Date对象
@@ -5461,7 +5468,7 @@ java.util.Date 有多个重载的构造器，但许多都过时啦，这里介�
 toString()：显示当前Date对象 星期 月 日 时:分:秒 标准时间+时差 年。`Mon Aug 10 19:54:10 GMT+08:00 2020`
 getTime()：获取当前Date对象对应的毫秒数（时间戳）。
 
-### 21.4.2. java.sql.Date
+### 20.4.2. java.sql.Date
 ```java
 public class java.sql.Date extends java.util.Date
 ```
@@ -5477,7 +5484,7 @@ long date = utilDate.getTime();
 java.sql.Date sqlDate = new java.sql.Date(date);
 ```
 
-### 21.4.3. SimpleDateFormat
+### 20.4.3. SimpleDateFormat
 
 java.text.SimpleDateFormat 类可以对日期 Date 类的做格式化和解析
 格式化：日期 ---> 字符串
@@ -5528,7 +5535,7 @@ java.sql.Date sqlDate = new java.sql.Date(date);
 System.out.println(sqlDate);
 ```
 
-### 21.4.4. java.util.Calendar 日历类
+### 20.4.4. java.util.Calendar 日历类
 
 Calendar 是一个抽象类，不能被直接实例化。可以使用静态的 getInstance 方法获得一个实例 或者 实例化其子类 GregorianCalendar
 ```java
@@ -5554,14 +5561,14 @@ final void setTime(Date date)：java.util.Date --> Calendar
 
 从 set 和 add 方法可见 Calendar 具有可变性。
 
-### 21.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增） 
+### 20.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增） 
 
 [Date Time API](#217-date-time-api)
 
 
-# 22. Java 8 新特性
+# 21. Java 8 新特性
 
-## 22.1. 函数式接口
+## 21.1. 函数式接口
 函数式接口(Functional Interface)就是一个有且仅有一个抽象方法，但是可以有多个非抽象方法的接口。
 函数式接口可以被隐式转换为 lambda 表达式。
 
@@ -5572,7 +5579,7 @@ interface GreetingService {
 }
 ```
 
-## 22.2. Lambda 表达式 
+## 21.2. Lambda 表达式 
 Lambda 表达式，也可称为闭包。允许把函数作为一个方法的参数（函数作为参数传递到方法中）。
 当匿名内部类所实现的接口是一个函数式接口，可以使用Lambda表达式来替代。
 
@@ -5685,7 +5692,7 @@ public class LambdaFinal {
 ```
 
 
-## 22.3. 方法引用
+## 21.3. 方法引用
 方法引用提供了非常有用的语法，可以直接引用已有Java类或对象（实例）的方法或构造器。与lambda联合使用，方法引用可以使语言的构造更紧凑简洁，减少冗余代码。
 方法引用提供了一种引用而不执行方法的方式。（函数指针？？）
 **注意方法引用是一个Lambda表达式**
@@ -5697,7 +5704,7 @@ public class LambdaFinal {
 - 特定对象的方法引用：`实例对象::方法名`
 
 
-## 22.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用
+## 21.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用
 
 定义一个函数式接口
 ```java
@@ -5813,7 +5820,7 @@ public class GreetingMain {
 
 
 
-## 22.5. 默认方法
+## 21.5. 默认方法
 Java 8 新增了接口的默认方法。默认方法就是一个在接口里面有了一个实现的方法。
 ```java
 public interface Vehicle {
@@ -5880,10 +5887,10 @@ class Mian {
 ```
 
 
-## 22.6. Stream API
+## 21.6. Stream API
 新添加的Stream API（java.util.stream） 把真正的函数式编程风格引入到Java中。
 
-## 22.7. Date Time API
+## 21.7. Date Time API
 加强对日期与时间的处理。
 
 在旧版的 Java 中，日期时间 API 存在诸多问题，其中有：
@@ -5957,7 +5964,7 @@ System.out.println(localDateTime4);
 ```
 
 
-## 22.8. Optional 类
+## 21.8. Optional 类
 Optional 类已经成为 Java 8 类库的一部分，用来解决空指针异常。
 Optional 是个容器：它可以保存类型T的值，或者保存null。
 Optional提供很多有用的方法，这样我们就不用显式进行空值检测。如果值存在则 isPresent() 方法会返回 true，调用 get() 方法会返回该对象。
@@ -6015,20 +6022,20 @@ String toString()
 ```
 
 
-## 22.9. 新工具
+## 21.9. 新工具
 新的编译工具，如：Nashorn引擎 jjs、 类依赖分析器jdeps。
 
-## 22.10. Nashorn, JavaScript 引擎
+## 21.10. Nashorn, JavaScript 引擎
 Java 8提供了一个新的Nashorn javascript引擎，它允许我们在JVM上运行特定的javascript应用。
 
 
-# 23. Java Web 三大组件
+# 22. Java Web 三大组件
 
 - Servlet 用到了模板方法模式：HttpServlet 是一个抽象类，需要子类继承并重写 doGet doPost 等方法。
 - Filter 用到了责任链模式：在一个 URL 上可以有多个 Filter，执行完一个 Filter 之后。通过 FilterChain 的 doFilter 方法继续往后执行下一个 Filter，直到执行到 Servlet。
 - Listener 用到了观察者模式：当 Request 等对象更新了之后会调用 ServletRequestListener 相应的方法。
 
-## 23.1. Servlet
+## 22.1. Servlet
 
 创建servlet有三种方式:
 - 实现Servlet接口
@@ -6126,7 +6133,7 @@ Servlet 并不是单例设计模式,如果有多个Url映射到同一个 Servlet
 **2、serlvet线程安全问题?**
 基于 JVM 对多线程的支持，这样可以提高代码的执行效率。 不需要为每一个请求都要单独创建/销毁 Servlet（执行 init(), desdroy()）。同一段代码可以在同一时间被多个请求同时执行。 Servlet 是普通的 Java 类，因此没有对其做线程安全的处理
 
-## 23.2. Filter
+## 22.2. Filter
 
 ```java
 package javax.servlet;
@@ -6150,14 +6157,14 @@ Filter 接口中有一个 doFilter 方法，当我们编写好 Filter 需要实�
 
 doFilter 第三个参数是 FilterChain 类型的
 
-### 23.2.1. Filter的四种拦截方式
+### 22.2.1. Filter的四种拦截方式
 - REQUEST：直接访问目标资源时执行过滤器。包括：在地址栏中直接访问、表单提交、超链接、重定向，只要在地址栏中可以看到目标资源的路径，就是REQUEST；
 - FORWARD：转发访问执行过滤器。包括RequestDispatcher#forward()方法、<jsp:forward>标签都是转发访问；
 - INCLUDE：包含访问执行过滤器。包括RequestDispatcher#include()方法、<jsp:include>标签都是包含访问；
 - ERROR：当目标资源在web.xml中配置为<error-page>中时，出现异常后，转发到目标资源时，会执行过滤器。
 
 
-## 23.3. Listener
+## 22.3. Listener
 
 ```java
 package javax.servlet.http;

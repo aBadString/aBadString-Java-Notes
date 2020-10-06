@@ -1,4 +1,4 @@
-# aBadString —— Java 技术之路
+# 1. aBadString —— Java 技术之路
 
 <b style="color:#ff2121">这个项目用于记录我的 Java 学习笔记，分享一些好的示例代码，记录自己踩过的每一个坑。</b>
 
@@ -22,12 +22,14 @@
 
 - ## 软件工程
     - [设计模式](05_软件工程/01_设计模式.md)
+    - 简单系统设计与架构基础
 
 - ## 开发工具
     - [Git](06_开发工具/01_Git.md)
     - [Maven](06_开发工具/02_Maven.md)
     - [Docker](06_开发工具/03_Docker.md)
     - [Shell](06_开发工具/04_Shell.md)
+    - [Ubuntu](06_开发工具/05_Ubuntu.md)
 
 <!-- 
 算法：
@@ -62,9 +64,9 @@ Java:
 
 每天交流：一道算法、一些面试题
 
+-->
 
-
-
+<!--
 	- 程序羊 https://github.com/hansonwang99/JavaCollection
 	- Java开源项目 
 		- https://mp.weixin.qq.com/s/y59hmDbQj1QglVj90viZqw
@@ -72,3 +74,57 @@ Java:
 阿里开源的 IDE 代码规约检测插件 https://github.com/alibaba/p3c
 
  -->
+
+<!-- 
+<h1 id="BOOK" align="center">Java 全栈笔记</h1>
+
+**Java 核心基础**
+- [1. Java 基础编程](#Java基础编程)
+- [2. Java 并发编程](#Java并发编程)
+- [3. Java 虚拟机](#Java虚拟机)
+- [4. Spring 框架](#Spring)
+
+**JavaScript 核心基础**
+- [1. JavaScript 基础编程](#JavaScript基础编程)
+
+**数据库与中间件基础**
+- [1. MySQL](#MySQL)
+
+**软件工程**
+- [1. 设计模式](#设计模式)
+
+**计算机基础理论**
+- [1. 数据结构与算法](#数据结构与算法)
+- [2. 计算机网络](#计算机网络)
+- [3. 操作系统](#操作系统)
+- [4. 计算机组成原理](#计算机组成原理)
+
+**开发工具**
+- [1. Git](#Git)
+- [2. Maven](#Maven)
+- [3. Docker](#Docker)
+- [4. Shell](#Shell)
+- [Tool](#Tool)
+
+
+@import "01_Java核心基础/01_Java基础编程.md"
+@import "01_Java核心基础/02_Java并发编程.md"
+@import "01_Java核心基础/03_Java虚拟机.md"
+@import "01_Java核心基础/04_Spring.md"
+
+@import "02_JavaScript核心基础/01_JavaScript基础编程.md"
+
+@import "03_数据库与中间件基础/01_MySQL.md"
+
+@import "05_软件工程/01_设计模式.md"
+
+@import "04_计算机基础理论/01_数据结构与算法.md"
+@import "04_计算机基础理论/02_计算机网络.md"
+@import "04_计算机基础理论/03_操作系统.md"
+
+@import "06_开发工具/01_Git.md"
+@import "06_开发工具/02_Maven.md"
+@import "06_开发工具/03_Docker.md"
+@import "06_开发工具/04_Shell.md"
+@import "06_开发工具/TOOL.md"
+-->

@@ -51,7 +51,6 @@ docker images
 docker rmi [image-id] 
 ```
 
-
 ## 2.2. 容器操作
 
 ```shell
@@ -102,6 +101,15 @@ sudo docker run ‐p 8080:8080 ‐‐name Tomcat --restart=always -v /home/abads
 如果已经创建好的容器，更改为自启动
 ```shell
 docker update --restart=always <容器名字>
+```
+
+将应用的 war 包拷贝到Tomcat容器的webapp下
+```shell
+docker cp hotel-manage-1.0.0.war ee8a3313b18d:/usr/local/tomcat/webapps
+
+# 进入容器目录看看是否拷贝成功
+docker exec -it ee8a3313b18d /bin/bash
+ls webapps/
 ```
 
 ## 2.4. 配置 Docker 远程连接
