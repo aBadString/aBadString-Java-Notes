@@ -1022,6 +1022,33 @@ static可以用来修饰：属性、方法、代码块、内部类。
 3、静态方法中不能使用非静态的实例变量，可以使用静态的类变量。静态方法中不能调用非静态的方法，可以调用静态方法。
 4、非静态方法中可以使用类变量和静态方法。
 5、静态方法中不能使用“this”和“super”。
+6、静态方法可以被继承，但是不能被重写。
+
+```java
+public class StaticExtend {
+    public static void main(String[] args) {
+        A.hello(); // A
+        B.hello(); // A
+        C.hello(); // C
+
+        A a = new C();
+        a.hello(); // A
+        ((C)a).hello(); // C
+    }
+}
+class A {
+    public static void hello() {
+        System.out.println("A");
+    }
+}
+class B extends A {
+}
+class C extends A {
+    public static void hello() {
+        System.out.println("C");
+    }
+}
+```
 
 【思考】什么时候使用static修饰属性和方法？
 static修饰属性：
@@ -1030,6 +1057,7 @@ static修饰属性：
 static修饰方法：
 ​    1、工具类中的方法一般使用static修饰。
 ​    2、有时为了使用类变量，方法也会使用static修饰。
+
 
 ### 7.5.3. 类加载的过程
 

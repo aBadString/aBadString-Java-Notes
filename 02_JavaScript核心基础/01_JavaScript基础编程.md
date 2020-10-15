@@ -36,7 +36,7 @@
 # 1. JavaScript 简介
 
 JavaScript 是一种轻量级的编程语言。
-JavaScript 包括：语法规则（ECMAScript）、标签对象（DOM）、浏览器对象（BOM）
+JavaScript 包括：核心语法（ECMAScript）、标签对象（DOM）、浏览器对象（BOM）
 
 四种输出形式
 - window.alert() 弹出警告框。
@@ -62,6 +62,7 @@ function name(params) {
     
 }
 ```
+
 
 # 2. 变量与数据类型
 
