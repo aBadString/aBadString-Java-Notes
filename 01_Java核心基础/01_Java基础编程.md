@@ -1970,8 +1970,7 @@ enum Season implements I{
  
 @Override：限定重写父类或者接口的方法，该注解只能用于方法。
 @Deprecated：用于表示某个程序结构(类、方法、属性、构造器等)已过时。
-@SuppressWarnings：抑制编译器警告，需要参数，参数是一个字符串数组。
-`@SuppressWarnings("unused") : The value of the local variable a is not used`
+@SuppressWarnings：抑制编译器警告，需要参数，参数是一个字符串数组。`@SuppressWarnings("unused") : The value of the local variable a is not used`
 
 
 ## 12.2. 自定义注解
