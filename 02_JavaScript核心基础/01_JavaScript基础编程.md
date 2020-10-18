@@ -5,6 +5,7 @@
 
 - [1. JavaScript 简介](#1-javascript-简介)
   - [1.1. 注释](#11-注释)
+  - [1.2. 标识符与保留字](#12-标识符与保留字)
 - [2. 变量与数据类型](#2-变量与数据类型)
   - [2.1. 变量声明](#21-变量声明)
   - [2.2. 数据类型](#22-数据类型)
@@ -13,30 +14,33 @@
   - [2.5. number 与 NaN](#25-number-与-nan)
   - [2.6. string](#26-string)
   - [2.7. number 与 string 之间的转换](#27-number-与-string-之间的转换)
-  - [2.8. array](#28-array)
-    - [2.8.1. 基本 API 使用](#281-基本-api-使用)
-  - [2.9. function](#29-function)
-    - [2.9.1. 函数作为参数 和 拉姆达表达式](#291-函数作为参数-和-拉姆达表达式)
-    - [2.9.2. 函数作为返回值](#292-函数作为返回值)
-    - [2.9.3. 自调用函数(闭包)](#293-自调用函数闭包)
-  - [2.10. 变量的作用域](#210-变量的作用域)
-  - [2.11. 定义提前](#211-定义提前)
-- [3. 标识符与保留字](#3-标识符与保留字)
-- [4. 运算符](#4-运算符)
-  - [4.1. 相等比较 与 相同比较](#41-相等比较-与-相同比较)
-- [5. 流程控制语句](#5-流程控制语句)
-  - [5.1. for-in 可以输出数组下标 和 对象属性名](#51-for-in-可以输出数组下标-和-对象属性名)
-- [6. 面向对象与类](#6-面向对象与类)
-  - [6.1. 对象字面量 json](#61-对象字面量-json)
-  - [6.2. 动态对象](#62-动态对象)
-  - [6.3. 类](#63-类)
+  - [2.8. function](#28-function)
+    - [2.8.1. 函数作为参数 和 拉姆达表达式](#281-函数作为参数-和-拉姆达表达式)
+    - [2.8.2. 函数作为返回值](#282-函数作为返回值)
+    - [2.8.3. 自调用函数(闭包)](#283-自调用函数闭包)
+  - [2.9. 变量的作用域](#29-变量的作用域)
+  - [2.10. 定义提前](#210-定义提前)
+  - [2.11. array](#211-array)
+    - [2.11.1. 基本 API 使用](#2111-基本-api-使用)
+- [3. 运算符](#3-运算符)
+  - [3.1. 相等比较 与 相同比较](#31-相等比较-与-相同比较)
+- [4. 流程控制语句](#4-流程控制语句)
+  - [4.1. for-in 可以输出数组下标 和 对象属性名](#41-for-in-可以输出数组下标-和-对象属性名)
+  - [4.2. continue、break 和 lable](#42-continue-break-和-lable)
+  - [4.3. with 语句](#43-with-语句)
+  - [4.4. switch 语句](#44-switch-语句)
+- [5. 面向对象与类](#5-面向对象与类)
+  - [5.1. 对象字面量 json](#51-对象字面量-json)
+  - [5.2. 动态对象](#52-动态对象)
+  - [5.3. 类](#53-类)
 
 <!-- /code_chunk_output -->
 
 # 1. JavaScript 简介
 
 JavaScript 是一种轻量级的编程语言。
-JavaScript 包括：核心语法（ECMAScript）、标签对象（DOM）、浏览器对象（BOM）
+JavaScript 包括：核心语法（ECMAScript）、标签对象（DOM）、浏览器对象（BOM）。
+JavaScript 严格区分大小写。
 
 四种输出形式
 - window.alert() 弹出警告框。
@@ -63,6 +67,29 @@ function name(params) {
 }
 ```
 
+## 1.2. 标识符与保留字
+
+JavaScript 标识符必须以字母、下划线（_）或美元符（$）开始。
+后续的字符可以是字母、数字、下划线或美元符。
+
+|JavaScript保留字|>|>|>|
+|-|-|-|-|
+| abstract | else | instanceof | super |
+| boolean | enum | int | switch |
+| break | export | interface | synchronized |
+| byte | extends | let | this |
+| case | false | long | throw |
+| catch | final | native | throws |
+| char | finally | new | transient |
+| class | float | null | true |
+| const | for | package | try |
+| continue | function | private | typeof |
+| debugger | goto | protected | var |
+| default | if | public | void |
+| delete | implements | return | volatile |
+| do | import | short | while |
+| double | in | static | with |
+
 
 # 2. 变量与数据类型
 
@@ -78,8 +105,10 @@ var a;
 
 ![](https://atts.w3cschool.cn/attachments/image/20160809/1470710140220491.gif)
 
- - 基本数据类型（值类型）：number、string、boolean、undefined、null、Symbol
- - 引用数据类型：object、array、function
+- 基本数据类型（值类型）：number、string、boolean、undefined、null、symbol
+- 引用数据类型：object、array、function
+
+注意：在 JavaScript 中 string 是基本数据类型。
 
 ```js
 var a = 1;
@@ -207,7 +236,7 @@ Number.MIN_VALUE = 5e-324
 
 NaN：Not a Number，非数值。
 isNaN()：返回值：参数可转为数值，返回 true；否则，返回 false。
-Number()：将参数转为数字。对于 `''、' '、'\t'、'\r'、'\n'、'0'、[]、[0]` 转化为 0；非数字、'\0'转换为 NaN。
+Number()：将参数转为数字。对于 `''、' '、'\t'、'\r'、'\n'、'0'、[]、[0]` 转化为 0；非数字、'\0'、undefined 转换为 NaN。
 
 - NaN 与任何值不相等, 包括它本身
 - 永远不要判断两个浮点数是否相等
@@ -287,7 +316,136 @@ console.log(s + 0); // 5000
 console.log(typeof (s + 0)); // string
 ```
 
-## 2.8. array
+
+## 2.8. function
+
+函数可以定义在任何位置。函数的调用可以在定义之前，因为浏览器会将函数定义提前。
+如果没有在任何类中定义函数，则函数是定义在window对象中，很可能把window原有函数替换掉。同样，变量也是在window对象中。
+没有函数重载，定义了多个同名函数，最终只有后定义的一个函数生效。
+
+```js
+demo();
+function demo() {
+    console.log("This is a fun");
+}
+demo();
+window.demo();
+// This is a fun
+// This is a fun
+// This is a fun
+```
+
+
+### 2.8.1. 函数作为参数 和 拉姆达表达式
+```js
+function runFun(fn)
+{
+    if(fn)
+    {
+        fn();
+    }
+}
+
+
+function a() {
+    console.log("我是传进去的函数");
+}
+runFun(a);
+
+runFun(
+    function () {
+        console.log("我是传进去的匿名函数");
+    }
+);
+// 拉姆达表达式
+runFun(
+    () => {
+        console.log("我是传进去的拉姆达表达式");
+    }
+);
+```
+
+### 2.8.2. 函数作为返回值
+```js
+// 返回值
+function ret() {
+    return function name() {
+        console.log("fun");
+    };
+}
+
+var res = ret();
+res();
+// fun
+
+ret()();
+// fun
+```
+
+### 2.8.3. 自调用函数(闭包)
+```js
+(
+    function c (a) 
+    {
+        console.log("自调用函数:"+a);
+    }
+)(12);
+
+// 匿名
+(
+    function (a) 
+    {
+        console.log("自调用函数:"+a);
+    }
+)(12);
+```
+
+## 2.9. 变量的作用域
+
+没有定义在任何类或者函数中的变量，都是全局变量，都会放到window对象中。
+函数中定义的变量是局部变量，尽在当前打括号中有效。
+
+## 2.10. 定义提前
+
+变量和方法的声明会被提前
+- 定义变量时, 变量的声明会被提升到作用域的最前面, 变量的赋值不会被提升。
+- JavaScript解析器会把当前作用域中的函数声明提前到整个作用域的最前面。
+
+```js
+// 没有声明, 则报错
+// console.log(A); // A is not defined
+
+console.log(b); // undefined
+var b; // 变量声明会提前
+
+console.log(c); // undefined
+var c = 1; // 但是赋值不会提前
+console.log(c); // 1
+```
+
+```js
+// 以下三种：一个有赋值, 一个没有赋值
+// 方法会覆盖变量
+// 因为方法和变量同时都会提前
+// 变量只是提前声明, 不会提前赋值
+// 方法提前声明的同时也就相当于定义了方法体
+console.log(typeof fun0); // function
+var fun0 = 12; // 赋值, 类型变为number
+function fun0() {}
+console.log(typeof fun0); // number
+
+console.log(typeof fun1); // function
+var fun1;
+function fun1() {}
+console.log(typeof fun1); // function
+
+console.log(typeof fun2); // function
+function fun2() {}
+var fun2;
+console.log(typeof fun2); // function
+```
+
+## 2.11. array
 
 JavaScript 的数组相当于 集合 队列 栈 数组 的结合体，可以存任意类型的元素。
 
@@ -308,7 +466,7 @@ arr3[4](); // 调用方法
 console.log("------------");
 ```
 
-### 2.8.1. 基本 API 使用
+### 2.11.1. 基本 API 使用
 
 ```js
 (function(){
@@ -354,161 +512,10 @@ console.log("队列");
 })();
 ```
 
-## 2.9. function
 
-函数可以定义在任何位置。函数的调用可以在定义之前，因为浏览器会将函数定义提前。
+# 3. 运算符
 
-如果没有在任何类中定义函数，则函数是定义在window对象中，很可能把window原有函数替换掉。同样，变量也是在window对象中。
-
-```js
-demo();
-function demo() {
-    console.log("This is a fun");
-}
-demo();
-window.demo();
-// This is a fun
-// This is a fun
-// This is a fun
-```
-
-
-### 2.9.1. 函数作为参数 和 拉姆达表达式
-```js
-function runFun(fn)
-{
-    if(fn)
-    {
-        fn();
-    }
-}
-
-
-function a() {
-    console.log("我是传进去的函数");
-}
-runFun(a);
-
-runFun(
-    function () {
-        console.log("我是传进去的匿名函数");
-    }
-);
-// 拉姆达表达式
-runFun(
-    () => {
-        console.log("我是传进去的拉姆达表达式");
-    }
-);
-```
-
-### 2.9.2. 函数作为返回值
-```js
-// 返回值
-function ret() {
-    return function name() {
-        console.log("fun");
-    };
-}
-
-var res = ret();
-res();
-// fun
-
-ret()();
-// fun
-```
-
-### 2.9.3. 自调用函数(闭包)
-```js
-(
-    function c (a) 
-    {
-        console.log("自调用函数:"+a);
-    }
-)(12);
-
-// 匿名
-(
-    function (a) 
-    {
-        console.log("自调用函数:"+a);
-    }
-)(12);
-```
-
-## 2.10. 变量的作用域
-
-没有定义在任何类或者函数中的变量，都是全局变量，都会放到window对象中。
-函数中定义的变量是局部变量，尽在当前打括号中有效。
-
-## 2.11. 定义提前
-
-变量和方法的声明会被提前
-- 定义变量时, 变量的声明会被提升到作用域的最前面, 变量的赋值不会被提升。
-- JavaScript解析器会把当前作用域中的函数声明提前到整个作用域的最前面。
-
-```js
-// 没有声明, 则报错
-// console.log(A); // A is not defined
-
-console.log(b); // undefined
-var b; // 变量声明会提前
-
-console.log(c); // undefined
-var c = 1; // 但是赋值不会提前
-console.log(c); // 1
-```
-
-```js
-// 以下三种：一个有赋值, 一个没有赋值
-// 方法会覆盖变量
-// 因为方法和变量同时都会提前
-// 变量只是提前声明, 不会提前赋值
-// 方法提前声明的同时也就相当于定义了方法体
-console.log(typeof fun0); // function
-var fun0 = 12; // 赋值, 类型变为number
-function fun0() {}
-console.log(typeof fun0); // number
-
-console.log(typeof fun1); // function
-var fun1;
-function fun1() {}
-console.log(typeof fun1); // function
-
-console.log(typeof fun2); // function
-function fun2() {}
-var fun2;
-console.log(typeof fun2); // function
-```
-
-# 3. 标识符与保留字
-
-JavaScript 标识符必须以字母、下划线（_）或美元符（$）开始。
-后续的字符可以是字母、数字、下划线或美元符。
-
-|JavaScript保留字|>|>|>|
-|-|-|-|-|
-| abstract | else | instanceof | super |
-| boolean | enum | int | switch |
-| break | export | interface | synchronized |
-| byte | extends | let | this |
-| case | false | long | throw |
-| catch | final | native | throws |
-| char | finally | new | transient |
-| class | float | null | true |
-| const | for | package | try |
-| continue | function | private | typeof |
-| debugger | goto | protected | var |
-| default | if | public | void |
-| delete | implements | return | volatile |
-| do | import | short | while |
-| double | in | static | with |
-
-
-# 4. 运算符
-
-## 4.1. 相等比较 与 相同比较
+## 3.1. 相等比较 与 相同比较
 
 == : 相等比较, 判断值是否相等, 两边的操作数会发生类型转换。
 ===: 相同比较, 判断值和类型是否都相同, 如果类型不相同则为 false。
@@ -551,9 +558,11 @@ console.log("0" == true); // false
 console.log([] == true); // false
 ```
 
-# 5. 流程控制语句
+# 4. 流程控制语句
 
-## 5.1. for-in 可以输出数组下标 和 对象属性名
+JavaScript 的语句以分号结尾，也可以省略分号。
+
+## 4.1. for-in 可以输出数组下标 和 对象属性名
 ```js
 for (var key in arr) {
     console.log(key, arr[key]);
@@ -572,9 +581,64 @@ for (var key in str) {
 // 1 松
 ```
 
-# 6. 面向对象与类
+## 4.2. continue、break 和 lable
+break 结束外层循环：
+```js
+A : for(let i = 0 ; i < 10; i++) {
+    for(let j = 0; j < 10; j++) {
+        console.log("j="+j);
+        if(j == 2) {
+            break A;
+        }
+    }
+    console.log("i="+i);
+}
+// j=0
+// j=1
+// j=2
+```
 
-## 6.1. 对象字面量 json
+## 4.3. with 语句
+将代码的作用域设定到一个特定对象中。
+```js
+// var qs = location.search.substring(1);
+// var name = location.hostname;
+// var url = location.href;
+// console.log(qs, name, url)
+
+with (location) {
+    var qs = search.substring(1);
+    var name = hostname;
+    var url = href;
+    console.log(qs, name, url)
+}
+```
+
+## 4.4. switch 语句
+
+JavaScript 的 switch 语句中，case 的值可以是常量、变量、表达式。
+```js
+var num = 15;
+switch (true) {
+    case num < 0:
+        console.log("Less than 0.");
+        break;
+    case num >= 0 && num <= 10:
+        console.log("Between 0 and 10.");
+        break;
+    case num > 10 && num <= 20:
+        console.log("Between 10 and 20.");
+        break;
+    default:
+        console.log("More than 20.");
+}
+// Between 10 and 20.
+```
+
+
+# 5. 面向对象与类
+
+## 5.1. 对象字面量 json
 
 ```js
 // 对象字面量 json对象: 用来传递数据 一次性的
@@ -625,7 +689,7 @@ json 数组
 // 小丁
 ```
 
-## 6.2. 动态对象
+## 5.2. 动态对象
 
 JavaScript 中对象的属性是可以动态添加的
 
@@ -644,7 +708,7 @@ function demo() {
 demo(); // 添加到window对象的属性
 ```
 
-## 6.3. 类
+## 5.3. 类
 
 删除对象的属性 `delete stu1.name`
 
