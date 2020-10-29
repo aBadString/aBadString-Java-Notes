@@ -10,7 +10,8 @@
 
 - ## JavaScript 核心基础
     - [JavaScript 基础编程](02_JavaScript核心基础/01_JavaScript基础编程.md)
-    - [组件化框架](02_JavaScript核心基础/02_组件化框架.md)
+    - [HTML 和 CSS 基础](02_JavaScript核心基础/02_HTML和CSS基础.md)
+    - [组件化框架](02_JavaScript核心基础/03_组件化框架.md)
 
 - ## 数据库与中间件基础
     - [MySQL 数据库](03_数据库与中间件基础/01_MySQL.md)
