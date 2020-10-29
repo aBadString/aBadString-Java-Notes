@@ -1,6 +1,6 @@
-# 1. aBadString —— Java 技术之路
+<h1>aBadString —— 技术之路</h1>
 
-<b style="color:#ff2121">这个项目用于记录我的 Java 学习笔记，分享一些好的示例代码，记录自己踩过的每一个坑。</b>
+<span style="color:#ff2121">记录我的学习笔记，分享一些好的示例代码，记录自己踩过的每一个坑。</span>
 
 - ## Java 核心基础
     - [Java 基础编程](01_Java核心基础/01_Java基础编程.md)
