@@ -1,0 +1,10 @@
+{
+    "editor.fontSize": 16,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.out": true,
+        "**/.vscode": true,
+        "**/images": true,
+        "**/_config.yml": true
+    }
+}
