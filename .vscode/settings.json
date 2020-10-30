@@ -5,6 +5,7 @@
         "**/.out": true,
         "**/.vscode": true,
         "**/images": true,
-        "**/_config.yml": true
+        "**/_config.yml": true,
+        "**/11_开发手册": true
     }
 }
