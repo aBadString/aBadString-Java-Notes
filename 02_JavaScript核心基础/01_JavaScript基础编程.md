@@ -33,6 +33,10 @@
   - [5.1. 对象字面量 json](#51-对象字面量-json)
   - [5.2. 动态对象](#52-动态对象)
   - [5.3. 类](#53-类)
+- [6. ES6 新特性](#6-es6-新特性)
+  - [6.1. let 和 const](#61-let-和-const)
+  - [6.2. 解构赋值](#62-解构赋值)
+  - [6.3. 扩展运算符与剩余运算符](#63-扩展运算符与剩余运算符)
 
 <!-- /code_chunk_output -->
 
@@ -791,4 +795,141 @@ stu2.show();
 // id: 1
 // age: 20
 // ----------------
+```
+
+
+# 6. ES6 新特性
+
+ECMAScript 6 于 2015 年 6 月发布。
+
+## 6.1. let 和 const
+
+使用 var 声明的变量无法控制其作用域。
+```js
+for (var i = 0; i < 5; i++) {
+    var j = 10;
+}
+console.log("循环外:", i); // 循环外: 5
+console.log("循环外:", j); // 循环外: 10
+```
+
+而使用 let 声明的变量只会在当前作用域内存在。
+- let 是在代码块内有效，var 是在全局范围内有效。
+- let 只能声明一次 var 可以声明多次。
+- let 不存在变量提升，var 会变量提升。
+```js
+for (let i = 0; i < 5; i++) {
+    let j = 10;
+}
+console.log("循环外:", i); // Uncaught ReferenceError: i is not defined
+console.log("循环外:", j); // Uncaught ReferenceError: j is not defined
+
+var b = 3;
+var b = 4;
+console.log(b); // 4
+let a = 1;
+let a = 2; // Uncaught SyntaxError: Identifier 'a' has already been declared
+
+console.log(b); // undefined
+var b = "banana";
+console.log(a); // Uncaught ReferenceError: Cannot access 'a' before initialization
+let a = "apple";
+```
+
+
+const 用于声明只读变量，只能被赋值一次，无法修改。必须在声明时初始化。
+```js
+const a = 12;
+a = 10; // Uncaught TypeError: Assignment to constant variable.
+
+const b; // Uncaught SyntaxError: Missing initializer in const declaration
+```
+
+## 6.2. 解构赋值
+
+**数组解构**
+```js
+var arr = [1, 2, 3];
+
+// 解构数组
+var [x, y, z] = arr;
+console.log(x, y, z); // 1 2 3
+// 忽略末尾
+var [a, b] = arr;
+console.log(a, b); // 1 2
+// 忽略中间部分
+var [c, , d] = arr;
+console.log(c, d); // 1 3
+// 不完全解构、解构默认值
+var [e, f, g=0, h, i=1] = arr;
+console.log(e, f, g, h, i); // 1 2 3 undefined 1
+
+// 解构字符串
+let [a, b, c, d, e] = 'hello';
+console.log(a, b, c, d, e); // h e l l o
+
+// 可嵌套使用
+var s = 'xyz';
+var arr = [1, s, 2];
+let [a, [x, y, z], c] = arr;
+console.log(a, x, y, z, c); // 1 "x" "y" "z" 2
+```
+
+**对象解构**
+```js
+const person = {
+    name: "jack",
+    age: 21,
+    language: ['html', 'css', 'js']
+};
+
+let {name, age, language} = person;
+console.log(name); // jack
+console.log(age);  // 21
+console.log(language); // ['html', 'css', 'js']
+
+let {name:n} = person;
+console.log(n); // jack
+```
+
+
+## 6.3. 扩展运算符与剩余运算符
+
+扩展运算符：将一个数组或者对象的所有元素展开为一个逗号分隔的参数序列。
+```js
+console.log([1, 2, 3]);       // [1, 2, 3]
+console.log(...[1, 2, 3]);    // 1 2 3
+console.log([1, 2, 3], 4);    // [1, 2, 3] 4
+console.log(...[1, 2, 3], 4); // 1 2 3 4
+
+// 函数入参
+console.log(
+    (
+        function add(a, b) {
+            return a + b;
+        }
+    )(...[1, 2])
+); // 3
+
+// 合并数组
+var a = [1, 2, 3];
+var b = [4, 5, 6];
+console.log([...a, ...b]); // [1, 2, 3, 4, 5, 6]
+
+console.log([..."hello"]); // ["h", "e", "l", "l", "o"]
+```
+
+扩展运算符会展开数组变成多个元素，剩余运算符会收集多个元素和压缩成一个单一的元素。
+```js
+// 剩余运算符
+let [a, ...b] = [1, 2, 3];
+console.log(a); // 1
+console.log(b); // [2, 3]
+
+(
+    function add(a, ...b) {
+        console.log(a); // 1
+        console.log(b); // [2, 3]
+    }
+)(1, 2, 3)
 ```
