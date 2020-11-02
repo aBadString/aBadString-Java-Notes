@@ -150,45 +150,46 @@
   - [18.5. NIO](#185-nio)
 - [19. JDBC](#19-jdbc)
 - [20. 网络编程](#20-网络编程)
-- [21. JNI](#21-jni)
-- [22. Java Web 三大组件](#22-java-web-三大组件)
-  - [22.1. Servlet](#221-servlet)
-  - [22.2. Filter](#222-filter)
-    - [22.2.1. Filter的四种拦截方式](#2221-filter的四种拦截方式)
-  - [22.3. Listener](#223-listener)
-- [23. Java 常用类](#23-java-常用类)
-  - [23.1. Object 类](#231-object-类)
-    - [23.1.1. equals方法](#2311-equals方法)
-    - [23.1.2. hashCode方法](#2312-hashcode方法)
-    - [23.1.3. toString方法](#2313-tostring方法)
-    - [23.1.4. clone方法](#2314-clone方法)
-  - [23.2. 包装类(Wrapper)](#232-包装类wrapper)
-    - [23.2.1. 基本数据类型、包装类、String之间的转换](#2321-基本数据类型-包装类-string之间的转换)
-    - [23.2.2. 拆箱与装箱](#2322-拆箱与装箱)
-  - [23.3. String类和常量池](#233-string类和常量池)
-    - [23.3.1. String 的不可变性](#2331-string-的不可变性)
-      - [23.3.1.1. 不可变性的好处](#23311-不可变性的好处)
-    - [23.3.2. String 的几种构造器](#2332-string-的几种构造器)
-    - [23.3.3. String 常用 API](#2333-string-常用-api)
-    - [23.3.4. String 与其他结构的转换](#2334-string-与其他结构的转换)
-    - [23.3.5. StringBuffer 和 StringBuilder](#2335-stringbuffer-和-stringbuilder)
-  - [23.4. 时间有关类](#234-时间有关类)
-    - [23.4.1. java.util.Date](#2341-javautildate)
-    - [23.4.2. java.sql.Date](#2342-javasqldate)
-    - [23.4.3. SimpleDateFormat](#2343-simpledateformat)
-    - [23.4.4. java.util.Calendar 日历类](#2344-javautilcalendar-日历类)
-    - [23.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增）](#2345-localdate-localtime-localdatetimejdk8-新增)
-- [24. Java 8 新特性](#24-java-8-新特性)
-  - [24.1. 函数式接口](#241-函数式接口)
-  - [24.2. Lambda 表达式](#242-lambda-表达式)
-  - [24.3. 方法引用](#243-方法引用)
-  - [24.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#244-接口实现类-匿名内部类-lambda表达式-方法引用)
-  - [24.5. 默认方法](#245-默认方法)
-  - [24.6. Stream API](#246-stream-api)
-  - [24.7. Date Time API](#247-date-time-api)
-  - [24.8. Optional 类](#248-optional-类)
-  - [24.9. 新工具](#249-新工具)
-  - [24.10. Nashorn, JavaScript 引擎](#2410-nashorn-javascript-引擎)
+- [21. JavaFX](#21-javafx)
+- [22. JNI](#22-jni)
+- [23. Java Web 三大组件](#23-java-web-三大组件)
+  - [23.1. Servlet](#231-servlet)
+  - [23.2. Filter](#232-filter)
+    - [23.2.1. Filter的四种拦截方式](#2321-filter的四种拦截方式)
+  - [23.3. Listener](#233-listener)
+- [24. Java 常用类](#24-java-常用类)
+  - [24.1. Object 类](#241-object-类)
+    - [24.1.1. equals方法](#2411-equals方法)
+    - [24.1.2. hashCode方法](#2412-hashcode方法)
+    - [24.1.3. toString方法](#2413-tostring方法)
+    - [24.1.4. clone方法](#2414-clone方法)
+  - [24.2. 包装类(Wrapper)](#242-包装类wrapper)
+    - [24.2.1. 基本数据类型、包装类、String之间的转换](#2421-基本数据类型-包装类-string之间的转换)
+    - [24.2.2. 拆箱与装箱](#2422-拆箱与装箱)
+  - [24.3. String类和常量池](#243-string类和常量池)
+    - [24.3.1. String 的不可变性](#2431-string-的不可变性)
+      - [24.3.1.1. 不可变性的好处](#24311-不可变性的好处)
+    - [24.3.2. String 的几种构造器](#2432-string-的几种构造器)
+    - [24.3.3. String 常用 API](#2433-string-常用-api)
+    - [24.3.4. String 与其他结构的转换](#2434-string-与其他结构的转换)
+    - [24.3.5. StringBuffer 和 StringBuilder](#2435-stringbuffer-和-stringbuilder)
+  - [24.4. 时间有关类](#244-时间有关类)
+    - [24.4.1. java.util.Date](#2441-javautildate)
+    - [24.4.2. java.sql.Date](#2442-javasqldate)
+    - [24.4.3. SimpleDateFormat](#2443-simpledateformat)
+    - [24.4.4. java.util.Calendar 日历类](#2444-javautilcalendar-日历类)
+    - [24.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增）](#2445-localdate-localtime-localdatetimejdk8-新增)
+- [25. Java 8 新特性](#25-java-8-新特性)
+  - [25.1. 函数式接口](#251-函数式接口)
+  - [25.2. Lambda 表达式](#252-lambda-表达式)
+  - [25.3. 方法引用](#253-方法引用)
+  - [25.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#254-接口实现类-匿名内部类-lambda表达式-方法引用)
+  - [25.5. 默认方法](#255-默认方法)
+  - [25.6. Stream API](#256-stream-api)
+  - [25.7. Date Time API](#257-date-time-api)
+  - [25.8. Optional 类](#258-optional-类)
+  - [25.9. 新工具](#259-新工具)
+  - [25.10. Nashorn, JavaScript 引擎](#2510-nashorn-javascript-引擎)
 
 <!-- /code_chunk_output -->
 
@@ -4914,7 +4915,137 @@ bye
 发送 [bye] 成功
 ```
 
-# 21. JNI
+# 21. JavaFX
+
+Main.java
+```java
+package sample;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        // 加载页面布局文件 view.fxml
+        Parent root = FXMLLoader.load(getClass().getResource("view.fxml"));
+        // 创建一个 Scene，即窗体的主体内容显示区域
+        Scene scene = new Scene(root, 275, 150);
+        // Stage 即是整个窗体对象
+        // 设置窗体标题栏
+        primaryStage.setTitle("Hello Java FX");
+        // 将 Scene 对象设置给窗体对象 Stage
+        primaryStage.setScene(scene);
+        // 显示窗体
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+```
+view.fxml
+```xml
+<!-- 导入需要的包 -->
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<!--
+使用 GridPane 即网格布局
+fx:controller 指定该页面的控制器
+ -->
+<GridPane xmlns:fx="http://javafx.com/fxml"
+          fx:controller="sample.Controller"
+          alignment="center" hgap="10" vgap="10"
+>
+    <!-- GridPane.columnIndex 定义控件位于网格的那一列 -->
+    <Label fx:id="show" GridPane.columnIndex="0"/>
+    <!-- onAction 设置点击事件 -->
+    <Button fx:id="refresh" text="刷新" onAction="#refresh" GridPane.columnIndex="1"/>
+</GridPane>
+```
+Controller.java
+```java
+package sample;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.ResourceBundle;
+
+public class Controller implements Initializable {
+    // 控件
+    public Button refresh;
+    public Label show;
+
+    // 实现了 Initializable 接口，定义初始化时执行的代码
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        refresh(null);
+    }
+
+    // 点击刷新按钮的事件
+    public void refresh(ActionEvent actionEvent) {
+        Date now= new Date();
+        DateFormat df = new SimpleDateFormat("yyyy-dd-MM");
+        StringBuilder s = new StringBuilder(df.format(now));
+
+        String url = "https://api.bilibili.com/x/relation/stat?vmid="+"xxx"; // xxx 改成实际的 UID
+        try {
+            // 连接 url
+            URLConnection connection = new URL(url).openConnection();
+            connection.connect();
+            // 定义 BufferedReader 输入流来读取 URL 的响应
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
+            String line;
+            StringBuilder result = new StringBuilder();
+            while ((line = in.readLine()) != null) {
+                result.append(line);
+            }
+            in.close();
+            // 解析 json 数据
+            String target = "\"follower\":";
+            int go = result.lastIndexOf(target) + target.length();
+            StringBuilder fans = new StringBuilder();
+            for (int i = go; i < result.length(); i++) {
+                char ch = result.charAt(i);
+                if ('0' <= ch && ch <= '9') {
+                    fans.append(ch);
+                } else {
+                    break;
+                }
+            }
+            // 输出
+            s.append("，粉丝数：");
+            s.append(fans);
+            show.setText(s.toString());
+        } catch (IOException e) {
+            show.setText("电波无法达到~");
+            e.printStackTrace();
+        }
+    }
+}
+```
+效果：
+![](/images/JavaFX/HelloJavaFX1.png)
+![](/images/JavaFX/HelloJavaFX2.png)
+
+舞台(Stage)，场景(Scene)，容器(Container)，布局(Layout )和控件(Controls)之间的关系:
+![](/images/JavaFX/Stage-Scene.png)
+
+
+# 22. JNI
 
 1、创建一个包 `mkdir -p priv/abadstring/jni/`
 2、创建一个java文件 `vi priv/abadstring/jni/JNIDemo.java`
@@ -5033,13 +5164,13 @@ hello, jni. I am C.
 -D 必须在类前面，这种不行 `java priv.abadstring.jni.JNIDemo -Djava.library.path="./priv/abadstring/jni"`
 
 
-# 22. Java Web 三大组件
+# 23. Java Web 三大组件
 
 - Servlet 用到了模板方法模式：HttpServlet 是一个抽象类，需要子类继承并重写 doGet doPost 等方法。
 - Filter 用到了责任链模式：在一个 URL 上可以有多个 Filter，执行完一个 Filter 之后。通过 FilterChain 的 doFilter 方法继续往后执行下一个 Filter，直到执行到 Servlet。
 - Listener 用到了观察者模式：当 Request 等对象更新了之后会调用 ServletRequestListener 相应的方法。
 
-## 22.1. Servlet
+## 23.1. Servlet
 
 创建servlet有三种方式:
 - 实现Servlet接口
@@ -5137,7 +5268,7 @@ Servlet 并不是单例设计模式,如果有多个Url映射到同一个 Servlet
 **2、serlvet线程安全问题?**
 基于 JVM 对多线程的支持，这样可以提高代码的执行效率。 不需要为每一个请求都要单独创建/销毁 Servlet（执行 init(), desdroy()）。同一段代码可以在同一时间被多个请求同时执行。 Servlet 是普通的 Java 类，因此没有对其做线程安全的处理
 
-## 22.2. Filter
+## 23.2. Filter
 
 ```java
 package javax.servlet;
@@ -5161,14 +5292,14 @@ Filter 接口中有一个 doFilter 方法，当我们编写好 Filter 需要实�
 
 doFilter 第三个参数是 FilterChain 类型的
 
-### 22.2.1. Filter的四种拦截方式
+### 23.2.1. Filter的四种拦截方式
 - REQUEST：直接访问目标资源时执行过滤器。包括：在地址栏中直接访问、表单提交、超链接、重定向，只要在地址栏中可以看到目标资源的路径，就是REQUEST；
 - FORWARD：转发访问执行过滤器。包括RequestDispatcher#forward()方法、<jsp:forward>标签都是转发访问；
 - INCLUDE：包含访问执行过滤器。包括RequestDispatcher#include()方法、<jsp:include>标签都是包含访问；
 - ERROR：当目标资源在web.xml中配置为<error-page>中时，出现异常后，转发到目标资源时，会执行过滤器。
 
 
-## 22.3. Listener
+## 23.3. Listener
 
 ```java
 package javax.servlet.http;
@@ -5187,9 +5318,9 @@ public interface ServletRequestListener extends EventListener {
 ```
 
 
-# 23. Java 常用类
+# 24. Java 常用类
 
-## 23.1. Object 类
+## 24.1. Object 类
 
 Object类是所有Java类的根父类。
 
@@ -5249,7 +5380,7 @@ public class Object {
 }
 ```
 
-### 23.1.1. equals方法
+### 24.1.1. equals方法
 
 **equals()方法需要具有如下特点：**
 
@@ -5302,19 +5433,19 @@ public boolean equals(Object anObject) {
 }
 ```
 
-### 23.1.2. hashCode方法
+### 24.1.2. hashCode方法
 
 这个方法返回一个整型值（hash code value），如果两个对象被equals()方法判断为相等，那么它们就应该拥有同样的 hash code。
 
 Object类的hashCode()方法为不同的对象返回不同的值，Object类的hashCode值表示的是对象的地址。
 
-### 23.1.3. toString方法
+### 24.1.3. toString方法
 
 输出一个引用时，实际上是先默认调用了toString方法得到一个字符串，然后调用重载方法public void System.out.println(String x)。
 
 ![image-20200403141045044](/images/image-20200403141045044.png) 
 
-### 23.1.4. clone方法
+### 24.1.4. clone方法
 
 1、想要重写clone方法的类必须实现 java.lang.Cloneable 接口，否则会抛出CloneNotSupportedException异常。Cloneable接口中不包含任何方法，所以实现它时只要在类声明中加上implements语句即可。
 
@@ -5358,11 +5489,11 @@ protected Object clone() throws CloneNotSupportedException {
 ![image-20200403151718701](/images/image-20200403151718701.png) 
 
 
-## 23.2. 包装类(Wrapper)
+## 24.2. 包装类(Wrapper)
 
 ![](/images/包装类.png)
 
-### 23.2.1. 基本数据类型、包装类、String之间的转换
+### 24.2.1. 基本数据类型、包装类、String之间的转换
  
 ![](/images/基本数据类型和包装类之间的转化.png)
 
@@ -5374,7 +5505,7 @@ protected Object clone() throws CloneNotSupportedException {
 - 基本数据类型 -> String：调用String类的valueOf()静态方法，String str = String.valueOf(10);
 - 包装类 -> String：调用包装类的toString()方法，String str = String.valueOf(integer);
 
-### 23.2.2. 拆箱与装箱
+### 24.2.2. 拆箱与装箱
 
 拆箱：将包装类直接赋值给基本数据类型。底层是调用了intValue方法。
 装箱：将基本数据类型直接赋值给包装类。底层是调用了valueOf方法。
@@ -5484,7 +5615,7 @@ static {
 }
 ```
 
-## 23.3. String类和常量池
+## 24.3. String类和常量池
 1、String类被final所修饰，所有该类不能被继承。
 2、实现了Serializable接口可以被序列化，被序列化后才能在不同的进程间或前后端进行数据传输。
 3、实现了Compareable接口可以用来比较内容。
@@ -5515,14 +5646,14 @@ public final class String
 value 数组被声明为 final，这意味着 value 数组初始化之后就不能再引用其它数组。并且 String 内部没有改变 value 数组的方法，因此可以保证 String 不可变。
 
 
-### 23.3.1. String 的不可变性
+### 24.3.1. String 的不可变性
 
 当对字符串引用重新赋值或者改变字符串的内容时，会重新创建一个字符串对象，而不会去改变原来对象的内容。
 
 通过字面量的方式给字符串赋值，字符串对象会创建在方法区的常量池当中，栈中的引用直接引用常量池地址，多个相同内容的字符串共用一个常量池中的对象。
 如果给字符串重新赋值，那么会重写在常量池中创建一个字符串对象，让栈上的引用重新指向改对象，而不会改变原来的字符串对象。
 
-#### 23.3.1.1. 不可变性的好处
+#### 24.3.1.1. 不可变性的好处
 
 1. 可缓存 hash 值
 
@@ -5537,7 +5668,7 @@ String 经常作为参数，String 不可变性可以保证参数不可变。
 String 不可变性天生具备线程安全，可以在多个线程中安全地使用。
 
 
-### 23.3.2. String 的几种构造器
+### 24.3.2. String 的几种构造器
 
 ```java
 // 这种就是引用间赋值，把地址值拷贝给引用变量
@@ -5622,7 +5753,7 @@ public void test4(){
 }
 ```
 
-### 23.3.3. String 常用 API
+### 24.3.3. String 常用 API
 **基本：**
 `int length()`：返回字符串的长度： return value.length
 `boolean isEmpty()`：判断是否是空字符串：return value.length == 0
@@ -5659,7 +5790,7 @@ public void test4(){
 `String[] split(String regex)`：根据给定正则表达式的匹配拆分此字符串。
 `String[] split(String regex, int limit)`：根据匹配给定的正则表达式来拆分此字符串，最多不超过limit个，如果超过了，剩下的全部都放到最后一个元素中。
 
-### 23.3.4. String 与其他结构的转换
+### 24.3.4. String 与其他结构的转换
 
 - **String 与基本数据类型和包装类的转换**
 [基本数据类型、包装类、String之间的转换](#921-基本数据类型-包装类-string之间的转换)
@@ -5720,7 +5851,7 @@ public void test2(){
 }
 ```
 
-### 23.3.5. StringBuffer 和 StringBuilder
+### 24.3.5. StringBuffer 和 StringBuilder
 
 - String: 不可变的字符序列；底层使用char[]存储
 - StringBuffer: 可变的字符序列；线程安全的，效率低；底层使用char[]存储
@@ -5813,7 +5944,7 @@ public static void main(String[] args) {
 // String的执行时间：1637
 ```
 
-## 23.4. 时间有关类
+## 24.4. 时间有关类
 
 System 类中的时间 API
 ```java
@@ -5822,7 +5953,7 @@ System 类中的时间 API
 long time = System.currentTimeMillis();
 ```
 
-### 23.4.1. java.util.Date
+### 24.4.1. java.util.Date
 java.util.Date 有多个重载的构造器，但许多都过时啦，这里介绍两个
 1. Date()：创建一个对应当前时间的Date对象
 2. Date(long date)：创建指定毫秒数的Date对象
@@ -5830,7 +5961,7 @@ java.util.Date 有多个重载的构造器，但许多都过时啦，这里介�
 toString()：显示当前Date对象 星期 月 日 时:分:秒 标准时间+时差 年。`Mon Aug 10 19:54:10 GMT+08:00 2020`
 getTime()：获取当前Date对象对应的毫秒数（时间戳）。
 
-### 23.4.2. java.sql.Date
+### 24.4.2. java.sql.Date
 ```java
 public class java.sql.Date extends java.util.Date
 ```
@@ -5846,7 +5977,7 @@ long date = utilDate.getTime();
 java.sql.Date sqlDate = new java.sql.Date(date);
 ```
 
-### 23.4.3. SimpleDateFormat
+### 24.4.3. SimpleDateFormat
 
 java.text.SimpleDateFormat 类可以对日期 Date 类的做格式化和解析
 格式化：日期 ---> 字符串
@@ -5897,7 +6028,7 @@ java.sql.Date sqlDate = new java.sql.Date(date);
 System.out.println(sqlDate);
 ```
 
-### 23.4.4. java.util.Calendar 日历类
+### 24.4.4. java.util.Calendar 日历类
 
 Calendar 是一个抽象类，不能被直接实例化。可以使用静态的 getInstance 方法获得一个实例 或者 实例化其子类 GregorianCalendar
 ```java
@@ -5923,14 +6054,14 @@ final void setTime(Date date)：java.util.Date --> Calendar
 
 从 set 和 add 方法可见 Calendar 具有可变性。
 
-### 23.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增） 
+### 24.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增） 
 
 [Date Time API](#217-date-time-api)
 
 
-# 24. Java 8 新特性
+# 25. Java 8 新特性
 
-## 24.1. 函数式接口
+## 25.1. 函数式接口
 函数式接口(Functional Interface)就是一个有且仅有一个抽象方法，但是可以有多个非抽象方法的接口。
 函数式接口可以被隐式转换为 lambda 表达式。
 
@@ -5941,7 +6072,7 @@ interface GreetingService {
 }
 ```
 
-## 24.2. Lambda 表达式 
+## 25.2. Lambda 表达式 
 Lambda 表达式，也可称为闭包。允许把函数作为一个方法的参数（函数作为参数传递到方法中）。
 当匿名内部类所实现的接口是一个函数式接口，可以使用Lambda表达式来替代。
 
@@ -6054,7 +6185,7 @@ public class LambdaFinal {
 ```
 
 
-## 24.3. 方法引用
+## 25.3. 方法引用
 方法引用提供了非常有用的语法，可以直接引用已有Java类或对象（实例）的方法或构造器。与lambda联合使用，方法引用可以使语言的构造更紧凑简洁，减少冗余代码。
 方法引用提供了一种引用而不执行方法的方式。（函数指针？？）
 **注意方法引用是一个Lambda表达式**
@@ -6066,7 +6197,7 @@ public class LambdaFinal {
 - 特定对象的方法引用：`实例对象::方法名`
 
 
-## 24.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用
+## 25.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用
 
 定义一个函数式接口
 ```java
@@ -6182,7 +6313,7 @@ public class GreetingMain {
 
 
 
-## 24.5. 默认方法
+## 25.5. 默认方法
 Java 8 新增了接口的默认方法。默认方法就是一个在接口里面有了一个实现的方法。
 ```java
 public interface Vehicle {
@@ -6249,10 +6380,10 @@ class Mian {
 ```
 
 
-## 24.6. Stream API
+## 25.6. Stream API
 新添加的Stream API（java.util.stream） 把真正的函数式编程风格引入到Java中。
 
-## 24.7. Date Time API
+## 25.7. Date Time API
 加强对日期与时间的处理。
 
 在旧版的 Java 中，日期时间 API 存在诸多问题，其中有：
@@ -6326,7 +6457,7 @@ System.out.println(localDateTime4);
 ```
 
 
-## 24.8. Optional 类
+## 25.8. Optional 类
 Optional 类已经成为 Java 8 类库的一部分，用来解决空指针异常。
 Optional 是个容器：它可以保存类型T的值，或者保存null。
 Optional提供很多有用的方法，这样我们就不用显式进行空值检测。如果值存在则 isPresent() 方法会返回 true，调用 get() 方法会返回该对象。
@@ -6384,8 +6515,8 @@ String toString()
 ```
 
 
-## 24.9. 新工具
+## 25.9. 新工具
 新的编译工具，如：Nashorn引擎 jjs、 类依赖分析器jdeps。
 
-## 24.10. Nashorn, JavaScript 引擎
+## 25.10. Nashorn, JavaScript 引擎
 Java 8提供了一个新的Nashorn javascript引擎，它允许我们在JVM上运行特定的javascript应用。
