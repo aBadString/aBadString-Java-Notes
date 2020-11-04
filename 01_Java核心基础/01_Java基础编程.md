@@ -182,17 +182,21 @@
     - [24.4.3. SimpleDateFormat](#2443-simpledateformat)
     - [24.4.4. java.util.Calendar 日历类](#2444-javautilcalendar-日历类)
     - [24.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增）](#2445-localdate-localtime-localdatetimejdk8-新增)
-- [25. Java 8 新特性](#25-java-8-新特性)
-  - [25.1. 函数式接口](#251-函数式接口)
-  - [25.2. Lambda 表达式](#252-lambda-表达式)
-  - [25.3. 方法引用](#253-方法引用)
-  - [25.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#254-接口实现类-匿名内部类-lambda表达式-方法引用)
-  - [25.5. 默认方法](#255-默认方法)
-  - [25.6. Stream API](#256-stream-api)
-  - [25.7. Date Time API](#257-date-time-api)
-  - [25.8. Optional 类](#258-optional-类)
-  - [25.9. 新工具](#259-新工具)
-  - [25.10. Nashorn, JavaScript 引擎](#2510-nashorn-javascript-引擎)
+- [25. Java 新特性](#25-java-新特性)
+  - [25.1. Java 8 新特性](#251-java-8-新特性)
+    - [25.1.1. 函数式接口](#2511-函数式接口)
+    - [25.1.2. Lambda 表达式](#2512-lambda-表达式)
+    - [25.1.3. 方法引用](#2513-方法引用)
+    - [25.1.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#2514-接口实现类-匿名内部类-lambda表达式-方法引用)
+    - [25.1.5. 默认方法](#2515-默认方法)
+    - [25.1.6. Stream API](#2516-stream-api)
+    - [25.1.7. Date Time API](#2517-date-time-api)
+    - [25.1.8. Optional 类](#2518-optional-类)
+    - [25.1.9. 新工具](#2519-新工具)
+    - [25.1.10. Nashorn, JavaScript 引擎](#25110-nashorn-javascript-引擎)
+  - [25.2. Java 15 新特性](#252-java-15-新特性)
+    - [25.2.1. 密封类](#2521-密封类)
+    - [25.2.2. 隐藏类](#2522-隐藏类)
 
 <!-- /code_chunk_output -->
 
@@ -6176,9 +6180,11 @@ final void setTime(Date date)：java.util.Date --> Calendar
 [Date Time API](#217-date-time-api)
 
 
-# 25. Java 8 新特性
+# 25. Java 新特性
 
-## 25.1. 函数式接口
+## 25.1. Java 8 新特性
+
+### 25.1.1. 函数式接口
 函数式接口(Functional Interface)就是一个有且仅有一个抽象方法，但是可以有多个非抽象方法的接口。
 函数式接口可以被隐式转换为 lambda 表达式。
 
@@ -6189,7 +6195,7 @@ interface GreetingService {
 }
 ```
 
-## 25.2. Lambda 表达式 
+### 25.1.2. Lambda 表达式 
 Lambda 表达式，也可称为闭包。允许把函数作为一个方法的参数（函数作为参数传递到方法中）。
 当匿名内部类所实现的接口是一个函数式接口，可以使用Lambda表达式来替代。
 
@@ -6302,7 +6308,7 @@ public class LambdaFinal {
 ```
 
 
-## 25.3. 方法引用
+### 25.1.3. 方法引用
 方法引用提供了非常有用的语法，可以直接引用已有Java类或对象（实例）的方法或构造器。与lambda联合使用，方法引用可以使语言的构造更紧凑简洁，减少冗余代码。
 方法引用提供了一种引用而不执行方法的方式。（函数指针？？）
 **注意方法引用是一个Lambda表达式**
@@ -6314,7 +6320,7 @@ public class LambdaFinal {
 - 特定对象的方法引用：`实例对象::方法名`
 
 
-## 25.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用
+### 25.1.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用
 
 定义一个函数式接口
 ```java
@@ -6430,7 +6436,7 @@ public class GreetingMain {
 
 
 
-## 25.5. 默认方法
+### 25.1.5. 默认方法
 Java 8 新增了接口的默认方法。默认方法就是一个在接口里面有了一个实现的方法。
 ```java
 public interface Vehicle {
@@ -6497,10 +6503,10 @@ class Mian {
 ```
 
 
-## 25.6. Stream API
+### 25.1.6. Stream API
 新添加的Stream API（java.util.stream） 把真正的函数式编程风格引入到Java中。
 
-## 25.7. Date Time API
+### 25.1.7. Date Time API
 加强对日期与时间的处理。
 
 在旧版的 Java 中，日期时间 API 存在诸多问题，其中有：
@@ -6574,7 +6580,7 @@ System.out.println(localDateTime4);
 ```
 
 
-## 25.8. Optional 类
+### 25.1.8. Optional 类
 Optional 类已经成为 Java 8 类库的一部分，用来解决空指针异常。
 Optional 是个容器：它可以保存类型T的值，或者保存null。
 Optional提供很多有用的方法，这样我们就不用显式进行空值检测。如果值存在则 isPresent() 方法会返回 true，调用 get() 方法会返回该对象。
@@ -6632,8 +6638,15 @@ String toString()
 ```
 
 
-## 25.9. 新工具
+### 25.1.9. 新工具
 新的编译工具，如：Nashorn引擎 jjs、 类依赖分析器jdeps。
 
-## 25.10. Nashorn, JavaScript 引擎
+### 25.1.10. Nashorn, JavaScript 引擎
 Java 8提供了一个新的Nashorn javascript引擎，它允许我们在JVM上运行特定的javascript应用。
+
+## 25.2. Java 15 新特性
+
+### 25.2.1. 密封类
+
+### 25.2.2. 隐藏类
+
