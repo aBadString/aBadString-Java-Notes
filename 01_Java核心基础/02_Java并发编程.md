@@ -152,7 +152,7 @@ JMM 三大特性：
 1. 保证特定操作的执行顺序
 2. 保证某些变量的内存可见性
 通过插入内存屏障指令，禁止在内存屏障前后的指令进行重排序。
-![](/images/Java高级特性/内存屏障.png)
+![](../images/Java高级特性/内存屏障.png)
 
 
 可见性例子：
@@ -1278,7 +1278,7 @@ synchronized 的底层实现主要依靠 Lock-Free 的队列，基本思路是**
 2. 提高响应速度，直接从线程池中拿线程的速度肯定快于创建一条线程
 3. 重复利用线程，避免增加创建线程和销毁线程的资源消耗
 
-![](/images/线程池.png)
+![](../images/线程池.png)
 
 ```java
 public class ThreadPoolExecutor extends AbstractExecutorService {}
@@ -1923,7 +1923,7 @@ final void checkForComodification() {
 3. CopyOnWriteArrayList
 
 ### 7.1.4. CopyOnWriteArrayList
-![image-20200326192142191](/images/image-20200326192142191.png)
+![image-20200326192142191](../images/image-20200326192142191.png)
 
 CopyOnWriteArrayList add 方法：写时复制，当要往list中添加元素时，不会在原list上直接修改，而是拷贝一份原list，在拷贝的list上做修改；修改完成之后用拷贝的数组更新原来的引用。
 ```java

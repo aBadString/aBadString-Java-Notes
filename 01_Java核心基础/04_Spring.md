@@ -141,7 +141,7 @@ Spring 是 用于 Java 企业级开发的，轻量级的，非侵入式的 开�
   - 既可以与hibernate整合，【session】
   - 也可以使用spring的对hibernate操作的封装
 
-![Spring模块](/images/spring/Spring模块.png) 
+![Spring模块](../images/spring/Spring模块.png) 
 
 
 **涉及到Spring core的开发jar包有6个**：
@@ -154,7 +154,7 @@ Spring 是 用于 Java 企业级开发的，轻量级的，非侵入式的 开�
 
 - log4j.jar：spring 依赖于 log4j
 
-![Spring体系结构](/images/spring/Spring体系结构.png) 
+![Spring体系结构](../images/spring/Spring体系结构.png) 
 
 ## 1.4. 托管 Bean 的三种方式
 
@@ -519,13 +519,13 @@ Spring在创建Bean时默认会根据自然排序进行创建，所以A会先于
 2. earlySingletonObjects：二级缓存，存放半成品Bean（完成实例化，但是还未进行属性注入及初始化的对象）。
 3. singletonFactories：三级缓存，存放Bean工厂的对象（二级缓存中存储的就是从这个工厂中获取到的对象）。
 
-![](/images/spring/简单循环依赖三级缓存.png)
+![](../images/spring/简单循环依赖三级缓存.png)
 
 #### 1.9.3.2. 结合了AOP的循环依赖
 
 其实在普通循环依赖下只需要二级缓存就可。
 
-![](/images/spring/AOP循环依赖三级缓存.png)
+![](../images/spring/AOP循环依赖三级缓存.png)
 
 
 # 2. Spring AOP
@@ -862,7 +862,7 @@ public static void main(String[] args) {
 - Proxy（代理）:   一个类被 AOP 织入增强后，就产生一个结果代理类。
 - Aspect(切面):   是切入点和通知（引介）的结合。 **切面就是配置**
 
-![通知的类型](/images/spring/通知的类型.jpg)
+![通知的类型](../images/spring/通知的类型.jpg)
 
 
 ```xml
@@ -1066,7 +1066,7 @@ private void pt1(){}
 
 **用注解配置通知时, 后置/异常通知个最终通知存在调用顺序错误的情况. 这是一个坑, 可能是框架代码写错了???**
 
-![最终同时顺序错误的坑](/images/spring/最终同时顺序错误的坑.png)
+![最终同时顺序错误的坑](../images/spring/最终同时顺序错误的坑.png)
 
 
 # 3. Spring MVC
