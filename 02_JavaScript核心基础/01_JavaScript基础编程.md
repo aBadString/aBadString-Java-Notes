@@ -37,6 +37,8 @@
   - [6.1. let 和 const](#61-let-和-const)
   - [6.2. 解构赋值](#62-解构赋值)
   - [6.3. 扩展运算符与剩余运算符](#63-扩展运算符与剩余运算符)
+  - [6.4. map() 和 reduce() 函数](#64-map-和-reduce-函数)
+  - [6.5. 模块化](#65-模块化)
 
 <!-- /code_chunk_output -->
 
@@ -932,4 +934,108 @@ console.log(b); // [2, 3]
         console.log(b); // [2, 3]
     }
 )(1, 2, 3)
+```
+
+## 6.4. map() 和 reduce() 函数
+
+`let newArray = array.map(function)`: 接收一个函数 function，将原数组 array 中的所有元素用这个函数 function 处理后放入新数组 newArray 返回。
+函数 function 有一个参数: 数组中当前元素
+```js
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map((number) => number * 2);
+console.log(numbers); // [1,2,3,4,5]
+console.log(doubled); // [2,4,6,8,10]
+```
+
+reduce()∶接收一个函数 function(必须)和一个初始值 value (可选)。
+函数 function 有两个参数:
+- 第一个参数：上一次 reduce() 处理的结果
+- 第二个参数：数组中要处理的下一个元素
+
+reduce() 会从左到右依次把数组中的元素用reduce处理，并把处理的结果作为下次reduce的第一个参数。
+如果是第一次reduce，没有指定初始值时，会把数组前两个元素作为参数；如果指定的初始值，则初始值和数组第一个元素作为参数。
+```js
+// 没有指定初始值
+let arr = [1, 2, 3, 4];
+arr.reduce(
+    (a, b) => {
+        console.log(a, b, a+b);
+        return a + b;
+    }
+);
+// a b 结果
+// 1 2 3
+// 3 3 6
+// 6 4 10
+
+// 指定初始值为 10
+let arr = [1, 2, 3, 4];
+arr.reduce(
+    (a, b) => {
+        console.log(a, b, a+b);
+        return a + b;
+    },
+    10
+);
+//  a b 结果
+// 10 1 11
+// 11 2 13
+// 13 3 16
+// 16 4 20
+```
+
+## 6.5. 模块化
+
+模块化就是把代码进行拆分，方便重复利用（类似java中的导包: 要使用一个包，必须先导包）。、
+而 JS 中没有包的概念，换来的是模块。 
+> export: 规定模块的对外接口，
+> import: 导入其他模块提供的功能。
+
+- 导出的函数声明与类声明必须要有名称
+- 不仅能导出声明还能导出引用（例如函数）。
+- export 命令可以出现在模块的任何位置，但必需处于模块顶层。
+- import 命令会提升到整个模块的头部，首先执行。
+
+- 在一个文件或模块中，export、import 可以有多个，export default 仅有一个。
+- export default 中的 default 是对应的导出接口变量。
+- 通过 export 方式导出，在导入时要加{ }，export default 则不需要。
+- export default 向外暴露的成员，可以使用任意变量来接收。
+
+在文件夹 module 下创建三个文件 package.json、Util.js、index.js
+package.json（"type": "module" 这一项必须）
+```json
+{
+  "name": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+```
+Util.js
+```js
+// 定义一个类
+class Util {
+    // 其中有一个静态方法
+    static sum = (a, b) => a + b;
+}
+// 导出该类
+export default Util;
+```
+index.js
+```js
+import Util from './Util.js'
+
+console.log(Util.sum(1, 1));
+```
+
+运行 Node
+```shell
+> node ./index.js
+2
 ```
