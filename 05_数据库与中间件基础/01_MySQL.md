@@ -2005,6 +2005,10 @@ mysqld --initialize --console
 ```
 2020-03-12T12:56:28.384344Z 5 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: ifwtm%))p7qZ
 ```
+```shell
+# 搜索临时密码，在日志文件中定位
+grep 'temporary password' /var/log/mysqld.log
+```
 
 输入以下安装命令：
 ```
@@ -2028,6 +2032,13 @@ mysql -u root -p
 修改密码为 whoami
 ```
 alter user user() identified by "whoami";
+```
+如不成功，则：
+```sql
+-- MySQL 8 修改密码
+use mysql;
+alter user 'root'@'localhost' identified with mysql_native_password by '123456';
+flush privileges;
 ```
 输入```quit;```可以退出。
 
@@ -2070,3 +2081,5 @@ use mysql;
 alter user 'root'@'localhost' identified with mysql_native_password by '123456';
 flush privileges;
 ```
+
+**2020最新Linux系统发行版ContOS7演示安装MySQL：https://www.cnblogs.com/xsge/p/13827288.html**
