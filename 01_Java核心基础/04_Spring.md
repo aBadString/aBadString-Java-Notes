@@ -44,14 +44,19 @@
         - [4.3.3.1.2. AutoConfigurationImportSelector](#43312-autoconfigurationimportselector)
         - [4.3.3.1.3. spring.factories](#43313-springfactories)
       - [4.3.3.2. 自动配置类 MybatisAutoConfiguration](#4332-自动配置类-mybatisautoconfiguration)
-  - [4.4. IOC 容器相关注解](#44-ioc-容器相关注解)
+  - [4.4. Spring IOC 注解](#44-spring-ioc-注解)
     - [4.4.1. @Component](#441-component)
     - [4.4.2. @Configuration + @Bean](#442-configuration-bean)
     - [4.4.3. @Import @ImportResource](#443-import-importresource)
     - [4.4.4. @Conditional 条件装配](#444-conditional-条件装配)
     - [4.4.5. @ConfigurationProperties](#445-configurationproperties)
   - [4.5. YAML 配置文件](#45-yaml-配置文件)
-  - [4.6. 自定义 Spring Boot 场景启动器](#46-自定义-spring-boot-场景启动器)
+  - [4.6. Spring Web](#46-spring-web)
+    - [4.6.1. 静态资源](#461-静态资源)
+    - [4.6.2. REST](#462-rest)
+    - [4.6.3. Spring MVC 注解](#463-spring-mvc-注解)
+      - [4.6.3.1. 请求参数获取](#4631-请求参数获取)
+  - [4.7. 自定义 Spring Boot 场景启动器](#47-自定义-spring-boot-场景启动器)
 
 <!-- /code_chunk_output -->
 
@@ -2121,7 +2126,7 @@ debug: true
 ```
 
 
-## 4.4. IOC 容器相关注解
+## 4.4. Spring IOC 注解
 
 以下注解都是 Spring 的注解
 
@@ -2404,7 +2409,286 @@ user:
   email: 123
 ```
 
-## 4.6. 自定义 Spring Boot 场景启动器
+
+## 4.6. Spring Web
+
+### 4.6.1. 静态资源
+
+静态资源目录：classpath:/static、classpath:/public、classpath:/resources、classpath:/META-INF/resources
+映射到 URL：/
+
+```yml
+spring:
+  resources:
+    static-locations: [classpath:/abadstring/] # 修改静态资源目录
+  mvc:
+    static-path-pattern: /res/** # 修改请求的 URL
+```
+
+- /favicon.ico 是网站图标
+- /index.html 是默认页面，映射到 /
+  只认静态资源 /index.html，不认 Controller @RequestMapping("/index.html")。但是 Controller 访问级别比静态资源高，也就是说静态资源与 Controller url 同名的话访问 Controller。
+  - 创建一个 index.html 并同时创建一个 Controller @RequestMapping("/index.html")；可以达到 访问 / 时请求 Controller 的目的。
+  
+
+### 4.6.2. REST
+
+UserController 的 action 请求地址为 "/user"，根据请求方法不同，执行不同的 action。
+```java
+@RestController
+@RequestMapping("/user")
+public class UserController {
+    @GetMapping
+    public String getUser(){
+        return "GET-张三";
+    }
+    @PostMapping
+    public String saveUser(){
+        return "POST-张三";
+    }
+
+    @PutMapping
+    public String putUser(){
+        return "PUT-张三";
+    }
+    @DeleteMapping
+    public String deleteUser(){
+        return "DELETE-张三";
+    }
+}
+```
+使用 HTTP 客户端测试，所有的请求是正常的。
+```http
+###
+GET localhost:8080/user
+# GET-张三
+
+###
+POST localhost:8080/user
+# POST-张三
+
+###
+PUT localhost:8080/user
+# PUT-张三
+
+###
+DELETE localhost:8080/user
+# DELETE-张三
+```
+
+但是，HTML 的 form 表达仅支持 get/post 两种请求方式
+```html
+<h1>测试REST风格</h1>
+<form action="/user" method="get">
+    <input value="REST-GET 提交" type="submit" />
+</form>
+<form action="/user" method="post">
+    <input value="REST-POST 提交" type="submit" />
+</form>
+
+<!-- form 仅支持 get/post 请求 -->
+<form action="/user" method="delete">
+    <input value="REST-DELETE 提交 (不支持, 执行 get 请求)" type="submit" />
+</form>
+<form action="/user" method="put">
+    <input value="REST-POST 提交 (不支持, 执行 get 请求)" type="submit" />
+</form>
+```
+
+**为了使用 delete/put 请求，可以开启 WebMvcAutoConfiguration 中 hiddenHttpMethodFilter 过滤器：**
+1. 开启方式：在配置文件中添加
+```yml
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: false # 开启 REST 请求
+```
+2. 使用 post 方法发生请求，并带上 _method 参数
+```html
+<!-- 要用 delete/put: 使用 post 请求, 传递一个 _method 参数 -->
+<form action="/user" method="post" >
+    <input name="_method" type="hidden" value="delete"/>
+    <input value="REST-DELETE 提交 "type="submit" />
+</form>
+<form action="/user" method="post" >
+    <input name="_method" type="hidden" value="put" />
+    <input value="REST-PUT 提交" type="submit" />
+</form>
+```
+
+3. 具体原理是：=向容器中注入了 OrderedHiddenHttpMethodFilter 组件
+```java
+public class WebMvcAutoConfiguration {
+    @Bean
+    @ConditionalOnMissingBean(HiddenHttpMethodFilter.class)
+    // 读取配置文件中 spring.mvc.hiddenmethod.filter.enabled 属性来判断是否添加 OrderedHiddenHttpMethodFilter
+    // 默认不添加
+    @ConditionalOnProperty(prefix = "spring.mvc.hiddenmethod.filter", name = "enabled", matchIfMissing = false)
+    public OrderedHiddenHttpMethodFilter hiddenHttpMethodFilter() {
+        return new OrderedHiddenHttpMethodFilter();
+    }
+}
+```
+
+### 4.6.3. Spring MVC 注解
+
+#### 4.6.3.1. 请求参数获取
+
+- @RequestParam Query String 参数
+- @PathVariable 路径参数
+- @RequestHeader 请求头参数
+- @CookieValue Cookie
+- @RequestBody 请求体
+- @RequestAttribute  Request 的属性
+- @MatrixVariable 矩阵变量
+
+```java
+@RestController
+public class ParameterController {
+
+    // 获取 Query String 参数
+    // 默认可不写 @RequestParam
+    // /querystring?code=2020
+    @GetMapping("/querystring")
+    public String getQueryString(/*@RequestParam*/ Integer code) {
+        return "路径参数: code=" + code;
+    }
+
+
+    @GetMapping("/parameter/{id}")
+    public String get(@PathVariable("id") Integer code) {
+        return "路径参数: code=" + code;
+    }
+
+    // 当 {id} 与 Integer id 变量名相同时, 可省略 @PathVariable 注解的参数
+    @GetMapping("/parameter/noname/{id}")
+    public String getNoName(@PathVariable Integer id) {
+        return "路径参数: id=" + id;
+    }
+
+    // 多个路径参数
+    @GetMapping("/parameter/noname/{id}/list/{username}")
+    public String getNoNameUsername(@PathVariable Integer id, @PathVariable String username) {
+        return "路径参数: id=" + id + ", username=" + username;
+    }
+
+    // 还可以直接使用一个 Map 存下所以的参数. 必须是 Map<String, String>
+    @GetMapping("/parameter/kv/{id}/list/{username}")
+    public String getMap(@PathVariable Integer id,
+                        @PathVariable String username,
+                        @PathVariable Map<String, String> map) {
+        return "路径参数: id=" + id + ", username=" + username + "<br/>map=" + map;
+        // 路径参数: id=2, username=Busername
+        // map={id=2, username=Busername}
+    }
+
+
+    // 请求头参数
+    @GetMapping("/header")
+    public String getHeader(@RequestHeader String cookie,
+                        @RequestHeader Map<String, String> headers) {
+        return "请求头参数: cookie= " + cookie + "<br/>"
+                + "headers= " + headers;
+
+        // cookie
+        // = Idea-973cd9f6=a94b7b21-d43d-4793-bd32-0f87e7a1a1d3;
+        //   Idea-973cd9f7=efa08f48-e552-496d-a586-a4f9aef9c88c
+    }
+
+    // 获取某一个 Cookie
+    @GetMapping("/cookie")
+    public String getCookie(
+            @CookieValue("Idea-973cd9f7") String cookie,
+            @CookieValue("Idea-973cd9f7") Cookie cookieObject) {
+        return "Cookie 字符串: " + cookie + "<br/>"
+                + "Cookie 对象: " + cookieObject;
+        // Cookie 字符串: efa08f48-e552-496d-a586-a4f9aef9c88c
+        // Cookie 对象: javax.servlet.http.Cookie@3ac9f602
+    }
+
+    // 请求体
+    /*
+        POST localhost:8080/body
+        Content-Type: application/json
+
+        {
+            "username": "aBadString",
+                "password": "123456"
+        }
+     */
+    @PostMapping("/body")
+    public String getBody(@RequestBody String body) {
+        return "body= " + body;
+    }
+}
+
+// @RequestAttribute
+@Controller
+public class RequestController {
+    @GetMapping("/forward")
+    public String forward(HttpServletRequest request) {
+        request.setAttribute("code", "00000");
+        request.setAttribute("message", "成功");
+        return "forward:/success";
+    }
+
+    @ResponseBody
+    @GetMapping("/success")
+    public String forward(@RequestAttribute String message,
+                          HttpServletRequest request) {
+        return "message= " + message + "<br/>"
+                + "code= " + request.getAttribute("code");
+    }
+}
+```
+
+**@MatrixVariable 矩阵变量**
+
+开启对矩阵变量的支持
+```java
+@Configuration
+public class WebConfiguration implements WebMvcConfigurer {
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        UrlPathHelper urlPathHelper = new UrlPathHelper();
+        // 设置【移除 url 分号后的内容】为 false => 开启矩阵变量功能
+        urlPathHelper.setRemoveSemicolonContent(false);
+        configurer.setUrlPathHelper(urlPathHelper);
+    }
+}
+```
+矩阵变量实例：@GetMapping("/matrix/{path}") 中一定要有 {path}。矩阵变量是在路径变量的基础上实现的。
+```java
+// 矩阵变量
+// /matrix/path;name=song;age=18;likes=java,cpp,js
+@GetMapping("/matrix/{path}")
+public String getMatrix(@MatrixVariable String name,
+                        @MatrixVariable Integer age,
+                        @MatrixVariable List<String>likes,
+                        @PathVariable String path) {
+    return name + "<br/>" + age + "<br/>" + likes + "<br/><br/>"
+            + "path= " + path;
+    // song
+    // 18
+    // [java, cpp, js]
+    // 
+    // path= path
+}
+
+// 两个不同路径下的同名矩变量
+// /matrix/path1;name=song1/path2;name=song2
+@GetMapping("/matrix/{teacher}/{student}")
+public String getTwoMatrix(@MatrixVariable(pathVar = "teacher", value = "name") String name1,
+                        @MatrixVariable(pathVar = "student", value = "name") String name2) {
+    return name1 + "<br/>" + name2;
+    // song1
+    // song2
+}
+```
+
+
+## 4.7. 自定义 Spring Boot 场景启动器
 
 文件结构
 ```
