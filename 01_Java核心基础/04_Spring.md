@@ -56,6 +56,7 @@
     - [4.6.2. REST](#462-rest)
     - [4.6.3. Spring MVC 注解](#463-spring-mvc-注解)
       - [4.6.3.1. 请求参数获取](#4631-请求参数获取)
+    - [4.6.4. 拦截器](#464-拦截器)
   - [4.7. 自定义 Spring Boot 场景启动器](#47-自定义-spring-boot-场景启动器)
 
 <!-- /code_chunk_output -->
@@ -2684,6 +2685,71 @@ public String getTwoMatrix(@MatrixVariable(pathVar = "teacher", value = "name") 
     return name1 + "<br/>" + name2;
     // song1
     // song2
+}
+```
+
+### 4.6.4. 拦截器
+
+1. 定义一个拦截器，需要实现接口 HandlerInterceptor
+```java
+public class ResponseResultInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+    // 进入对应的 Controller 的 action 之前执行
+    // 第三个参数 Object handler 是将要被执行的 Controller 的对应 action 方法 的对象
+
+        // 如果当前 handler 是一个 HandlerMethod 对象
+        if (xxx) {
+            // 不再执行后续
+            return false;
+        }
+        // 放行, 执行后续操作
+        return true;
+    }
+}
+```
+HandlerInterceptor 接口源码
+```java
+package org.springframework.web.servlet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.lang.Nullable;
+import org.springframework.web.method.HandlerMethod;
+public interface HandlerInterceptor {
+
+    // 在执行 Controller 的 action 之前执行
+    // 返回 true 则放行; 返回 false 则直接返回不执行 action
+    default boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+        throws Exception {
+        return true;
+    }
+    // action 执行之后, 视图渲染之前
+    default void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView)
+        throws Exception {
+    }
+    // 试图渲染之后
+    default void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex)
+        throws Exception {
+    }
+
+}
+```
+
+2. 注册拦截器
+```java
+@Configuration(proxyBeanMethods = false)
+public class InterceptorConfiguration implements WebMvcConfigurer {
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 添加拦截器
+        registry.addInterceptor(new ResponseResultInterceptor())
+                // 需要拦截的路径
+                .addPathPatterns("/**")
+                // 不需拦截的路径
+                .excludePathPatterns("/swagger-ui.html");
+    }
 }
 ```
 
