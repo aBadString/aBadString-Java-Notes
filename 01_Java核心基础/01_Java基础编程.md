@@ -190,6 +190,8 @@
     - [25.1.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#2514-接口实现类-匿名内部类-lambda表达式-方法引用)
     - [25.1.5. 默认方法](#2515-默认方法)
     - [25.1.6. Stream API](#2516-stream-api)
+      - [25.1.6.1. 创建流](#25161-创建流)
+      - [25.1.6.2. 流的操作](#25162-流的操作)
     - [25.1.7. Date Time API](#2517-date-time-api)
     - [25.1.8. Optional 类](#2518-optional-类)
     - [25.1.9. 新工具](#2519-新工具)
@@ -3383,7 +3385,7 @@ public HashSet(int initialCapacity, float loadFactor) {
 public HashSet(int initialCapacity) {
     map = new HashMap<>(initialCapacity);
 }
-// 传入初始容量、加载因子和标记，构造一个空的LinkedHashMap，此构造函数为包访问权限，不对外公开，实际只是是对LinkedHashSet的支持。
+// 传入初始容量、加载因子和标记，构造一个空的LinkedHashMap，此构造函数为包访问权限，不���外公开，实际只是是对LinkedHashSet的支持。
 HashSet(int initialCapacity, float loadFactor, boolean dummy) {
     map = new LinkedHashMap<>(initialCapacity, loadFactor);
 }
@@ -6504,7 +6506,175 @@ class Mian {
 
 
 ### 25.1.6. Stream API
+
+> 参考:
+> https://www.cnblogs.com/chenpi/p/5915364.html
+> https://www.runoob.com/java/java8-streams.html
+
 新添加的Stream API（java.util.stream） 把真正的函数式编程风格引入到Java中。
+
+
+Stream 是一个来自数据源的元素队列并支持聚合操作
+Stream 其实是函数式编程中的 [Monad](http://www.ruanyifeng.com/blog/2015/07/monad.html)。
+简单说，Monad就是一种设计模式，表示将一个运算过程，通过函数拆解成互相连接的多个步骤。你只要提供下一步运算所需的函数，整个运算就会自动进行下去。
+
+#### 25.1.6.1. 创建流
+**数据源**：流的来源。可以是集合，数组，I/O channel，产生器 generator 等。
+1. 从 Collection、Array 创建流
+    - Collection.stream()
+    - Collection.parallelStream()
+    - Arrays.stream(T array)
+    - Stream.of()
+
+2. 从 BufferedReader 创建流
+    - java.io.BufferedReader.lines()
+
+3. 使用静态工厂方法创建流
+    - java.util.stream.IntStream.range()
+    - java.nio.file.Files.walk()
+
+4. 自己创建
+    -java.util.Spliterator
+
+5. 其它
+    - Random.ints()
+    - BitSet.stream()
+    - Pattern.splitAsStream(java.lang.CharSequence)
+    - JarFile.stream()
+```java
+// Collection.stream() 顺序流
+// Collection.parallelStream() 并行流
+List list = new ArrayList<Integer>();
+for (int i = 0; i < 5; i++) {
+    list.add(i);
+}
+Stream s1 = list.stream();
+s1.forEach(System.out::print);
+// Arrays.stream(T array)
+int[] arr = {4,5,6,7,12,34,12};
+IntStream s2 = Arrays.stream(arr);
+// Stream.of()
+Stream<Integer> s3 = Stream.of(1, 2, 3, 4);
+Stream<int[]> s4 = Stream.of(arr);
+Stream<List> s5 = Stream.of(list);
+```
+
+#### 25.1.6.2. 流的操作
+
+```java
+Stream<Integer> s = Stream.of(1, 2, 3, 4, 5);
+```
+
+1. map 修改元素
+```java
+s.map(
+    // 返回修改后的值
+    (el) -> { return el+2;}
+)
+.forEach( (el) -> System.out.print(el + " - ") );
+// 3 - 4 - 5 - 6 - 7 - 
+```
+2. filter 过滤元素
+``` java
+s.filter(
+    // 若返回值为 true 则保留该元素
+    (el) -> { return el % 2 == 0; }
+)
+.forEach( (el) -> System.out.print(el + " - ") );
+// 2 - 4 - 
+```
+3. limit 限制元素数量
+```java
+s.limit(3)
+.forEach( (el) -> System.out.print(el + " - ") );
+// 1 - 2 - 3 - 
+```
+
+4. sorted 排序元素
+```java
+// 采用默认排序, 或元素自身比较器排序
+s.sorted()
+.forEach( (el) -> System.out.print(el + " - ") );
+// 1 - 2 - 3 - 4 - 5 - 
+
+s.sorted(
+    // 自定义比较器
+    (a, b) -> { return -(a - b); }
+).forEach( (el) -> System.out.print(el + " - ") );
+// 5 - 4 - 3 - 2 - 1 - 
+```
+
+5. forEach 迭代元素
+```java
+s.forEach(
+    (el) -> System.out.print(el + " - ")
+);
+// 1 - 2 - 3 - 4 - 5 - 
+```
+
+6. collect 转为集合
+```java
+List<Integer> list =
+    s.sorted( (a, b) -> -(a - b) )
+    .collect(
+        // 转为 List
+        Collectors.toList()
+    );
+System.out.println(list);
+// [5, 4, 3, 2, 1]
+```
+
+7. count 元素数量
+```java
+System.out.println(s.count());
+// 5
+
+System.out.println(
+    s.filter( (el) -> el % 2 == 0)
+    .count()
+);
+// 2
+```
+
+8. reduce 组合元素
+第一次调用 reduce：取流 s 中前两个元素作为参数 a,b，调用 拉姆达表达式 L，得到返回值 r。
+第二次调用 reduce：取 r 和 流 s 中后一个元素(第三个)作为参数 a,b，调用 拉姆达表达式 L，得到返回值 r。
+... 重复上述操作，直到遍历完流中的元素。
+
+若流中仅有一个元素，则直接返回，不调用 拉姆达表达式 L；
+若为空流 Stream.empty()，则得到的结果为 Optional.empty。
+```java
+Optional<Integer> op = s.reduce(
+    // 拉姆达表达式 L
+    (a, b) -> {
+        return a + b;
+    }
+);
+System.out.println(op.get());
+// 15
+
+Optional<Integer> op = s.reduce(
+    (a, b) -> {
+        System.out.println("a="+a+", b="+b+", r="+(a+b));
+        return a + b;
+    }
+);
+System.out.println(op.get());
+// a=1, b=2, r=3
+// a=3, b=3, r=6
+// a=6, b=4, r=10
+// a=10, b=5, r=15
+// 15
+
+Stream<Integer> sz = Stream.empty();
+Optional<Integer> op = sz.reduce(
+    (a, b) -> {
+        return a + b;
+    }
+);
+System.out.println(op);
+// Optional.empty
+```
 
 ### 25.1.7. Date Time API
 加强对日期与时间的处理。

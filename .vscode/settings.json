@@ -6,6 +6,6 @@
         "**/.vscode": true,
         "**/images": true,
         "**/_config.yml": true,
-        "**/11_开发手册": true
+        "**/10_开发手册": true
     }
 }
