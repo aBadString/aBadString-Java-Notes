@@ -38,7 +38,8 @@
   - [6.2. 解构赋值](#62-解构赋值)
   - [6.3. 扩展运算符与剩余运算符](#63-扩展运算符与剩余运算符)
   - [6.4. map() 和 reduce() 函数](#64-map-和-reduce-函数)
-  - [6.5. 模块化](#65-模块化)
+  - [6.5. Class 类](#65-class-类)
+  - [6.6. 模块化](#66-模块化)
 
 <!-- /code_chunk_output -->
 
@@ -984,7 +985,69 @@ arr.reduce(
 // 16 4 20
 ```
 
-## 6.5. 模块化
+## 6.5. Class 类
+
+**类的定义**
+```js
+// 创建一个 Person 类
+class Person {
+    // 构造器
+    constructor(name,age) {
+        // 构造器中的 this 是 类的实例对象
+        this.name = name
+        this.age = age
+    }
+    // 方法
+    speak() {
+        // speak 方法放在 类的原型对象上，供实例使用
+        // 通过 Person 实例调用 speak 时，speak 中的 this 就是 Person 实例
+        console.log(`我叫${this.name}，我年龄是${this.age}`);
+    }
+}
+
+// 创建一个Student类，继承于Person类
+class Student extends Person {
+    constructor(name,age,grade){
+        super(name,age)
+        this.grade = grade
+        this.school = '尚硅谷'
+    }
+    // 重写从父类继承过来的方法
+    speak() {
+        console.log(`我叫${this.name}，我年龄是${this.age},我读的是${this.grade}年级`);
+        this.study()
+    }
+    study() {
+        // study 方法放在 类的原型对象上，供实例使用
+        // 通过 Student 实例调用 study 时，study 中的 this 就是 Student 实例
+        console.log('我很努力的学习');
+    }
+}
+
+class Car {
+    constructor(name,price){
+        this.name = name
+        this.price = price
+        // this.wheel = 4
+    }
+    // 类中可以直接写赋值语句
+    // 如下代码的含义是：给Car的实例对象添加一个属性，名为a，值为1
+    a = 1
+    wheel = 4
+    // 静态属性
+    static demo = 100
+}
+const c1 = new Car('奔驰c63',199)
+console.log(c1);
+console.log(Car.demo);
+```
+注意：类定义不会被提升，这意味着，必须在访问前对类进行定义，否则就会报错。
+1. 类中的构造器不是必须要写的，要对实例进行一些初始化的操作，如添加指定属性时才写。
+2. 如果 A 类继承了 B 类，且 A 类中写了构造器，那么在 A 类构造器中的必须要使用 super 调用父类的构造器。
+3. 类中所定义的方法，都放在了类的原型对象上，供实例去使用。
+
+
+## 6.6. 模块化
 
 模块化就是把代码进行拆分，方便重复利用（类似java中的导包: 要使用一个包，必须先导包）。、
 而 JS 中没有包的概念，换来的是模块。 
