@@ -1061,7 +1061,7 @@ console.log(Car.demo);
 
 - 在一个文件或模块中，export、import 可以有多个，export default 仅有一个。
 - export default 中的 default 是对应的导出接口变量。
-- 通过 export 方式导出，在导入时要加{ }，export default 则不需要。
+- **通过 export 方式导出，在导入时要加 `{ }`，export default 则不需要。**
 - export default 向外暴露的成员，可以使用任意变量来接收。
 
 在文件夹 module 下创建三个文件 package.json、Util.js、index.js
