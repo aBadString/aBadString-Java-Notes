@@ -33,13 +33,15 @@
   - [5.1. 对象字面量 json](#51-对象字面量-json)
   - [5.2. 动态对象](#52-动态对象)
   - [5.3. 类](#53-类)
-- [6. ES6 新特性](#6-es6-新特性)
-  - [6.1. let 和 const](#61-let-和-const)
-  - [6.2. 解构赋值](#62-解构赋值)
-  - [6.3. 扩展运算符与剩余运算符](#63-扩展运算符与剩余运算符)
-  - [6.4. map() 和 reduce() 函数](#64-map-和-reduce-函数)
-  - [6.5. Class 类](#65-class-类)
-  - [6.6. 模块化](#66-模块化)
+- [6. Ajax（Asynchronous Javascript And XML）](#6-ajaxasynchronous-javascript-and-xml)
+- [7. ES6 新特性](#7-es6-新特性)
+  - [7.1. let 和 const](#71-let-和-const)
+  - [7.2. 解构赋值](#72-解构赋值)
+  - [7.3. 扩展运算符与剩余运算符](#73-扩展运算符与剩余运算符)
+  - [7.4. map() 和 reduce() 函数](#74-map-和-reduce-函数)
+  - [7.5. Class 类](#75-class-类)
+  - [7.6. 模块化](#76-模块化)
+  - [7.7. Promise](#77-promise)
 
 <!-- /code_chunk_output -->
 
@@ -801,11 +803,190 @@ stu2.show();
 ```
 
 
-# 6. ES6 新特性
+# 6. Ajax（Asynchronous Javascript And XML）
+
+AJAX 即异步的 JavaScript 和 XML。
+通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现**异步**更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
+
+下面是使用 Ajax 的示例：
+1. 实现准备一个服务器端，能够返回数据即可
+为方便使用 Node 开启一个服务 server.js
+```js
+const http = require('http');
+const hostname = '127.0.0.1';
+const port = 3000;
+
+const server = http.createServer(
+    (req, res) => {
+        console.log("服务器被", req.headers.origin, "访问了");
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/plain');
+        res.end('hello, ajax\n');
+    }
+);
+
+server.listen(
+    port,
+    hostname,
+    () => {
+        console.log(`server run in http://${hostname}:${port}/`);
+    }
+);
+```
+启动服务器：
+```shell
+> node .\server.js
+server run in http://127.0.0.1:3000/
+```
+浏览器访问：
+```http
+GET http://127.0.0.1:3000/
+
+hello, ajax
+```
+
+2. 准备一个页面 ajax.html
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax</title>
+</head>
+<body>
+    <button onclick="getData();">点击获取数据</button>
+    <input id="me" type="text" readonly>
+    <script>
+        function getData() {
+            // TODO 通过 Ajax 获取数据
+            const data = "hello, ajax";
+
+            const me = document.getElementById("me");
+            me.value = data;
+        }
+    </script>
+</body>
+</html>
+```
+
+3. 编写 Ajax 请求代码
+```js
+function getData() {
+    // 1. 创建 XMLHttpRequest 对象
+    var xmlHttpRequest = null;
+    try {
+        xmlHttpRequest = new XMLHttpRequest();
+    } catch(e) {
+        console.log(e);
+        alert("不能创建Ajax对象!", e);
+        return;
+    }
+    if (xmlHttpRequest == null) {return;}
+
+    // 2. 发送请求
+    const url = "http://127.0.0.1:3000";
+    // GET 请求
+    // 三个参数: 请求方法, URL, 是否异步
+    //    第三个参数为 false, 使用同步, 等获取到了网络数据 send() 才返回
+    //    第三个参数为  true, 使用异步, send() 立即返回
+    xmlHttpRequest.open("GET", url, false);
+    xmlHttpRequest.send();
+
+    // 3. 获取响应
+    const data = xmlHttpRequest.responseText;
+
+    const me = document.getElementById("me");
+    me.value = data;
+}
+```
+以上的网络请求还是同步的，效率不高。当 send() 函数取请求数据时，主线程需要等待它获取到数据再执行。
+为提高效率，采用 异步 + 回调 方式：
+```js
+function getData() {
+    // 1. 创建 XMLHttpRequest 对象
+    var xmlHttpRequest = null;
+    try {
+        xmlHttpRequest = new XMLHttpRequest();
+    } catch(e) {
+        console.log(e);
+        alert("不能创建Ajax对象!", e);
+        return;
+    }
+    if (xmlHttpRequest == null) {return;}
+
+    // 2. 发送请求
+    const url = "http://127.0.0.1:3000";
+    // GET 请求
+    // 三个参数: 请求方法, URL, 是否异步
+    //      第三个参数为 false, 使用同步, 等获取到了网络数据 send() 才返回
+    //      第三个参数为  true, 使用异步, send() 立即返回
+    xmlHttpRequest.open("GET", url, true);
+    // send() 调用后主线程立即返回, send() 在另一个子线程中请求数据
+    // 当 send() 获取到数据后, 调用 onreadystatechange 所设置的方法 callbackWhenResponse
+    xmlHttpRequest.onreadystatechange = callbackWhenResponse;
+    xmlHttpRequest.send();
+
+    // 当取到数据后调用
+    function callbackWhenResponse() {
+        // 3. 获取响应
+        const data = xmlHttpRequest.responseText;
+
+        const me = document.getElementById("me");
+        me.value = data;
+    }
+}
+```
+
+**出现跨域问题**
+浏览器访问页面 ajax.html，点击按钮后，浏览器报错出现跨域问题，数据没有获取到。
+浏览器 log：
+```log
+Access to XMLHttpRequest at 'http://127.0.0.1:3000/' from origin 'http://127.0.0.1:5500' has been blocked by CORS policy:
+No 'Access-Control-Allow-Origin' header is present on the requested resource.
+```
+查看一下服务器日志，发现服务器是正常的被访问到了，并且正常返回了数据
+服务器 log：
+```shell
+> node .\server.js
+server run in http://127.0.0.1:3000/
+服务器被 http://127.0.0.1:5500 访问了
+```
+
+【分析问题】
+说明一下：ajax.html 是客户端开启在 `http://127.0.0.1:5500`，使用浏览器访问页面；server.js 是服务器开启在 `http://127.0.0.1:3000`。
+
+> 【对浏览器报错的翻译】：
+> 从源 'http://127.0.0.1:5500'【客户端】 访问 'http://127.0.0.1:3000/'【服务器】 的XMLHttpRequest 已经被 **同源策略** 阻止了:
+> 在 被请求的资源【服务器的响应报文】 上没有 'Access-Control-Allow-Origin' 报文首部字段。
+
+> 同源策略：如果两个 URL 的 protocol, port, host 都相同的话，则这两个 URL 是同源。
+> Access-Control-Allow-Origin 响应头指定了该响应的资源是否被允许与给定的 origin 共享。
+
+根据日志可以看出：浏览器的 ajax 请求正常发生给了服务器，服务器正常返回数据了。
+问题出现在浏览器接收到服务器的数据后，响应报文被浏览器的 CORS policy 拦截掉了。
+因为在响应报文上没有首部字段 'Access-Control-Allow-Origin'。
+
+【解决方法】
+1. 方法一：服务器响应报文时添加 `Access-Control-Allow-Origin: http://127.0.0.1:5500`（或者 `Access-Control-Allow-Origin: *`，* 表示所有域）
+修改 server.js 文件：
+```diff
+console.log("服务器被", req.headers.origin, "访问了");
+res.statusCode = 200;
+res.setHeader('Content-Type', 'text/plain');
++ res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
+res.end('hello, ajax\n');
+```
+
+2. 方法二：前端走代理
+[React 配置代理](./03_组件化框架.md/#222-配置代理解决跨域问题)
+
+
+# 7. ES6 新特性
 
 ECMAScript 6 于 2015 年 6 月发布。
 
-## 6.1. let 和 const
+## 7.1. let 和 const
 
 使用 var 声明的变量无法控制其作用域。
 ```js
@@ -848,7 +1029,7 @@ a = 10; // Uncaught TypeError: Assignment to constant variable.
 const b; // Uncaught SyntaxError: Missing initializer in const declaration
 ```
 
-## 6.2. 解构赋值
+## 7.2. 解构赋值
 
 **数组解构**
 ```js
@@ -896,7 +1077,7 @@ console.log(n); // jack
 ```
 
 
-## 6.3. 扩展运算符与剩余运算符
+## 7.3. 扩展运算符与剩余运算符
 
 扩展运算符：将一个数组或者对象的所有元素展开为一个逗号分隔的参数序列。
 ```js
@@ -937,7 +1118,7 @@ console.log(b); // [2, 3]
 )(1, 2, 3)
 ```
 
-## 6.4. map() 和 reduce() 函数
+## 7.4. map() 和 reduce() 函数
 
 `let newArray = array.map(function)`: 接收一个函数 function，将原数组 array 中的所有元素用这个函数 function 处理后放入新数组 newArray 返回。
 函数 function 有一个参数: 数组中当前元素
@@ -985,7 +1166,7 @@ arr.reduce(
 // 16 4 20
 ```
 
-## 6.5. Class 类
+## 7.5. Class 类
 
 **类的定义**
 ```js
@@ -1047,7 +1228,7 @@ console.log(Car.demo);
 3. 类中所定义的方法，都放在了类的原型对象上，供实例去使用。
 
 
-## 6.6. 模块化
+## 7.6. 模块化
 
 模块化就是把代码进行拆分，方便重复利用（类似java中的导包: 要使用一个包，必须先导包）。、
 而 JS 中没有包的概念，换来的是模块。 
@@ -1101,4 +1282,32 @@ console.log(Util.sum(1, 1));
 ```shell
 > node ./index.js
 2
+```
+
+## 7.7. Promise
+Promise 是一个对象，从它可以获取异步操作的消息，是异步编程的一种解决方案。
+```js
+/* 创建 Promise 对象*/
+// Promise 构造器接收一个 function(resolve, reject) 做参数
+var promise = new Promise(function(resolve, reject) {
+    // 1. 异步处理
+    const x = 1;
+    // 2. 处理结束后: 一切都正常调用 resolve; 否则调用 reject
+    if (x === 1) {
+        const data = "good";
+        resolve(data);
+    } else {
+        const error = "bad";
+        reject(error);
+    }
+});
+
+/* 准备好两个处理函数 */
+function resolve(data) {console.log("正常", data);}
+function reject(error) {console.log("异常", error);}
+
+/* 调用 promise */
+// 执行 promise 实参中的方法 function(resolve, reject)
+// 会将上述两个方法传入 then(正常方法) catch(异常方法)
+promise.then(resolve).catch(reject);
 ```

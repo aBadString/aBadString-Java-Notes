@@ -1537,7 +1537,7 @@ interface I {
 
 ### 8.5.1. 匿名子类（匿名内部类）
 
-代码见：[模板方法(TemplateMethod)设计模式](#941-模板方法templatemethod设计模式)
+代码见：[模板方法(TemplateMethod)设计模式](./01_Java基础编程.md/#941-模板方法templatemethod设计模式)
 
 如上：Main类的main方法中创建了一个继承自CodeRunTimeTest类的子类，**该子类没有名字**，叫做匿名子类。而匿名的子类的对象有名字。对于接口也有匿名实现类。
 
@@ -5916,7 +5916,7 @@ public void test4(){
 ### 24.3.4. String 与其他结构的转换
 
 - **String 与基本数据类型和包装类的转换**
-[基本数据类型、包装类、String之间的转换](#2421-基本数据类型-包装类-string之间的转换)
+[基本数据类型、包装类、String之间的转换](./01_Java基础编程.md/#2421-基本数据类型-包装类-string之间的转换)
 
 String --> 基本数据类型、包装类：调用包装类的静态方法：parseXxx(str)
 基本数据类型、包装类 --> String:调用String重载的valueOf(xxx)
@@ -6179,7 +6179,7 @@ final void setTime(Date date)：java.util.Date --> Calendar
 
 ### 24.4.5. LocalDate、LocalTime、LocalDateTime（jdk8 新增） 
 
-[Date Time API](#2517-date-time-api)
+[Date Time API](./01_Java基础编程.md/#2517-date-time-api)
 
 
 # 25. Java 新特性
