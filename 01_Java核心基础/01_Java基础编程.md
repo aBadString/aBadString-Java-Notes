@@ -121,7 +121,10 @@
     - [15.6.4. 再探生产者消费者模型（基本模板）](#1564-再探生产者消费者模型基本模板)
 - [16. 泛型](#16-泛型)
   - [16.1. 泛型方法](#161-泛型方法)
-  - [16.2. 类型擦除](#162-类型擦除)
+  - [16.2. 泛型类](#162-泛型类)
+  - [16.3. 协变与逆变](#163-协变与逆变)
+  - [16.4. 通配符](#164-通配符)
+  - [16.5. 类型擦除](#165-类型擦除)
 - [17. 集合](#17-集合)
   - [17.1. List](#171-list)
   - [17.2. Set](#172-set)
@@ -3204,45 +3207,280 @@ Java 泛型（generics）是 JDK 5 中引入的一个新特性, 泛型提供了*
 - 在方法的返回值前面，在尖括号中可以声明类型参数，多个类型参数用逗号隔开。
 - 类型参数必须先声明后使用。
 - 类型参数只能代表引用型类型，不能是基本数据类型。
+```java
+public class GenericMethodTest
+{
+    // 泛型方法 printArray
+    public static < E > E printArray( E[] inputArray )
+    {
+        // 输出数组元素
+        for ( E element : inputArray ){
+            System.out.printf( "%s ", element );
+        }
+        System.out.println();
+        // 返回数组第一个元素
+        return inputArray[0];
+    }
+    public static void main( String args[] )
+    {
+        // 创建不同类型数组： Integer, Double 和 Character
+        Integer[] intArray = { 1, 2, 3, 4, 5 };
+        Double[] doubleArray = { 1.1, 2.2, 3.3, 4.4 };
+        Character[] charArray = { 'H', 'E', 'L', 'L', 'O' };
+
+        System.out.println( "整型数组元素为:" );
+        Integer integer = printArray(intArray);// 传递一个整型数组
+        System.out.println(integer);
+
+        System.out.println( "\n双精度型数组元素为:" );
+        Double aDouble = printArray(doubleArray);// 传递一个双精度型数组
+        System.out.println(aDouble);
+
+        System.out.println( "\n字符型数组元素为:" );
+        Character character = printArray(charArray);// 传递一个字符型数组
+        System.out.println(character);
+    }
+}
+// 整型数组元素为:
+// 1 2 3 4 5 
+// 1
+
+// 双精度型数组元素为:
+// 1.1 2.2 3.3 4.4 
+// 1.1
+
+// 字符型数组元素为:
+// H E L L O 
+// H
+```
+
+## 16.2. 泛型类
+```java
+/**
+ * 统一的响应数据格式
+ * {
+ *   # 结果码
+ *   code: Integer,
+ *   # 解释消息
+ *   message: String,
+ *   # 响应数据
+ *   data: T
+ * }
+ */
+public class ResultModel<T> implements Serializable {
+    /** 结果码 */
+    private String code;
+    /** 解释消息 */
+    private String message;
+    /** 响应数据 */
+    private T data;
+
+    public ResultModel(String code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
+    public ResultModel(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+    /** 提供给反序列化使用的默认构造器 */
+    public ResultModel() {
+    }
+
+    public T getData() {
+        return data;
+    }
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    /** 返回成功的响应结果, 以及数据 */
+    public static <E> ResultModel<E> success(E data) {
+        return new ResultModel<E>("00000", "成功", data);
+    }
+}
+
+class Test {
+    public static void main(String[] args) {
+        // 创建泛型类时, 指明泛型 T 的具体类型 Integer
+        ResultModel<Integer> model = new ResultModel<Integer>("10001", "电子邮件格式错误", 12);
+
+        // 调用使用泛型 T 参数的实例方法时, 返回值和参数都会变为具体类型 Integer
+        Integer data = model.getData();
+        System.out.println(data);
+        model.setData(123);
+
+        // 静态方法定义为泛型方法
+        String hello = ResultModel.success("hello").getData();
+        System.out.println(hello);
+    }
+}
+```
+- 静态方法不能使用**类的**泛型，但可以定义为泛型方法（在静态方法中使用的是**自己的**泛型声明，而不是类的泛型）。
+- 异常类不能使用泛型。
+
+泛型类的子类：
+```java
+class Father<T1，T2>{}
+// 1. 子类不保留父类的泛型
+// 1.1. 不写任何类型: 会进行类型擦除, 等价于 class Son extends Father<Object, Object>{}
+class Son1 extends Father {}
+// 1.2. 传入具体类型
+class Son1 extends Father<String, Integer> {}
+
+// 2. 子类保留父类的泛型
+// 2.1. 全部保留
+class Son3<T1,T2> extends Father<T1, T2> {}
+// 2.2. 部分保留
+class Son4<T2>extends Father<Integer, T2>{}
+
+
+// 3. 子类额外定义自己的泛型 A B
+
+class Son5<A, B> extends Father {}
+// 等价于 class Son<A, B> extends Father<Object, Object>{}
+
+class Son6<A, B> extends Father<String, Integer> {}
+
+class Son7<T1, T2, A, B> extends Father<T1, T2> {}
+// 2.2. 部分保留
+class Son4<T2, A, B> extends Father<Integer, T2>{}
+```
+
+## 16.3. 协变与逆变
+
+逆变与协变用来描述类型转换后的继承关系。
+定义：
+如果 $A, B$ 表示类型，$f(x)$ 表示类型转换，$<=$ 表示继承关系（例：$A<=B$ 表示 $A$ 是由 $B$ 派生出来的子类）
+- $f(x)$ 是协变（covariant）的，当 $A<=B$ 时，有 $f(A)<=f(B)$ 成立；
+- $f(x)$ 是逆变（contravariant）的，当 $A<=B$ 时，有 $f(B)<=f(A)$ 成立；
+- $f(x)$ 是不变（invariant）的，当 $A<=B$ 时，上述两式均不成立，即 $f(A)$ 与 $f(B)$ 相互之间没有继承关系。
 
 ```java
-// 泛型方法 printArray
-public static < E > void printArray( E[] inputArray )
-{
-    // 输出数组元素
-    for ( E element : inputArray ){
-        System.out.printf( "%s ", element );
-    }
-    System.out.println();
-}
-public static void main( String args[] )
-{
-    // 创建不同类型数组： Integer, Double 和 Character
-    Integer[] intArray = { 1, 2, 3, 4, 5 };
-    Double[] doubleArray = { 1.1, 2.2, 3.3, 4.4 };
-    Character[] charArray = { 'H', 'E', 'L', 'L', 'O' };
+// 数组是协变的：可以向子类型的数组赋予基类型的数组引用。
+Object[] objects = new String[]{};
 
-    System.out.println( "整型数组元素为:" );
-    printArray( intArray  ); // 传递一个整型数组
+// 泛型是不变的：类 `A` 是类 `B` 的父类，但 `G<A>` 与 `G<B>` 不具有父子关系。
+// java: 不兼容的类型: java.util.ArrayList<java.lang.String>无法转换为java.util.ArrayList<java.lang.Object>
+ArrayList<Object> objectArrayList = new ArrayList<String>();
+```
 
-    System.out.println( "\n双精度型数组元素为:" );
-    printArray( doubleArray ); // 传递一个双精度型数组
+## 16.4. 通配符
 
-    System.out.println( "\n字符型数组元素为:" );
-    printArray( charArray ); // 传递一个字符型数组
-}
+```java
+// 通配符
+List<Object> list1 = new ArrayList<Object>();
+List<String> list2 = new ArrayList<String>();
+list2.add("aaa");
+list2.add("bbb");
+list2.add("ccc");
+
+List<?> list = null;
+list = list1;
+list = list2;
+
+// 但是 List<?> 中无法添加任何元素, 除了 null
+list.add(new String("aaa")); // 编译时报错
+list.add(new Object()); // 编译时报错
+list.add(null); // 可以
+// java: 对于add(java.lang.String), 找不到合适的方法
+//     方法 java.util.Collection.add(capture#1, 共 ?)不适用
+//         (参数不匹配; java.lang.String无法转换为capture#1, 共 ?)
+//     方法 java.util.List.add(capture#1, 共 ?)不适用
+//         (参数不匹配; java.lang.String无法转换为capture#1, 共 ?)
+
+// 获取出来的元素是 Object
+// 也可以使用迭代器遍历, 这里就不给出例子了
+Object o = list.get(0);
+System.out.println(o); // aaa
 ```
 
 - `<? extends T>` 表示该通配符所代表的类型是 T 类型的子类。
 - `<? super T>` 表示该通配符所代表的类型是 T 类型的父类。
+- 通配符可以为泛型引入协变、逆变
+```java
+class Base {}
+class Father extends Base{}
+class Son extends Father{}
 
-## 16.2. 类型擦除
+// List 赋值
+{
+    List<Base> listBase = new ArrayList<Base>();
+    List<Father> listFather = new ArrayList<Father>();
+    List<Son> listSon = new ArrayList<Son>();
+    List<? extends Father> listExtends = null;
+    List<? super Father> listSuper = null;
+    // extends 协变
+    listExtends = listBase;    // 编译时报错
+    listExtends = listFather;  // 可以
+    listExtends = listSon;     // 可以
+    // super 逆变
+    listSuper = listBase;      // 可以
+    listSuper = listFather;    // 可以
+    listSuper = listSon;       // 编译时报错
+}
+
+// extends 确定了实际存储类型元素的上限, 下限不确定
+{
+    // List<? extends Father> -> Father, Son
+    List<? extends Father> list = new ArrayList<Son>();
+    Object object = list.get(0); // 可以, 取出的元素 至少可转为 Father 再上转型 Object
+    Base base = list.get(0);     // 可以, 取出的元素 至少可转为 Father 再上转型 Base
+    // 等价于 Father father = list.get(0);  Base base = father;
+    Father father = list.get(0); // 可以, 取出的元素 至少可转为 Father
+    Son son = list.get(0);       // 编译时报错, 取出的元素 无法变为 Son
+    // 读取由上限确定
+}
+{
+    // List<? extends Father> -> Father, Son
+    // 与 List<?> 一样,
+    // List<? extends Father> 不能写入任何元素.
+    // List<?> 可看作 List<? extends Object>
+    List<? extends Father> list = new ArrayList<Son>();
+    list.add(new Object());  // 编译时报错
+    list.add(new Base());    // 编译时报错
+    list.add(new Father());  // 编译时报错, 连 Father 自己都不能放了???
+    list.add(new Son());     // 编译时报错, 连 Father 的子类都不能放了???
+    // 为啥 Father 及其子类都无法放入?
+    // 因为 list 实际类型可能是 List<Son>, Father 无法转为 Son
+    // 因为 list 实际类型可能是 List<SonSon>, Son 无法转为 SonSon (class SonSon extends Son)
+    /** 简而言之, 设 list 实际存储元素的类型下限 X, 则 list 中可以存储 X 及其子类类型的元素
+        无法确定 list 实际存储元素的类型下限 X, 所有不能存储任何类型 */
+    // 写入由下限确定
+}
+
+// super 确定了实际存储类型元素的下限, 且上限为 Object
+{
+    // List<? super Father> -> Object, Base, Father
+    List<? super Father> list = new ArrayList<Base>();
+    Object object = list.get(0); // 可以, 可以确定取出的元素 至少是 Object 类型
+    Base base = list.get(0);     // 编译时报错, 无法确定取出的元素是 Base 类型
+    Father father = list.get(0); // 编译时报错, 无法确定取出的元素是 Father 类型
+    Son son = list.get(0);       // 编译时报错, 无法确定取出的元素是 Son 类型
+    // 读取由上限确定
+}
+{
+    // List<? super Father> -> Object, Base, Father
+    // List<Father> list = new ArrayList<Father>(); 情况一样
+    List<? super Father> list = new ArrayList<Base>();
+    list.add(new Object());  // 编译时报错
+    list.add(new Base());    // 编译时报错
+    list.add(new Father());  // 可以, 还好 Father 自己可以放
+    list.add(new Son());     // 可以, Son 可以上转型为 Father, 放入
+    // 因为 list 实际类型至少是 List<Father>, 其子类都可以上转型为 Father
+    // 写入由下限确定
+}
+```
+- 若 list 实际存储元素的类型是 X, 则 list 中可以存储 X 及其子类类型的元素
+- 读取由上限确定，写入由下限确定
+
+## 16.5. 类型擦除
 
 `List<String>、List<T>` 擦除后的类型为 `List`。
 `List<String>[]、List<T>[]` 擦除后的类型为 `List[]`。
 `List<? extends E>、List<? super E>` 擦除后的类型为 `List<E>`。
 `List<T extends Serialzable & Cloneable>` 擦除后类型为 `List<Serializable>`。
-
 
 # 17. 集合
 
