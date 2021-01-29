@@ -147,13 +147,17 @@
   - [17.5. 快速失败 (fail-fast) 和安全失败 (fail-safe)](#175-快速失败-fail-fast-和安全失败-fail-safe)
 - [18. IO](#18-io)
   - [18.1. File (磁盘文件操作)](#181-file-磁盘文件操作)
-  - [18.2. 字节流：InputStream 和 OutputStream （输入输出流）](#182-字节流inputstream-和-outputstream-输入输出流)
-  - [18.3. 字符流：Reader 和 Writer](#183-字符流reader-和-writer)
-    - [18.3.1. 字符编码](#1831-字符编码)
-    - [18.3.2. BufferRead 和 BufferWriter](#1832-bufferread-和-bufferwriter)
-  - [18.4. 序列化](#184-序列化)
-    - [18.4.1. 序列化相关问题](#1841-序列化相关问题)
-  - [18.5. NIO](#185-nio)
+  - [18.2. 流的分类](#182-流的分类)
+  - [18.3. 文件流（节点流）](#183-文件流节点流)
+  - [18.4. 缓冲流（处理流）](#184-缓冲流处理流)
+  - [18.5. 转换流（处理流、字符流）](#185-转换流处理流-字符流)
+    - [18.5.1. 字符编码](#1851-字符编码)
+  - [18.6. 标准输入输出流](#186-标准输入输出流)
+    - [18.6.1. 打印流与重定向标准输出](#1861-打印流与重定向标准输出)
+  - [18.7. 数据流与对象流](#187-数据流与对象流)
+    - [18.7.1. 对象的序列化](#1871-对象的序列化)
+  - [18.8. 随机文件访问流 RandomAccessFile](#188-随机文件访问流-randomaccessfile)
+  - [18.9. NIO](#189-nio)
 - [19. JDBC](#19-jdbc)
 - [20. 网络编程](#20-网络编程)
 - [21. JavaFX](#21-javafx)
@@ -352,6 +356,7 @@ char c3 = 65;
 | \xhh     | 十六进制所代表的任意字符            | 十六进制            |
 
 **拓展: Unicode编码与UTF-8**
+
 **UTF-8 是 Unicode 的实现方式之一。**
 UTF-8 的编码规则很简单，只有二条：
 (1) 对于单字节的符号，字节的第一位设为0，后面7位为这个符号的 Unicode 码。因此对于英语字母，UTF-8 编码和 ASCII 码是相同的。
@@ -650,7 +655,7 @@ public class Logic {
 
 ### 4.5.1. 进制
 
-世界上有10种人，一种是都二进制的，另一种是不懂二进制的。  
+世界上有10种人，一种是懂二进制的，另一种是不懂二进制的。  
 还有一种以为这是一个二进制的笑话。
 
 - 二进制：0, 1，以0b或者0B开头；
@@ -4878,11 +4883,11 @@ Java 的 I/O 大概可以分成以下几类：
 - 网络操作：Socket
 - 新的输入/输出：NIO
 
-![](../images/IO.png)
-
-
 ## 18.1. File (磁盘文件操作)
-File 用于表示文件和目录的信息，但是它不表示文件的内容
+File 用于表示文件和目录的信息，但是它不表示文件的内容。
+File 类中涉及到关于文件或文件目录的创建、删除、重命名、修改时间、文件大小等方法，并未涉及到写入或读取文件内容的操作。如果需要读取或写入文件内容，必须使用IO流来完成。
+File 类的对象常会作为参数传递到流的构造器中，指明读取或写入的 "终点"。
+
 ```java
 /**
  * 递归列出 dir 目录下所有文件
@@ -4901,75 +4906,551 @@ public static void listAllFiles(File dir) {
 }
 ```
 
-## 18.2. 字节流：InputStream 和 OutputStream （输入输出流）
+常用方法
 ```java
-InputStream f = new FileInputStream("C:/java/hello");
-OutputStream f = new FileOutputStream("C:/java/hello")
-
-/**
-从这个输入流中读取最多len字节的数据到字节数组中。
-如果len不为零，这个方法就会阻塞直到有输入可用; 否则，将不读取字节并返回0。
-
-参数:
-b – 读取数据的缓冲区。
-off -目标数组 b 中的起始偏移量
-len -读取的最大字节数。
-
-返回:
-读入缓冲区的总字节数，如果已经到达文件的末尾而没有更多数据，则为-1。
-
-抛出:
-NullPointerException - 如果b为空。
-IndexOutOfBoundsException - 如果off为负数，len为负数，或者len大于b.length
-IOException - 如果I/O错误发生。
-*/
-public int read(byte b[], int off, int len) throws IOException {
-    return readBytes(b, off, len);
-}
-
-/**
-将从指定字节数组开始的len字节写入此文件输出流。
-
-参数:
-b - 数据。
-off - 数据中的起始偏移量。
-len - 要写入的字节数。
-
-抛出:
-IOException -如果I/O错误发生。
-*/
-public void write(byte b[], int off, int len) throws IOException {
-    writeBytes(b, off, len, append);
-}
+// 构造器
+File(String filePath)
+File(String parentPath,String childPath)
+File(File parentFile,String childPath)
 ```
 ```java
+public String getAbsolutePath() //获取绝对路径
+public String getPath() // 获取路径
+public String getName() // 获取名称
+public String getParent() // 获取上层文件目录路径。若无，返回null
+public long length() // 获取文件长度（即：字节数）。不能获取目录的长度。
+public long lastModified() // 获取最后一次的修改时间，毫秒值
+// 如下的两个方法适用于文件目录：
+public String[] list() // 获取指定目录下的所有文件或者文件目录的名称数组
+public File[] listFiles() // 获取指定目录下的所有文件或者文件目录的File数组
+
+// 移动/重命名文件
+public boolean renameTo(File dest) // 把文件重命名为指定的文件路径
+// file1.renameTo(file2)
+// 要想保证返回true，需要file1在硬盘中是存在的，且file2不能在硬盘中存在。
+
+public boolean isDirectory()// 判断是否是文件目录
+public boolean isFile() // 判断是否是文件
+public boolean exists() // 判断是否存在
+public boolean canRead() // 判断是否可读
+public boolean canWrite() // 判断是否可写
+public boolean isHidden() // 判断是否隐藏
+
+// 创建硬盘中对应的文件或文件目录
+public boolean createNewFile() // 创建文件。若文件存在，则不创建，返回false
+public boolean mkdir() // 创建文件目录。如果此文件目录存在，就不创建了。如果此文件目录的上层目录不存在，也不创建。
+public boolean mkdirs() // 创建文件目录。如果此文件目录存在，就不创建了。如果上层文件目录不存在，一并创建
+
+// 删除磁盘中的文件或文件目录
+public boolean delete() // 删除文件或者文件夹
+// 删除注意事项：Java中的删除不走回收站。
+```
+
+## 18.2. 流的分类
+
+<table style="text-align: center;">
+  <tr>
+    <td>基类</td>
+    <td>字节流</td>
+    <td>字符流</td>
+  </tr>
+  <tr>
+    <td>输入流</td>
+    <td>InputStream</td>
+    <td>Reader</td>
+  </tr><tr>
+    <td>输出流</td>
+    <td>OutputStream</td>
+    <td>Writer</td>
+  </tr>
+</table>
+
+- 节点流：可以从或向一个特定的地方（节点）读写数据。如 FileReader。
+- 处理流：是对一个已存在的流的连接和封装，通过所封装的流的功能调用实现数据读写。如 BufferedReader。（处理流的构造方法总是要带一个其他的流对象做参数。一个流对象经过其他流的多次包装，称为流的链接。）
+
+| 分类 | 字节输入流 | 字节输出流 | 字符输入流 | 字符输出流 |
+| :-: | :-: | :-: | :-: | :-: | :-: |
+| 抽象基类 | InputStream | OutputStream | Reader | Writer |
+| 文件 | FileInputStream | FileOutputStream | FileReader | FileWriter |
+| 管道 | PipedInputStream | PipedOutputStream | PipedReader | PipedWriter |
+| 数组 | ByteArrayInputStream | ByteArrayOutputStream | CharArrayReader | CharArrayWriter |
+| 字符串 |  |  | StringReader | StringWriter |
+| 对象流 | ObjectInputStream | ObjectOutputStream |  |  |
+|  |  |  |  |  |  |
+| 转换流 |  |  | InputStreamReader | OutputStreamWriter |
+| 处理流 | FilterInputStream | FilterOutputStream | FilterReader |FilterWriter |
+| 缓冲流 | BufferedInputStream | BufferedOutputStream |BufferedReader | BufferedWriter |
+| 打印流 |   | PrintStream |  | PrintWriter |
+| 推回输入流 | PushbackInputStream |  | PushbackReader |  |
+| 数据流 | DataInputStream | DataOutputStream |  |  |
+
+![](../images/IO.png)
+
+## 18.3. 文件流（节点流）
+
+- FileInputStream
+- FileOutputStream
+- FileReader
+- FileWriter
+
+**文件字节流: FileInputStream 和 FileOutputStream**
+```java
+public class FileInputStream extends InputStream
+{
+    /**
+    抛出：
+        - FileNotFoundException -如果该文件不存在，则是目录而不是常规文件；或者由于某些其他原因而无法打开以进行读取
+    */
+    public FileInputStream(String name) throws FileNotFoundException {
+        this(name != null ? new File(name) : null);
+    }
+    public FileInputStream(File file) throws FileNotFoundException {}
+
+    /**
+    从这个输入流中读取最多len字节的数据到字节数组中。
+    如果len不为零，这个方法就会阻塞直到有输入可用; 否则，将不读取字节并返回0。
+    参数:
+        b – 读取数据的缓冲区。
+        off -目标数组 b 中的起始偏移量
+        len -读取的最大字节数。
+    返回:
+        读入缓冲区的总字节数，如果已经到达文件的末尾而没有更多数据，则为-1。
+    抛出:
+        NullPointerException - 如果b为空。
+        IndexOutOfBoundsException - 如果off为负数，len为负数，或者len大于b.length
+        IOException -如果发生 I/O 错误。
+    */
+    public int read(byte b[], int off, int len) throws IOException {
+        return readBytes(b, off, len);
+    }
+    public int read(byte b[]) throws IOException {
+        return readBytes(b, 0, b.length);
+    }
+    private native int readBytes(byte b[], int off, int len) throws IOException;
+
+    /**
+    从此输入流中读取一个字节的数据。如果尚无输入可用，则此方法将阻塞。
+    返回值：
+        下一个数据字节；如果到达文件末尾，则返回 -1 。
+    抛出：
+        IOException -如果发生 I/O 错误。
+     */
+    public int read() throws IOException {
+        return read0();
+    }
+    private native int read0() throws IOException;
+}
+
+public class FileOutputStream extends OutputStream
+{
+    /**
+    append = false: 非追加, 字节将被写入文件的开头, 之前的文件内容清空
+    */
+    public FileOutputStream(String name) throws FileNotFoundException {
+        this(name != null ? new File(name) : null, false);
+    }
+    /**
+    参数：
+        file –要打开以进行写入的文件。
+        append –如果为true，则字节将被写入文件的末尾而不是开头; 为 false 则清空之前的文件内容, 再从头写
+    抛出：
+        - FileNotFoundException -如果该文件不存在，则是目录而不是常规文件；或者由于某些其他原因而无法打开以进行读取
+    */
+    public FileOutputStream(File file, boolean append) throws FileNotFoundException {}
+
+    /**
+    将从指定字节数组开始的len字节写入此文件输出流。
+    参数:
+        b - 数据。
+        off - 数据中的起始偏移量。
+        len - 要写入的字节数。
+    抛出:
+        IOException -如果发生 I/O 错误。
+    */
+    public void write(byte b[], int off, int len) throws IOException {
+        writeBytes(b, off, len, append);
+    }
+    public void write(byte b[]) throws IOException {
+        writeBytes(b, 0, b.length, append);
+    }
+    private native void writeBytes(byte b[], int off, int len, boolean append) throws IOException;
+
+    /**
+    将指定的字节写入此文件输出流。实现OutputStream的write方法。
+    参数：
+        b - 要写入的字节。
+    抛出：
+        IOException -如果发生 I/O 错误。
+    */
+    public void write(int b) throws IOException {
+        write(b, append);
+    }
+    private native void write(int b, boolean append) throws IOException;
+    
+}
+```
+
+例子：拷贝文件
+```java
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.MessageFormat;
+
 /**
  * 拷贝文件
  */
-public static void copyFile(String src, String dist) throws IOException {
-    // 文件输入流（读取文件内容到内存中）
-    FileInputStream in = new FileInputStream(src);
-    // 文件输出流（内存内容写入到文件中）
-    FileOutputStream out = new FileOutputStream(dist);
+public class CopyFile {
+    public static void main(String[] args) throws FileNotFoundException {
+        // File.separatorChar:
+        //     On UNIX systems the value of this field is '/';
+        //     on Microsoft Windows systems it is '\\'.
+        String src = MessageFormat.format("D:{0}Users{0}aBadString{0}Videos{0}Captures{0}PEss6P.mp4", File.separatorChar);
+        String dist = MessageFormat.format("D:{0}Users{0}aBadString{0}Videos{0}Captures{0}PEss6P-copy.mp4", File.separatorChar);
+        long startTime = System.currentTimeMillis();
+        copyFile(src, dist);
+        long endTime = System.currentTimeMillis();
+        System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
+        // 程序运行时间：10041ms
+    }
+    public static void copyFile(String src, String dist){
+        FileInputStream in = null;
+        FileOutputStream out = null;
+        
+        try {
+            // 1. 创建流
+            in = new FileInputStream(src);
+            out = new FileOutputStream(dist);
 
-    byte[] buffer = new byte[20 * 1024];
-    int cnt;
+            // 2. 流的读写
+            byte[] buffer = new byte[20 * 1024];
+            int cnt;
+            // read() 最多读取 buffer.length 个字节
+            // 返回的是实际读取的个数
+            // 返回 -1 的时候表示读到 eof，即文件尾
+            while ((cnt = in.read(buffer, 0, buffer.length)) != -1) {
+                out.write(buffer, 0, cnt);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 3. 关闭流
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // 上面异常后, 会继续执行下面代码
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+对一个大小为 698 MB (732,201,278 字节) 的文件进行拷贝，使用了 10041ms (大约 10 秒钟)。
 
-    // read() 最多读取 buffer.length 个字节
-    // 返回的是实际读取的个数
-    // 返回 -1 的时候表示读到 eof，即文件尾
-    while ((cnt = in.read(buffer, 0, buffer.length)) != -1) {
-        out.write(buffer, 0, cnt);
+**文件字符流: FileReader 和 FileWriter**
+```java
+public class FileReader extends InputStreamReader {
+    public FileReader(String fileName) throws FileNotFoundException {
+        super(new FileInputStream(fileName));
+    }
+    public FileReader(File file) throws FileNotFoundException {
+        super(new FileInputStream(file));
+    }
+}
+public class InputStreamReader extends Reader {
+    /**
+    读取单个字符。
+    返回值：
+        读取的字符；如果已到达流的末尾，则返回 -1
+    抛出：
+        IOException -如果发生 I/O 错误。
+    */
+    public int read() throws IOException {
+        return sd.read();
+    }
+    /**
+    将字符读入数组的一部分。
+    参数：
+        cbuf –目标缓冲区
+        offset -开始存储字符的偏移量
+        length –读取的最大字符数
+    返回值：
+        读取的字符数；如果已到达流的末尾，则为 -1
+    抛出：
+        IOException -如果发生 I/O 错误。
+    */
+    public int read(char cbuf[], int offset, int length) throws IOException {
+        return sd.read(cbuf, offset, length);
+    }
+}
+public abstract class Reader implements Readable, Closeable {
+    /**
+    将字符读入数组。该方法将阻塞，直到某些输入可用，发生 I/O 错误或到达流的末尾为止。
+    参数：
+        cbuf –目标缓冲区
+    返回值：
+        读取的字符数；如果已到达流的末尾，则为-1
+    抛出：
+        IOException -如果发生 I/O 错误。
+    */
+    public int read(char cbuf[]) throws IOException {
+        return read(cbuf, 0, cbuf.length);
+    }
+}
+
+public class FileWriter extends OutputStreamWriter {
+    public FileWriter(String fileName) throws IOException {
+        super(new FileOutputStream(fileName));
+    }
+    public FileWriter(String fileName, boolean append) throws IOException {
+        super(new FileOutputStream(fileName, append));
+    }
+    public FileWriter(File file) throws IOException {
+        super(new FileOutputStream(file));
+    }
+    public FileWriter(File file, boolean append) throws IOException {
+        super(new FileOutputStream(file, append));
+    }
+}
+public class OutputStreamWriter extends Writer {
+    /**
+    写一个字符。
+    抛出：
+        IOException -如果发生 I/O 错误。
+     */
+    public void write(int c) throws IOException {
+        se.write(c);
     }
 
-    in.close();
-    out.close();
+    /**
+    写入字符数组的一部分。
+    参数：
+        cbuf -字符缓冲区
+        off -从开始写入字符的偏移量
+        len -要写入的字符数
+    抛出：
+        IOException -如果发生 I/O 错误。
+     */
+    public void write(char cbuf[], int off, int len) throws IOException {
+        se.write(cbuf, off, len);
+    }
+
+    /**
+    写入字符串的一部分。
+    参数：
+        str -一个字符串
+        off -从开始写入字符的偏移量
+        len -要写入的字符数
+    抛出：
+        IOException -如果发生 I/O 错误。
+     */
+    public void write(String str, int off, int len) throws IOException {
+        se.write(str, off, len);
+    }
+}
+public abstract class Writer implements Appendable, Closeable, Flushable {
+    /**
+    写一个字符数组。
+    参数：
+        cbuf –要写入的字符数组
+    抛出：
+        IOException -如果发生 I/O 错误。
+    */
+    public void write(char cbuf[]) throws IOException {
+        write(cbuf, 0, cbuf.length);
+    }
+    /**
+    写一个字符串。
+    参数：
+        str –要写入的字符串
+    抛出：
+        IOException -如果发生 I/O 错误。
+    */
+    public void write(String str) throws IOException {
+        write(str, 0, str.length());
+    }
 }
 ```
 
-## 18.3. 字符流：Reader 和 Writer
+## 18.4. 缓冲流（处理流）
 
-### 18.3.1. 字符编码
+- BufferInputStream
+- BufferOutputStream
+- BufferReader
+- BufferWriter
+
+缓冲流内部使用了一个缓冲区，可以提高读写速度。
+
+使用缓冲流来拷贝文件
+同样的一个大小为 698 MB (732,201,278 字节) 的文件，使用缓冲流进行拷贝，只使用了 979ms (不到 1 秒)。
+```java
+import java.io.*;
+import java.text.MessageFormat;
+
+public class CopyFileBuffered {
+    public static void main(String[] args) throws FileNotFoundException {
+        String src = MessageFormat.format("D:{0}Users{0}aBadString{0}Videos{0}Captures{0}PEss6P.mp4", File.separatorChar);
+        String dist = MessageFormat.format("D:{0}Users{0}aBadString{0}Videos{0}Captures{0}PEss6P-copy.mp4", File.separatorChar);
+        long startTime = System.currentTimeMillis();
+        copyFile(src, dist);
+        long endTime = System.currentTimeMillis();
+        System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
+        // 程序运行时间：979ms
+    }
+    public static void copyFile(String src, String dist){
+        FileInputStream in = null;
+        FileOutputStream out = null;
+        BufferedInputStream bin = null;
+        BufferedOutputStream bout = null;
+        // ctrl+alt+t
+        try {
+            // 1. 创建流
+            // 1.1 文件流(节点流)
+            in = new FileInputStream(src);
+            out = new FileOutputStream(dist);
+            // 1.2 缓冲流(处理流)
+            bin = new BufferedInputStream(in);
+            bout = new BufferedOutputStream(out);
+
+            // 2. 流的读写
+            byte[] buffer = new byte[20 * 1024];
+            int cnt;
+            while ((cnt = bin.read(buffer)) != -1) {
+                bout.write(buffer, 0, cnt);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 3. 关闭流
+            // 先关闭外层流(bin,bout), 再关闭内层流(in,out)
+            // 关闭外层流时, 内层流会自动关闭, 所有可以省略
+            // 3.1 关闭缓冲流
+            try {
+                if (bin != null) {
+                    bin.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (bout != null) {
+                    bout.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // 3.2 关闭文件流
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+- 关闭流时, 先关闭外层流(bin,bout), 再关闭内层流(in,out)
+- 关闭外层流时, 内层流会自动关闭, 所有可以省略
+
+## 18.5. 转换流（处理流、字符流）
+
+- InputStreamReader
+- OutputStreamWriter
+
+提供字符流与字节流之间的转换
+
+```
+utf8 -> 字节输入流 ->  InputStreamReader -> 字符输入流 -> \
+                                                         X--X|程序|
+ gbk -> 字节输出流 <- OutputStreamWriter -> 字符输出流 <- /
+```
+
+示例：文件编码转换
+```java
+import java.io.*;
+
+/**
+ * 文件编码转换
+ */
+public class FileEncodingConversion {
+    public static void main(String[] args) {
+        convertFileEncoding("utf8.txt", "UTF-8", "gbk.txt", "GBK");
+    }
+    /**
+     * 转换文件编码
+     * @param srcFile 原始文件路径名
+     * @param srcEncoding 原始文件发编码格式
+     * @param distFile 目标文件路径名
+     * @param distEncoding 目标文件的编码格式
+     */
+    public static void convertFileEncoding(String srcFile, String srcEncoding, String distFile, String distEncoding) {
+        FileInputStream in = null;
+        InputStreamReader inr = null;
+        FileOutputStream out = null;
+        OutputStreamWriter outw = null;
+        try {
+            in = new FileInputStream(srcFile);
+            inr = new InputStreamReader(in, srcEncoding);
+            out = new FileOutputStream(distFile);
+            outw = new OutputStreamWriter(out, distEncoding);
+
+            char[] cbuf = new char[32];
+            int len;
+            while ((len = inr.read(cbuf)) != -1) {
+                outw.write(cbuf, 0, len);
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inr != null) {
+                    inr.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (outw != null) {
+                    outw.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // in, out 的关闭可以省略
+        }
+    }
+}
+```
+
+### 18.5.1. 字符编码
 
 - GBK 编码中，中文字符占 2 个字节，英文字符占 1 个字节；
 - GB2312 编码中，中文字符占 2 个字节，英文字符占 1 个字节；
@@ -4989,14 +5470,16 @@ public static void copyFile(String src, String dist) throws IOException {
 > 
 > UTF-32 使用四个字节为每个字符编码，使得 UTF-32 占用空间通常会是其它编码的二到四倍。UTF-32 与 UTF-16 一样有大尾序和小尾序之别，编码前会放置 U+0000FEFF 或 U+FFFE0000 以区分。
 
+这个网站可以找到所有的 Unicode 字符 [Unicode 字符百科](https://unicode-table.com/cn/)
+
 ```java
 public class Unicode {
     public static void main(String[] args) throws UnsupportedEncodingException {
+        System.out.println("字符\t\t编码\t\tunicode值\t\t字节\t\t实际存储");
         chartest("A", "UTF8");
-        chartest("a", "UTF16");
+        chartest("A", "UTF16");
         chartest("A", "GBK");
         chartest("A", "GB2312");
-
         chartest("中", "UTF8");
         chartest("中", "UTF16");
         chartest("中", "GBK");
@@ -5005,64 +5488,209 @@ public class Unicode {
     static void chartest(String str1, String coding) throws UnsupportedEncodingException {
         byte[] bytes = str1.getBytes(coding);
         String str2 = new String(bytes, coding);
-        System.out.println(coding + " " + str2 + " " + bytes.length);
-        System.out.println("umicode: " + str2.charAt(0) + " "+ Integer.toHexString((int)str2.charAt(0)) );
-        System.out.println(Arrays.toString(bytes));
-        System.out.println("----");
+        System.out.print(str2 + "\t\t" + coding + "\t\t");
+        System.out.print(Integer.toHexString((int)str2.charAt(0)) + "\t\t");
+        System.out.println(bytes.length + "\t\t" + Arrays.toString(bytes));
     }
 }
-// UTF8 A 1
-// umicode: A 41
-// [65]
-// ----
-// UTF16 a 4
-// umicode: a 61
-// [-2, -1, 0, 97]
-// ----
-// GBK A 1
-// umicode: A 41
-// [65]
-// ----
-// GB2312 A 1
-// umicode: A 41
-// [65]
-// ----
-// UTF8 中 3
-// umicode: 中 4e2d
-// [-28, -72, -83]
-// ----
-// UTF16 中 4
-// umicode: 中 4e2d
-// [-2, -1, 78, 45]
-// ----
-// GBK 中 2
-// umicode: 中 4e2d
-// [-42, -48]
-// ----
-// GB2312 中 2
-// umicode: 中 4e2d
-// [-42, -48]
-// ----
+// 字符     编码        unicode值   字节      实际存储
+// A        UTF8        41          1        [65]
+// A        UTF16       41          4        [-2, -1, 0, 65]
+// A        GBK         41          1        [65]
+// A        GB2312      41          1        [65]
+// 中       UTF8        4e2d        3        [-28, -72, -83]
+// 中       UTF16       4e2d        4        [-2, -1, 78, 45]
+// 中       GBK         4e2d        2        [-42, -48]
+// 中       GB2312      4e2d        2        [-42, -48]
 ```
 
-### 18.3.2. BufferRead 和 BufferWriter
+## 18.6. 标准输入输出流
 
+- System.in 从键盘输入
+- System.out 从控制台输出
+
+```java
+public final class System {
+    public final static InputStream in = null;
+    public final static PrintStream out = null;
+    public final static PrintStream err = null;
+    // 可以重定向
+    /** Reassigns the "standard" input stream. */
+    public static void setIn(InputStream in) { checkIO(); setIn0(in); }
+    /** Reassigns the "standard" output stream. */
+    public static void setOut(PrintStream out) { checkIO(); setOut0(out); }
+    /** Reassigns the "standard" error output stream. */
+    public static void setErr(PrintStream err) { checkIO(); setErr0(err); }
+}
 ```
-Read
-  |-- BufferRead
-  |-- InputStreamReader 实现从字节流解码成字符流；
-        | -- FileReader
+
+从键盘输入字符串，要求将读取到的整行字符串转成大写输出。
+然后继续进行输入操作，直至当输入“e”或者“exit”时，退出程序。
+```java
+public class SystemIO {
+    // System.in(标准输入流) --> InputStreamReader(转换流) --> BufferedReader(缓冲流) 的 readLine()
+    public static void main(String[] args) {
+        InputStream in = null;
+        InputStreamReader inr = null;
+        BufferedReader binr = null;
+        try {
+            in = System.in;
+            inr = new InputStreamReader(in);
+            binr = new BufferedReader(inr);
+            for(;;) {
+                System.out.println("请输入字符串：");
+                String data = binr.readLine();
+                if ("e".equalsIgnoreCase(data) || "exit".equalsIgnoreCase(data)) {
+                    System.out.println("程序结束");
+                    break;
+                }
+                String upperCase = data.toUpperCase();
+                System.out.println(upperCase);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (binr != null) {
+                try {
+                    binr.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
 ```
 
-## 18.4. 序列化
+### 18.6.1. 打印流与重定向标准输出
+```java
+class Reassign {
+    public static void main(String[] args) {
+        PrintStream ps = null;
+        FileOutputStream out = null;
 
-**序列化**是把对象改成可以存到磁盘或通过网络发送到其他运行中的 Java 虚拟机的二进制格式的过程, 并可以通过反序列化恢复对象状态。需要实现 `java.io.Serializable` 接口。**序列化保存的时对象的状态，瞬态和静态变量会不会得到序列化**
+        try {
+            out = new FileOutputStream("stdout.txt");
+            ps = new PrintStream(out);
 
-序列化一个对象需调用 `ObjectOutputStream.writeObject(saveThisObject)`, 并用 `ObjectInputStream.readObject()` 读取对象
+            // 重定向标准输出
+            if (ps != null) {
+                System.setOut(ps);
+            }
 
+            System.out.println("hello, stdout");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                ps.close();
+            }
+        }
+    }
+}
+```
+
+## 18.7. 数据流与对象流
+
+基本数据类型
+- DataInputStream
+- DatatOutputStream
+
+基本数据类型和对象
+- ObjectInputStream  反序列化
+- ObjectOutputStream 序列化
+
+用于持久化内存中的变量
+
+```java
+public class ObjectStream {
+    public static void main(String[] args) {
+        // 序列化
+        {
+            ObjectOutputStream objOut = null;
+            try {
+                // 1. 创建流
+                objOut = new ObjectOutputStream(new FileOutputStream("object.dat"));
+                // 2. 序列化
+                objOut.writeObject(new String("hello, 序列化。"));
+                // 要序列化的类必须实现 Serializable 接口
+                // 否则抛异常 java.io.NotSerializableException
+                objOut.writeObject(new Student("aBadString", 18, 100));
+                // 3. 刷新缓冲区
+                objOut.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                // 4. 关闭流
+                try {
+                    objOut.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // 反序列化
+        {
+            ObjectInputStream objIn = null;
+            try {
+                // 1. 创建流
+                objIn = new ObjectInputStream(new FileInputStream("object.dat"));
+                // 2. 反序列化
+                String str = (String) objIn.readObject();
+                System.out.println(str);
+                Student student = (Student) objIn.readObject();
+                System.out.println(student);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                // 3. 关闭流
+                try {
+                    objIn.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+class Student implements Serializable {
+    private static final long serialVersionUID = -2170184692754387192L;
+    private String name;
+    private int age;
+    private Integer score;
+    public Student(String name, int age, Integer score) {
+        this.name = name;
+        this.age = age;
+        this.score = score;
+    }
+    @Override
+    public String toString() {
+        return "Student{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", score=" + score +
+                '}';
+    }
+}
+```
+- 被序列化的类需要实现 Serializable 接口
+- 提供 serialVersionUID
+- 该类的属性（非静态、非瞬态）必须是可序列化的
+- 基本数据类型和实现了 Serializable 接口的类是可序列化的
+
+### 18.7.1. 对象的序列化
+
+**序列化**是把对象改成可以存到磁盘或通过网络发送到其他运行中的 Java 虚拟机的二进制格式的过程, 并可以通过反序列化恢复对象状态。需要实现 `java.io.Serializable` 接口。**序列化保存的是对象的状态，瞬态和静态变量会不会得到序列化**
+
+序列化一个对象需调用 `ObjectOutputStream.writeObject(saveThisObject)`, 并用 `ObjectInputStream.readObject()` 读取对象。
 序列化可以看作是深拷贝的一种实现。
 
-### 18.4.1. 序列化相关问题
+**如果类没有显示定义 serialVersionUID 静态常量，那么它的值是，在 Java 运行时环境中，根据类的内部细节自动生成的。若类的实例变量改变了，serialVersionUID 可能发生变化。**
+
+
 
 【1、Java 中的可序列化接口和可外部接口之间的区别是什么？】
 Externalizable 给我们提供 writeExternal() 和 readExternal() 方法, 这让我们灵活地控制 Java 序列化机制, 而不是依赖于 Java 的默认序列化。 正确实现 Externalizable 接口可以显著提高应用程序的性能。
@@ -5091,7 +5719,57 @@ Externalizable 给我们提供 writeExternal() 和 readExternal() 方法, 这让
 由于序列化仅保留**对象的状态**而不是对象本身，瞬态变量也不包含在 Java 序列化过程中。
 
 
-## 18.5. NIO
+## 18.8. 随机文件访问流 RandomAccessFile
+
+- 既可以实例化为输出流，又可以实例化为输入流
+```java
+public class RandomAccessFile implements DataOutput, DataInput, Closeable {
+    /**
+     * @param mode
+     *   - r   只读。调用对象的任何 write 方法将导致抛出 IOException。
+     *   - rw  可读可写。如果该文件不存在，则将尝试创建它。
+     *   - rwd 可读可写，且还要求对 文件内容 的每次更新都必须同步写入基础存储设备。
+     *   - rws 可读可写，且还要求对 文件内容和元数据 的每次更新都必须同步写入基础存储设备。
+     */
+    public RandomAccessFile(String name, String mode) throws FileNotFoundException {
+        this(name != null ? new File(name) : null, mode);
+    }
+}
+```
+
+- seek(3) 方法可以移动读写字节，以字节为单位
+```java
+public class RandomAccessFileStream {
+    public static void main(String[] args) throws IOException {
+        {
+            // 写文件, 文件不存在则创建
+            RandomAccessFile raf = new RandomAccessFile("random.txt", "rw");
+            raf.write("abcdefghijk".getBytes());
+            // random.txt 内容: abcdefghijk
+        }
+        {
+            // 写文件, 文件存在则在开头覆盖
+            RandomAccessFile raf = new RandomAccessFile("random.txt", "rw");
+            raf.write("ooo".getBytes());
+            // random.txt 内容: ooodefghijk
+        }
+        {
+            // 写文件, 改变写入指针位置
+            RandomAccessFile raf = new RandomAccessFile("random.txt", "rw");
+            // 移动 3 字节
+            raf.seek(3);
+            raf.write("xxx".getBytes());
+            // random.txt 内容: oooxxxghijk
+            
+            //   Offset: 00 01 02 03 04 05 06 07 08 09 0A
+            // 00000000: 6F 6F 6F 78 78 78 67 68 69 6A 6B
+            //           o  o  o  x  x  x  g  h  i  j  k
+        }
+    }
+}
+```
+
+## 18.9. NIO
 
 Non-blocking I/O 是一种同步非阻塞的I/O模型，也是I/O多路复用的基础，已经被越来越多地应用到大型应用服务器，成为解决高并发与大量连接、I/O处理问题的有效方式。
 
