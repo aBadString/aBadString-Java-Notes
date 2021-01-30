@@ -96,9 +96,10 @@
 - [14. 异常体系结构](#14-异常体系结构)
   - [14.1. Exception和Error](#141-exception和error)
   - [14.2. try – catch – finally](#142-try-catch-finally)
-  - [14.3. throws](#143-throws)
-  - [14.4. throw](#144-throw)
-  - [14.5. 自定义异常类](#145-自定义异常类)
+  - [14.3. try - with - resources（JDK 7 新特性）](#143-try-with-resourcesjdk-7-新特性)
+  - [14.4. throws](#144-throws)
+  - [14.5. throw](#145-throw)
+  - [14.6. 自定义异常类](#146-自定义异常类)
 - [15. 多线程](#15-多线程)
   - [15.1. 程序、进程、线程](#151-程序-进程-线程)
   - [15.2. 线程安全](#152-线程安全)
@@ -311,6 +312,13 @@ Java整型常量默认为int类型，long类型常量必须在末尾加上“l�
 | short    | 2字节              | -32768 ~ 32767           |
 | int      | 4字节              | -2147483648 ~ 2147483647 |
 | long     | 8字节              | -2^63  ~ 2^63-1          |
+
+整数表示形式：
+- 十进制：12，1_000_000
+- 八进制：077
+- 十六进制：0xAE
+- 二进制：0B11110001，0b1111_0001
+Java 7 支持在数字字面量中使用 `_` 作为分隔符。下划线仅仅能在数字中间，编译时编译器自己主动删除数字中的下划线。
 
 2. **浮点类型：float、double**
 Java的浮点类型有固定的表数范围和字段长度，不受具体的操作系统的影响，以保证Java程序的可移植性。
@@ -2395,15 +2403,80 @@ public static void main(String[] args) {
 // 输出：
 ```
 
+## 14.3. try - with - resources（JDK 7 新特性）
 
-## 14.3. throws
+1. catch 子句能够同时捕获多个异常
+```java
+try { 
+    Integer.parseInt("Hello"); 
+}
+// 使用 '|' 分隔多个类型，一个对象 e 
+catch (NumberFormatException | RuntimeException e) {
+
+}
+```
+
+2. 关闭资源
+使用 finally 关闭资源
+```java
+FileInputStream in = null;
+FileOutputStream out = null;
+try {
+    // 1. 创建流
+    in = new FileInputStream(src);
+    out = new FileOutputStream(dist);
+    // 2. 流的读写
+    byte[] buffer = new byte[20 * 1024];
+    int cnt;
+    while ((cnt = in.read(buffer, 0, buffer.length)) != -1) {
+        out.write(buffer, 0, cnt);
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+} finally {
+    // 3. 关闭流
+    try {
+        if (in != null) {
+            in.close();
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    try {
+        if (out != null) {
+            out.close();
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+try-with-resources
+```java
+try (
+    // 1. 创建流
+    FileInputStream in = new FileInputStream(src);
+    FileOutputStream out = new FileOutputStream(dist);
+){
+    // 2. 流的读写
+    byte[] buffer = new byte[20 * 1024];
+    int cnt;
+    while ((cnt = in.read(buffer, 0, buffer.length)) != -1) {
+        out.write(buffer, 0, cnt);
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+```
+
+## 14.4. throws
 格式：方法名(形参列表) throws 异常类型1, 异常类型2, … { 方法体 }
 
 throws并没有真正处理掉异常，而是将异常向上抛出，抛给方法的调用者，由其处理。
 如果父类被重写方法没有抛出异常，那么子类重写方法也不能抛出异常。
 子类重写方法所抛出的异常不大于父类被重写方法所抛出的异常。
 
-## 14.4. throw
+## 14.5. throw
 格式：throw 异常类对象;
 一般throw编译时异常的时候，我们都使用throws将其抛给上层方法处理。
 
@@ -2430,7 +2503,7 @@ static void show () {
 // 哈哈
 ```
 
-## 14.5. 自定义异常类
+## 14.6. 自定义异常类
 
 ```java
 public class MyException extends Exception {

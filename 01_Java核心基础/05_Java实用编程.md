@@ -200,42 +200,30 @@ public class GetImageConcurrent {
         }
     }
 }
-
 class DownloadImage implements Runnable {
     /** 图片 url */
     private String src;
-    /** 图片保存文件名 */
     private int i;
     public DownloadImage(String src, int i) {
         this.src = src;
         this.i = i;
     }
-
     @Override
     public void run() {
-        try {
+        String fileName = MessageFormat.format("src{0}main{0}resources{0}zhihu{0}{1}.png", File.separatorChar, i);
+        try (
+            FileOutputStream fos = new FileOutputStream(fileName);
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fos);
+        ) {
             // 4.1. 获取图片输入流
             Connection connection = Jsoup.connect(src).timeout(1000);
-            Connection.Response response = null;
-            response = connection
-                    .ignoreContentType(true)
-                    .execute();
+            Connection.Response response = connection.ignoreContentType(true).execute();
             BufferedInputStream bufferedInputStream = response.bodyStream();
-
             // 4.2. 写入文件
-            FileOutputStream fileOutputStream = new FileOutputStream("src/main/resources/zhihu/" + (i) + ".png");
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
-
             byte[] buffer = new byte[1024];
-            int length;
-            while ((length = bufferedInputStream.read(buffer,0,buffer.length)) != -1){
+            for (int length; (length = bufferedInputStream.read(buffer)) != -1; ){
                 bufferedOutputStream.write(buffer,0,length);
             }
-
-            System.out.println(i+".png 下载完成");
-            bufferedOutputStream.close();
-            fileOutputStream.close();
-            bufferedInputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
