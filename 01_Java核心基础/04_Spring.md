@@ -24,40 +24,51 @@
     - [2.1.2. cglib 示例代码](#212-cglib-示例代码)
   - [2.2. AOP 面向切面编程](#22-aop-面向切面编程)
   - [2.3. AOP 中的注解](#23-aop-中的注解)
-- [3. Spring MVC](#3-spring-mvc)
-- [4. Spring Boot](#4-spring-boot)
-  - [4.1. Spring Boot 简介](#41-spring-boot-简介)
-  - [4.2. Hello Spring Boot](#42-hello-spring-boot)
-    - [4.2.1. 创建项目](#421-创建项目)
-    - [4.2.2. 引入依赖](#422-引入依赖)
-    - [4.2.3. 编写代码](#423-编写代码)
-    - [4.2.4. 编译运行](#424-编译运行)
-    - [4.2.5. 修改配置](#425-修改配置)
-    - [4.2.6. 打包部署](#426-打包部署)
-  - [4.3. hello world 项目详解](#43-hello-world-项目详解)
-    - [4.3.1. 依赖管理与版本仲裁](#431-依赖管理与版本仲裁)
-      - [4.3.1.1. 自定义依赖的版本](#4311-自定义依赖的版本)
-    - [4.3.2. Spring Boot 场景启动器: spring-boot-starter-*](#432-spring-boot-场景启动器-spring-boot-starter-)
-    - [4.3.3. @SpringBootApplication](#433-springbootapplication)
-      - [4.3.3.1. @EnableAutoConfiguration 自动配置](#4331-enableautoconfiguration-自动配置)
-        - [4.3.3.1.1. AutoConfigurationPackages.Registrar](#43311-autoconfigurationpackagesregistrar)
-        - [4.3.3.1.2. AutoConfigurationImportSelector](#43312-autoconfigurationimportselector)
-        - [4.3.3.1.3. spring.factories](#43313-springfactories)
-      - [4.3.3.2. 自动配置类 MybatisAutoConfiguration](#4332-自动配置类-mybatisautoconfiguration)
-  - [4.4. Spring IOC 注解](#44-spring-ioc-注解)
-    - [4.4.1. @Component](#441-component)
-    - [4.4.2. @Configuration + @Bean](#442-configuration-bean)
-    - [4.4.3. @Import @ImportResource](#443-import-importresource)
-    - [4.4.4. @Conditional 条件装配](#444-conditional-条件装配)
-    - [4.4.5. @ConfigurationProperties](#445-configurationproperties)
-  - [4.5. YAML 配置文件](#45-yaml-配置文件)
-  - [4.6. Spring Web](#46-spring-web)
-    - [4.6.1. 静态资源](#461-静态资源)
-    - [4.6.2. REST](#462-rest)
-    - [4.6.3. Spring MVC 注解](#463-spring-mvc-注解)
-      - [4.6.3.1. 请求参数获取](#4631-请求参数获取)
-    - [4.6.4. 拦截器](#464-拦截器)
-  - [4.7. 自定义 Spring Boot 场景启动器](#47-自定义-spring-boot-场景启动器)
+- [3. Spring Boot](#3-spring-boot)
+  - [3.1. Spring Boot 简介](#31-spring-boot-简介)
+  - [3.2. Hello Spring Boot](#32-hello-spring-boot)
+    - [3.2.1. 创建项目](#321-创建项目)
+    - [3.2.2. 引入依赖](#322-引入依赖)
+    - [3.2.3. 编写代码](#323-编写代码)
+    - [3.2.4. 编译运行](#324-编译运行)
+    - [3.2.5. 修改配置](#325-修改配置)
+    - [3.2.6. 打包部署](#326-打包部署)
+  - [3.3. hello world 项目详解](#33-hello-world-项目详解)
+    - [3.3.1. 依赖管理与版本仲裁](#331-依赖管理与版本仲裁)
+      - [3.3.1.1. 自定义依赖的版本](#3311-自定义依赖的版本)
+    - [3.3.2. Spring Boot 场景启动器: spring-boot-starter-*](#332-spring-boot-场景启动器-spring-boot-starter-)
+    - [3.3.3. @SpringBootApplication](#333-springbootapplication)
+      - [3.3.3.1. @EnableAutoConfiguration 自动配置](#3331-enableautoconfiguration-自动配置)
+        - [3.3.3.1.1. AutoConfigurationPackages.Registrar](#33311-autoconfigurationpackagesregistrar)
+        - [3.3.3.1.2. AutoConfigurationImportSelector](#33312-autoconfigurationimportselector)
+        - [3.3.3.1.3. spring.factories](#33313-springfactories)
+      - [3.3.3.2. 自动配置类 MybatisAutoConfiguration](#3332-自动配置类-mybatisautoconfiguration)
+  - [3.4. Spring IOC 注解](#34-spring-ioc-注解)
+    - [3.4.1. @Component](#341-component)
+    - [3.4.2. @Configuration + @Bean](#342-configuration-bean)
+    - [3.4.3. @Import @ImportResource](#343-import-importresource)
+    - [3.4.4. @Conditional 条件装配](#344-conditional-条件装配)
+    - [3.4.5. @ConfigurationProperties](#345-configurationproperties)
+  - [3.5. YAML 配置文件](#35-yaml-配置文件)
+  - [3.6. Spring Web: MVC](#36-spring-web-mvc)
+    - [3.6.1. 静态资源](#361-静态资源)
+    - [3.6.2. REST](#362-rest)
+    - [3.6.3. 拦截器](#363-拦截器)
+    - [3.6.4. Spring MVC 注解](#364-spring-mvc-注解)
+      - [3.6.4.1. 请求参数获取](#3641-请求参数获取)
+    - [3.6.5. Spring MVC 流程](#365-spring-mvc-流程)
+  - [3.7. Spring Data: JPA](#37-spring-data-jpa)
+    - [3.7.1. Hello Spring Data](#371-hello-spring-data)
+    - [3.7.2. JPA 基本注解](#372-jpa-基本注解)
+    - [3.7.3. 对象关系映射](#373-对象关系映射)
+      - [3.7.3.1. 一对多关系](#3731-一对多关系)
+    - [3.7.4. Repository 接口](#374-repository-接口)
+      - [3.7.4.1. 方法定义规范](#3741-方法定义规范)
+      - [3.7.4.2. CrudRepository 接口](#3742-crudrepository-接口)
+      - [3.7.4.3. PagingAndSortingRepository 接口](#3743-pagingandsortingrepository-接口)
+    - [3.7.5. @Query JPQL 查询](#375-query-jpql-查询)
+    - [3.7.6. @Modifying JPQL 修改/删除](#376-modifying-jpql-修改删除)
+  - [3.8. 自定义 Spring Boot 场景启动器](#38-自定义-spring-boot-场景启动器)
 
 <!-- /code_chunk_output -->
 
@@ -1098,50 +1109,9 @@ private void pt1(){}
 ![最终同时顺序错误的坑](../images/spring/最终同时顺序错误的坑.png)
 
 
-# 3. Spring MVC
+# 3. Spring Boot
 
-```sequence
-浏览器 -> DispatcherServlet : 1.发送请求
-
-    DispatcherServlet -> HandlerMapping : 2.请求获取Handler
-    HandlerMapping -> HandlerMapping : 3.寻找具体的处理器\n(xml配置、注解)
-    HandlerMapping --> DispatcherServlet : 4.HandlerExecutionChain\n（HandelIntercepter和Handle）
-
-    DispatcherServlet -> HandlerAdapter : 5.请求执行Handler
-        HandlerAdapter -> Handler(Controller) : 6.执行相应方法
-        Handler(Controller) --> HandlerAdapter : 7.ModelAndView
-    HandlerAdapter --> DispatcherServlet : 8.ModelAndView
-
-    DispatcherServlet -> ViewReslover : 9.请求视图解析 ModelAndView
-    ViewReslover -> ViewReslover : 10.视图解析
-    ViewReslover --> DispatcherServlet : 11.View
-
-    DispatcherServlet -> DispatcherServlet : 12.渲染视图\n（将模型数据填充至视图中）
-
-DispatcherServlet --> 浏览器 : 13.响应结果
-```
-SpringMVC 流程
-1. 用户发送请求至前端控制器DispatcherServlet。
-2. DispatcherServlet收到请求调用HandlerMapping处理器映射器。
-3. 处理器映射器找到具体的处理器(可以根据xml配置、注解进行查找)，生成处理器对象及处理器拦截器(如果有则生成)一并返回给DispatcherServlet。
-4. DispatcherServlet调用HandlerAdapter处理器适配器。
-5. HandlerAdapter经过适配调用具体的处理器(Controller，也叫后端控制器)。
-6. Controller执行完成返回ModelAndView。
-7. HandlerAdapter将controller执行结果ModelAndView返回给DispatcherServlet。
-8. DispatcherServlet将ModelAndView传给ViewReslover视图解析器。
-9. ViewReslover解析后返回具体View。
-10. DispatcherServlet根据View进行渲染视图（即将模型数据填充至视图中）。
-11. DispatcherServlet响应用户。
-
-DispatcherServlet：作为前端控制器，整个流程控制的中心，控制其它组件执行，统一调度，降低组件之间的耦合性，提高每个组件的扩展性。
-HandlerMapping：通过扩展处理器映射器实现不同的映射方式，例如：配置文件方式，实现接口方式，注解方式等。 
-HandlAdapter：通过扩展处理器适配器，支持更多类型的处理器。
-ViewResolver：通过扩展视图解析器，支持更多类型的视图解析，例如：jsp、freemarker、pdf、excel等。
-
-
-# 4. Spring Boot
-
-## 4.1. Spring Boot 简介
+## 3.1. Spring Boot 简介
 
 Spring Boot 核心
 - 自动配置
@@ -1152,7 +1122,7 @@ Spring Boot 核心
 SpringBoot是整合Spring技术栈的一站式框架
 SpringBoot是简化Spring技术栈的快速开发脚手架
 
-## 4.2. Hello Spring Boot
+## 3.2. Hello Spring Boot
 
 前提：
 > - 学习 Java 基础知识
@@ -1163,7 +1133,7 @@ SpringBoot是简化Spring技术栈的快速开发脚手架
 
 按照以下步骤即可完成一个 Spring Boot 【hello, world】 项目的编写运行。
 
-### 4.2.1. 创建项目
+### 3.2.1. 创建项目
 
 首先要创建一个 Maven 项目
 
@@ -1205,7 +1175,7 @@ hello-spring-boot\
 
 到此为止我们仅仅是构建了一个 Maven 项目
 
-### 4.2.2. 引入依赖
+### 3.2.2. 引入依赖
 
 1. 为我们的 hello-spring-boot 项目添加一个父项目依赖: spring-boot-starter-parent
 ```xml
@@ -1267,7 +1237,7 @@ hello-spring-boot\
 
 至此，我们项目所需要的外部依赖库已经全部声明完毕
 
-### 4.2.3. 编写代码
+### 3.2.3. 编写代码
 
 1. 编写一个包含 main 方法的主程序类 Application.java
 包名是 groupId.artifactId
@@ -1317,7 +1287,7 @@ hello-spring-boot\
         |-- java\
 ```
 
-### 4.2.4. 编译运行
+### 3.2.4. 编译运行
 
 1. 编译，在项目根目录(pom.xml 同一目录)下执行 `mvn compile`
 ```shell
@@ -1352,7 +1322,7 @@ hello-spring-boot\
 
 到此，我们已经运行了一个 Spring Boot 项目了。如果使用 IDE 开发这个过程会简单许多，但其大致过程也是如此。
 
-### 4.2.5. 修改配置
+### 3.2.5. 修改配置
 
 Spring Boot 已经默认设置了许多配置项，如果想要修改这些配置：
 
@@ -1379,7 +1349,7 @@ server:
 ```
 可以看到端口已经改变了 Tomcat started on port(s): 80 (http) with context path ''
 
-### 4.2.6. 打包部署
+### 3.2.6. 打包部署
 
 1. 修改 pom.xml 文件，添加打包插件
 ```xml
@@ -1494,9 +1464,9 @@ server:
 >java -jar ./target/hello-spring-boot-1.0.0.jar
 ```
 
-## 4.3. hello world 项目详解
+## 3.3. hello world 项目详解
 
-### 4.3.1. 依赖管理与版本仲裁
+### 3.3.1. 依赖管理与版本仲裁
 
 1. 父项目 spring-boot-starter-parent
 ```xml
@@ -1601,7 +1571,7 @@ Spring Boot 版本仲裁中心帮助我们仲裁了大量的依赖库的版本�
 - 引入仲裁中心没有的依赖，则要写版本号
 - 通过重写 properties 中的版本标签可以自定义指定依赖的版本
 
-#### 4.3.1.1. 自定义依赖的版本
+#### 3.3.1.1. 自定义依赖的版本
 例如：我们添加一个 MySQL 驱动依赖
 未指定版本, 则使用 spring-boot-dependencies-2.4.1.pom 仲裁中心的版本 8.0.22
 > Maven: mysq:mysql-connector-java:8.0.22
@@ -1634,7 +1604,7 @@ Spring Boot 版本仲裁中心帮助我们仲裁了大量的依赖库的版本�
 </dependencies>
 ```
 
-### 4.3.2. Spring Boot 场景启动器: spring-boot-starter-*
+### 3.3.2. Spring Boot 场景启动器: spring-boot-starter-*
 
 如果我们要引入一系列依赖来搭建指定的场景，势必要引入一大堆的依赖（例如：Web 场景需要 Tomcat、Servlet、Spring IOC、SpringMVC、JSON等等）。
 而在 Spring Boot 中，我们只需要引入对应的 Spring Boot 场景启动器 即可引入这一场景所需要的全部依赖。
@@ -1697,7 +1667,7 @@ Spring Boot 版本仲裁中心帮助我们仲裁了大量的依赖库的版本�
 所有场景启动器都会依赖 spring-boot-starter，这是 Spring Boot 自动配置的最核心依赖。
 
 
-### 4.3.3. @SpringBootApplication
+### 3.3.3. @SpringBootApplication
 
 - @SpringBootApplication 这个注解 开启组件扫描和自动配置, 由以下三个注解组合
   - @SpringBootConfiguration 继承自@Configuration, 标明该类使用Spring基于Java的配置, 而非XML配置
@@ -1715,7 +1685,7 @@ Spring Boot 版本仲裁中心帮助我们仲裁了大量的依赖库的版本�
     - @Component
   - @ResponseBody: 表示将返回的结果之间输出给浏览器
 
-#### 4.3.3.1. @EnableAutoConfiguration 自动配置
+#### 3.3.3.1. @EnableAutoConfiguration 自动配置
 
 > 总结：请先看下面的分析，和后一节的注解的含义
 > @EnableAutoConfiguration 注解导入了两个类 AutoConfigurationPackages.Registrar 和 AutoConfigurationImportSelector
@@ -1735,7 +1705,7 @@ Spring Boot 版本仲裁中心帮助我们仲裁了大量的依赖库的版本�
 >   - 用户去看这个组件是获取的配置文件什么值就去修改。
 > https://www.yuque.com/atguigu/springboot/qb7hy2#tOyy3
 
-##### 4.3.3.1.1. AutoConfigurationPackages.Registrar
+##### 3.3.3.1.1. AutoConfigurationPackages.Registrar
 利用 Registrar 给容器其中导入主程序包下的组件
 ```java
 static class Registrar implements ImportBeanDefinitionRegistrar, DeterminableImports {
@@ -1754,7 +1724,7 @@ static class Registrar implements ImportBeanDefinitionRegistrar, DeterminableImp
 }
 ```
 
-##### 4.3.3.1.2. AutoConfigurationImportSelector
+##### 3.3.3.1.2. AutoConfigurationImportSelector
 利用 AutoConfigurationImportSelector 按需导入自动配置类
 Spring Boot 应用启动时，调到 AutoConfigurationImportSelector 这个类：process() -> getAutoConfigurationEntry() -> getCandidateConfigurations()
 最终发现会从所有 jar 包的 META-INF/spring.factories 文件中来获取配置类清单。
@@ -1885,7 +1855,7 @@ public final class SpringFactoriesLoader {
 }
 ```
 
-##### 4.3.3.1.3. spring.factories
+##### 3.3.3.1.3. spring.factories
 
 AutoConfigurationImportSelector 导入的自动配置类都来自 xxx-autoconfigure.jar 的 /META-INF/spring.factories 清单中
 
@@ -2066,7 +2036,7 @@ org.springframework.boot.autoconfigure.thymeleaf.ThymeleafTemplateAvailabilityPr
 org.springframework.boot.autoconfigure.web.servlet.JspTemplateAvailabilityProvider
 ```
 
-#### 4.3.3.2. 自动配置类 MybatisAutoConfiguration
+#### 3.3.3.2. 自动配置类 MybatisAutoConfiguration
 
 在 pom.xml 中引入 MyBatis 场景启动器。这是一个第三方的场景启动器。
 ```xml
@@ -2127,11 +2097,11 @@ debug: true
 ```
 
 
-## 4.4. Spring IOC 注解
+## 3.4. Spring IOC 注解
 
 以下注解都是 Spring 的注解
 
-### 4.4.1. @Component
+### 3.4.1. @Component
 
 @Component 写在一个类上，调用该类的无参构造器来创建 Bean 对象，并加入到 IOC 容器中
 Bean 对象名字默认为类名转驼峰命名 song
@@ -2155,7 +2125,7 @@ Component衍生的三个语义化注解:
   - @Service    业务层
   - @Repository 持久层
 
-### 4.4.2. @Configuration + @Bean
+### 3.4.2. @Configuration + @Bean
 
 我们可以使用如下配置类来向容器中添加注解
 ```java
@@ -2264,7 +2234,7 @@ public class BeanConfig {
 }
 ```
 
-### 4.4.3. @Import @ImportResource
+### 3.4.3. @Import @ImportResource
 
 @Import 用于导入其他的配置类，默认 Bean 对象的名字就是全类名 priv.abadstring.hellospringboot.bean.Song
 ```java
@@ -2287,9 +2257,9 @@ public class BeanConfig {
 }
 ```
 
-### 4.4.4. @Conditional 条件装配
+### 3.4.4. @Conditional 条件装配
 
-### 4.4.5. @ConfigurationProperties
+### 3.4.5. @ConfigurationProperties
 
 @ConfigurationProperties 告诉 SpringBoot 将本类中的属性和配置文件中相关的配置进行绑定。这个注解是 Spring Boot 自己的。
 
@@ -2357,7 +2327,7 @@ public class SwaggerConfiguration {
 ```
 
 
-## 4.5. YAML 配置文件
+## 3.5. YAML 配置文件
 
 YAML 以数据为中心的配置文件
 
@@ -2411,9 +2381,19 @@ user:
 ```
 
 
-## 4.6. Spring Web
+## 3.6. Spring Web: MVC
 
-### 4.6.1. 静态资源
+引入 Web 场景启动器
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+</dependencies>
+```
+
+### 3.6.1. 静态资源
 
 静态资源目录：classpath:/static、classpath:/public、classpath:/resources、classpath:/META-INF/resources
 映射到 URL：/
@@ -2432,7 +2412,7 @@ spring:
   - 创建一个 index.html 并同时创建一个 Controller @RequestMapping("/index.html")；可以达到 访问 / 时请求 Controller 的目的。
   
 
-### 4.6.2. REST
+### 3.6.2. REST
 
 UserController 的 action 请求地址为 "/user"，根据请求方法不同，执行不同的 action。
 ```java
@@ -2531,10 +2511,74 @@ public class WebMvcAutoConfiguration {
     }
 }
 ```
+### 3.6.3. 拦截器
 
-### 4.6.3. Spring MVC 注解
+1. 定义一个拦截器，需要实现接口 HandlerInterceptor
+```java
+public class ResponseResultInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+    // 进入对应的 Controller 的 action 之前执行
+    // 第三个参数 Object handler 是将要被执行的 Controller 的对应 action 方法 的对象
 
-#### 4.6.3.1. 请求参数获取
+        // 如果当前 handler 是一个 HandlerMethod 对象
+        if (xxx) {
+            // 不再执行后续
+            return false;
+        }
+        // 放行, 执行后续操作
+        return true;
+    }
+}
+```
+HandlerInterceptor 接口源码
+```java
+package org.springframework.web.servlet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.lang.Nullable;
+import org.springframework.web.method.HandlerMethod;
+public interface HandlerInterceptor {
+
+    // 在执行 Controller 的 action 之前执行
+    // 返回 true 则放行; 返回 false 则直接返回不执行 action
+    default boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+        throws Exception {
+        return true;
+    }
+    // action 执行之后, 视图渲染之前
+    default void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView)
+        throws Exception {
+    }
+    // 试图渲染之后
+    default void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex)
+        throws Exception {
+    }
+
+}
+```
+
+2. 注册拦截器
+```java
+@Configuration(proxyBeanMethods = false)
+public class InterceptorConfiguration implements WebMvcConfigurer {
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 添加拦截器
+        registry.addInterceptor(new ResponseResultInterceptor())
+                // 需要拦截的路径
+                .addPathPatterns("/**")
+                // 不需拦截的路径
+                .excludePathPatterns("/swagger-ui.html");
+    }
+}
+```
+
+### 3.6.4. Spring MVC 注解
+
+#### 3.6.4.1. 请求参数获取
 
 - @RequestParam Query String 参数
 - @PathVariable 路径参数
@@ -2688,73 +2732,886 @@ public String getTwoMatrix(@MatrixVariable(pathVar = "teacher", value = "name") 
 }
 ```
 
-### 4.6.4. 拦截器
+### 3.6.5. Spring MVC 流程
 
-1. 定义一个拦截器，需要实现接口 HandlerInterceptor
+```sequence
+浏览器 -> DispatcherServlet : 1.发送请求
+
+    DispatcherServlet -> HandlerMapping : 2.请求获取Handler
+    HandlerMapping -> HandlerMapping : 3.寻找具体的处理器\n(xml配置、注解)
+    HandlerMapping --> DispatcherServlet : 4.HandlerExecutionChain\n（HandelIntercepter和Handle）
+
+    DispatcherServlet -> HandlerAdapter : 5.请求执行Handler
+        HandlerAdapter -> Handler(Controller) : 6.执行相应方法
+        Handler(Controller) --> HandlerAdapter : 7.ModelAndView
+    HandlerAdapter --> DispatcherServlet : 8.ModelAndView
+
+    DispatcherServlet -> ViewReslover : 9.请求视图解析 ModelAndView
+    ViewReslover -> ViewReslover : 10.视图解析
+    ViewReslover --> DispatcherServlet : 11.View
+
+    DispatcherServlet -> DispatcherServlet : 12.渲染视图\n（将模型数据填充至视图中）
+
+DispatcherServlet --> 浏览器 : 13.响应结果
+```
+SpringMVC 流程
+1. 用户发送请求至前端控制器DispatcherServlet。
+2. DispatcherServlet收到请求调用HandlerMapping处理器映射器。
+3. 处理器映射器找到具体的处理器(可以根据xml配置、注解进行查找)，生成处理器对象及处理器拦截器(如果有则生成)一并返回给DispatcherServlet。
+4. DispatcherServlet调用HandlerAdapter处理器适配器。
+5. HandlerAdapter经过适配调用具体的处理器(Controller，也叫后端控制器)。
+6. Controller执行完成返回ModelAndView。
+7. HandlerAdapter将controller执行结果ModelAndView返回给DispatcherServlet。
+8. DispatcherServlet将ModelAndView传给ViewReslover视图解析器。
+9. ViewReslover解析后返回具体View。
+10. DispatcherServlet根据View进行渲染视图（即将模型数据填充至视图中）。
+11. DispatcherServlet响应用户。
+
+DispatcherServlet：作为前端控制器，整个流程控制的中心，控制其它组件执行，统一调度，降低组件之间的耦合性，提高每个组件的扩展性。
+HandlerMapping：通过扩展处理器映射器实现不同的映射方式，例如：配置文件方式，实现接口方式，注解方式等。 
+HandlAdapter：通过扩展处理器适配器，支持更多类型的处理器。
+ViewResolver：通过扩展视图解析器，支持更多类型的视图解析，例如：jsp、freemarker、pdf、excel等。
+
+## 3.7. Spring Data: JPA
+
+JPA 是规范；Hibernate 是实现。
+
+### 3.7.1. Hello Spring Data
+
+1. **引入 Data JPA 场景启动器和相关数据库驱动**
+```xml
+<!-- pom.xml -->
+
+<!-- 父项目: spring-boot-starter-parent -->
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.4.1</version>
+</parent>
+
+<properties>
+    <!-- 重写 MySQL 驱动的版本
+            标签名 mysql.version 必须和 spring-boot-dependencies-2.4.1.pom 一致 -->
+    <mysql.version>8.0.15</mysql.version>
+</properties>
+
+<dependencies>
+    <!-- Spring Boot 场景启动器: data 模块 -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <!-- MySQL 数据库驱动 -->
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+</dependencies>
+```
+
+2. **数据库连接配置**
+```yml
+# application.yml
+
+spring:
+  # 数据库连接信息
+  datasource:
+    url: jdbc:mysql://localhost/data_spring_boot?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: 123456
+  # Spring Data JPA 配置
+  jpa:
+    hibernate:
+      # 当项目启动时自动更新或者创建数据表结构
+      ddl‐auto: update
+    properties:
+      hibernate:
+        # 控制台显示 SQL
+        show_sql: true
+        # 格式化 SQL
+        format_sql: true
+```
+
+3. **编写主程序类**
 ```java
-public class ResponseResultInterceptor implements HandlerInterceptor {
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
-    // 进入对应的 Controller 的 action 之前执行
-    // 第三个参数 Object handler 是将要被执行的 Controller 的对应 action 方法 的对象
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-        // 如果当前 handler 是一个 HandlerMethod 对象
-        if (xxx) {
-            // 不再执行后续
-            return false;
+@SpringBootApplication
+public class DataSpringBootApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DataSpringBootApplication.class, args);
+    }
+}
+```
+
+4. **准备数据库**
+创建一个空的数据库即可，数据库名和 application.yml 中配置的一样。
+可以不用准备数据表，
+```sql
+mysql> create database data_spring_boot;
+Query OK, 1 row affected (0.01 sec)
+```
+
+5. **启动程序**
+现在就可以启动一下程序，看看有没有报错。如果前面的步骤没错就会看到以下日志输出
+```log
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.4.1)
+
+2021-01-31 13:08:31.692  INFO 13976 --- [           main] p.a.d.DataSpringBootApplication          : Starting DataSpringBootApplication using Java 1.8.0_265 on aBadString with PID 13976 (D:\MyProject\Java\spring-boot-2\data-spring-boot\target\classes started by aBadString in D:\MyProject\Java\spring-boot-2\data-spring-boot)
+2021-01-31 13:08:31.696  INFO 13976 --- [           main] p.a.d.DataSpringBootApplication          : No active profile set, falling back to default profiles: default
+2021-01-31 13:08:32.459  INFO 13976 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-01-31 13:08:32.474  INFO 13976 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 0 JPA repository interfaces.
+2021-01-31 13:08:32.987  INFO 13976 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-01-31 13:08:33.048  INFO 13976 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.25.Final
+2021-01-31 13:08:33.238  INFO 13976 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-01-31 13:08:33.709  INFO 13976 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-01-31 13:08:34.046  INFO 13976 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-01-31 13:08:34.125  INFO 13976 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2021-01-31 13:08:34.588  INFO 13976 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-01-31 13:08:34.598  INFO 13976 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-01-31 13:08:34.744  INFO 13976 --- [           main] p.a.d.DataSpringBootApplication          : Started DataSpringBootApplication in 3.577 seconds (JVM running for 4.385)
+2021-01-31 13:08:34.752  INFO 13976 --- [extShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2021-01-31 13:08:34.754  INFO 13976 --- [extShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2021-01-31 13:08:34.764  INFO 13976 --- [extShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+
+Process finished with exit code 0
+```
+
+6. **编写一个数据实体类**
+
+该类必须符合 Java Bean 规范
+- 类是具体的，且是 public 的
+- 有一个无参数的 public 的构造器
+- 有属性，且每一个属性具有对应的 get/set 方法
+
+并且使用 JPA 的注解说明这个类
+- 使用 @Entity 注解标识 类 Person 是一个实体类
+- 使用 @Id 注解标注出主键
+```java
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+public class Person {
+    @Id
+    private Integer id;
+    private String name;
+    private Date birthday;
+
+    public Person() { }
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public Date getBirthday() { return birthday; }
+    public void setBirthday(Date birthday) { this.birthday = birthday; }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", birthday=" + birthday +
+                '}';
+    }
+}
+```
+
+7. **编写对于的 DAO**
+- 必须继承 Repository 接口，两个泛型参数分别是对应的实体类和主键类型
+- 按照**规范**写一个抽象方法
+
+没错只需要编写一个接口，无需实现该接口。
+Spring Data 根据这个接口创建一个代理类并实例化。代理类会实现 `getById` 方法。
+
+方法的具体实现依据于方法名。
+所以方法名要写得有规范，`Person getById(Integer id)` 表示要通过 id 属性获取一个 Person 对象，于是会生成这样的 SQL 语句：
+`select person.id as id, person.birthday as birthday, person.name as name from person where person.id=?`
+```java
+import org.springframework.data.repository.Repository;
+import priv.abadstring.dataspringboot.entity.Person;
+
+public interface PersonRepository extends Repository<Person, Integer> {
+    Person getById(Integer id);
+}
+```
+
+8. **修改主程序并启动应用**
+```java
+@SpringBootApplication
+public class DataSpringBootApplication {
+    public static void main(String[] args) {
+        // 启动S pring Boot 应用后会返回 IOC 容器的引用
+        ApplicationContext context = SpringApplication.run(DataSpringBootApplication.class, args);
+        // 可以从 IOC 容器中拿出 PersonRepository 的代理对象
+        PersonRepository personRepository = context.getBean(PersonRepository.class);
+        System.out.println(personRepository);
+        // 调用代理对象实现的 getById 方法
+        Person person = personRepository.getById(1);
+        // 输出获取到的数据
+        System.out.println(person);
+    }
+}
+```
+
+主要关注以下几条日志
+```shell
+# 由于配置了 jpa.hibernate.ddl‐auto = update 所以启动时会更新数据表结构
+Hibernate:
+create table person (
+    id integer not null,
+    birthday datetime(6),
+    name varchar(255),
+    primary key (id)
+) engine=InnoDB
+# 这是 System.out.println(personRepository) 的输出, 可见确实是得到了一个代理类的实例对象
+org.springframework.data.jpa.repository.support.SimpleJpaRepository@3c9ef6e9
+# personRepository.getById(1) 实际执行的 SQL
+Hibernate: select person0_.id as id1_0_, person0_.birthday as birthday2_0_, person0_.name as name3_0_ from person person0_ where person0_.id=?
+# System.out.println(person) 由于没有数据所以输出 null
+null
+```
+
+数据库中也创建了 person 表，表字段名和 Person 类的属性名一致。
+```log
+mysql> show tables;
++----------------------------+
+| Tables_in_data_spring_boot |
++----------------------------+
+| person                     |
++----------------------------+
+1 row in set (0.00 sec)
+
+mysql> show columns from person;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| id       | int(11)      | NO   | PRI | NULL    |       |
+| birthday | datetime(6)  | YES  |     | NULL    |       |
+| name     | varchar(255) | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+```
+
+插入一条数据再启动程序看看
+```sql
+insert into person(id, name, birthday) value (1, "aBadString", "2021/01/31");
+```
+
+这时就查询到了刚刚那条记录。
+日志少了一条创建表结构的，因为表结构没有改变。
+```
+org.springframework.data.jpa.repository.support.SimpleJpaRepository@4d0cc83e
+Hibernate: select person0_.id as id1_0_, person0_.birthday as birthday2_0_, person0_.name as name3_0_ from person person0_ where person0_.id=?
+Person{id=1, name='aBadString', birthday=2021-01-31 08:00:00.0}
+```
+
+### 3.7.2. JPA 基本注解
+
+- @Entity 表示该类为实体类，将映射到指定的数据库表
+- @Table 当实体类与其映射的数据库表名不同名时，指明表名
+
+- @Id 标注主键
+- @GeneratedValue 标注主键的生成策略(strategy)。默认 JPA 自动选择一个最适合的主键生成策略。
+    - IDENTITY：自增长 ID。SqlServer 对应 identity，MySQL 对应 auto increment，Oracle 不支持这种方式。
+    - AUTO：默认 JPA 自动选择。
+    - SEQUENCE：通过序列产生主键，通过 @SequenceGenerator 注解指定序列名。MySql 不支持这种方式。
+    - TABLE：通过表产生主键，框架借由表模拟序列产生主键，使用该策略可以使应用更易于数据库移植。
+
+- @Basic 表示类属性到数据表字段的映射。对于没有任何标注的属性，默认标注 @Basic
+- @Column 指定不同的属性名和表名
+    - unique 必要字段
+    - nullable 是否可为空
+    - length 字段长度
+- @Transient 表示该属性并非一个到数据库表的字段的映射
+
+- @Temporal 指定日期字段的精度，默认 datetime
+    - DATE
+    - TIME
+    - TIMESTAMP
+
+```java
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.GenerationType;
+
+@Entity
+// 数据库名 data_spring_boot, 表名 tb_person
+@Table(schema = "data_spring_boot", name = "tb_person")
+public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(unique = true, nullable = false, length = 64)
+    private String name;
+    @Temporal(TemporalType.DATE)
+    private Date birthday;
+
+    public Person() { }
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public Date getBirthday() { return birthday; }
+    public void setBirthday(Date birthday) { this.birthday = birthday; }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", birthday=" + birthday +
+                '}';
+    }
+}
+```
+生成的 SQL
+```sql
+create table tb_person (
+    id integer not null auto_increment,
+    birthday date,
+    name varchar(64) not null,
+    primary key (id)
+) engine=InnoDB
+
+alter table tb_person 
+    drop index UK_7s16hi70hwu5pocfgpnce8nlk
+alter table tb_person 
+    add constraint UK_7s16hi70hwu5pocfgpnce8nlk unique (name)
+```
+表结构
+```
+mysql> show columns from tb_person;
++----------+-------------+------+-----+---------+----------------+
+| Field    | Type        | Null | Key | Default | Extra          |
++----------+-------------+------+-----+---------+----------------+
+| id       | int(11)     | NO   | PRI | NULL    | auto_increment |
+| birthday | date        | YES  |     | NULL    |                |
+| name     | varchar(64) | NO   | UNI | NULL    |                |
++----------+-------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+```
+
+### 3.7.3. 对象关系映射
+
+#### 3.7.3.1. 一对多关系
+
+订单 - 客户：一个客户可以有多个订单，每个订单只能对应唯一一个客户。
+一对多关系外键放在多的一边。
+
+1. **建立对象关系映射**
+```java
+package priv.abadstring.dataspringboot.entity;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.GenerationType;
+/** 客户 */
+@Entity @Table(name = "tb_customer")
+public class Customer {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
+    private String email;
+
+    public Customer() { }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+}
+```
+```java
+package priv.abadstring.dataspringboot.entity;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.GenerationType;
+/** 订单 */
+@Entity @Table(name = "tb_order")
+public class Order {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
+
+    @ManyToOne // 单向多对一映射
+    @JoinColumn(name = "customer_id") // 指定外键名
+    private Customer customer;
+
+    public Order() { }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public Customer getCustomer() { return customer; }
+    public void setCustomer(Customer customer) { this.customer = customer; }
+}
+```
+
+2. **启动项目生成数据表**
+生成的数据表：
+```sql
+create table tb_customer (
+    id integer not null auto_increment,
+    email varchar(255),
+    name varchar(255),
+    primary key (id)
+) engine=InnoDB
+
+create table tb_order (
+    id integer not null auto_increment,
+    name varchar(255),
+    customer_id integer,
+    primary key (id)
+) engine=InnoDB
+
+alter table tb_order 
+    add constraint FKqcp43jdylvf2riad5s1x1i2dn 
+    foreign key (customer_id) 
+    references tb_customer (id)
+```
+```shell
+mysql> show columns from tb_customer;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| id    | int(11)      | NO   | PRI | NULL    | auto_increment |
+| email | varchar(255) | YES  |     | NULL    |                |
+| name  | varchar(255) | YES  |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> show columns from tb_order;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id          | int(11)      | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(255) | YES  |     | NULL    |                |
+| customer_id | int(11)      | YES  | MUL | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+```
+![](../images/spring/SpringData-1对n关系.png)
+
+**可能的异常：**
+`org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "xxxxx" via JDBC Statement`
+
+> 如果您使用的 MySQ 版本大于5.0，请使用以下任何一种方言：
+> ```
+> org.hibernate.dialect.MySQL5Dialect
+> org.hibernate.dialect.MySQL55Dialect
+> org.hibernate.dialect.MySQL57Dialect
+> ```
+
+在 application.yml 中配置
+```diff
+  # Spring Data JPA 配置
+  jpa:
+    hibernate:
+      # 当项目启动时自动更新或者创建数据表结构
+      ddl‐auto: update
+    properties:
+      hibernate:
+        # 控制台显示 SQL
+        show_sql: true
+        # 格式化 SQL
+        format_sql: true
++       # 如果您使用的 MySQ 版本大于5.0，请使用以下任何一种方言
++       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+```
+
+3. **执行 Repository 相关方法**
+
+准备两个实体的 CrudRepository 接口
+```java
+public interface CustomerRepository extends CrudRepository<Customer, Integer> {}
+
+public interface OrderRepository extends CrudRepository<Order, Integer> {}
+```
+
+**保存**
+准备订单业务 Service 并开启事务
+```java
+package priv.abadstring.dataspringboot.service;
+import org.springframework.stereotype.Service;
+import priv.abadstring.dataspringboot.entity.Customer;
+import priv.abadstring.dataspringboot.entity.Order;
+import priv.abadstring.dataspringboot.repository.CustomerRepository;
+import priv.abadstring.dataspringboot.repository.OrderRepository;
+import javax.transaction.Transactional;
+import java.util.List;
+
+@Service
+public class OrderService {
+    private CustomerRepository customerRepository;
+    private OrderRepository orderRepository;
+
+    public OrderService(CustomerRepository customerRepository, OrderRepository orderRepository) {
+        this.customerRepository = customerRepository;
+        this.orderRepository = orderRepository;
+    }
+
+    @Transactional
+    public void submitOrder(Customer customer, List<Order> orders) {
+        customerRepository.save(customer);
+        for (Order order : orders) {
+            orderRepository.save(order);
         }
-        // 放行, 执行后续操作
-        return true;
     }
 }
 ```
-HandlerInterceptor 接口源码
+main 方法中执行
 ```java
-package org.springframework.web.servlet;
+// main
+ApplicationContext context = SpringApplication.run(DataSpringBootApplication.class, args);
+OrderService service = context.getBean(OrderService.class);
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.lang.Nullable;
-import org.springframework.web.method.HandlerMethod;
-public interface HandlerInterceptor {
+Customer customer =new Customer();
+customer.setName("ss");
+customer.setEmail("aBadString@git.me");
 
-    // 在执行 Controller 的 action 之前执行
-    // 返回 true 则放行; 返回 false 则直接返回不执行 action
-    default boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-        throws Exception {
-        return true;
-    }
-    // action 执行之后, 视图渲染之前
-    default void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView)
-        throws Exception {
-    }
-    // 试图渲染之后
-    default void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex)
-        throws Exception {
-    }
-
+int len = 5;
+ArrayList<Order> orders = new ArrayList<>(len);
+for (int i = 0; i < len; i++) {
+    Order order = new Order();
+    order.setName("订单" + i);
+    order.setCustomer(customer);
+    orders.add(order);
 }
+
+service.submitOrder(customer, orders);
 ```
 
-2. 注册拦截器
+结果
+```shell
+mysql> select * from tb_customer;
++----+-------------------+------+
+| id | email             | name |
++----+-------------------+------+
+|  1 | aBadString@git.me | ss   |
++----+-------------------+------+
+1 row in set (0.00 sec)
+
+mysql> select * from tb_order;
++----+---------+-------------+
+| id | name    | customer_id |
++----+---------+-------------+
+|  1 | 订单0   |           1 |
+|  2 | 订单1   |           1 |
+|  3 | 订单2   |           1 |
+|  4 | 订单3   |           1 |
+|  5 | 订单4   |           1 |
++----+---------+-------------+
+5 rows in set (0.00 sec)
+```
+并且只执行了 1 + 5 条 insert 语句，没有 updata 语句区维护
+这是因为在 Customer 类中 `mappedBy = "customer"` 断掉了 1 对 n 的维护
 ```java
-@Configuration(proxyBeanMethods = false)
-public class InterceptorConfiguration implements WebMvcConfigurer {
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        // 添加拦截器
-        registry.addInterceptor(new ResponseResultInterceptor())
-                // 需要拦截的路径
-                .addPathPatterns("/**")
-                // 不需拦截的路径
-                .excludePathPatterns("/swagger-ui.html");
-    }
-}
+@OneToMany(mappedBy = "customer")
+private Set<Order> orders;
+```
+
+**查询**
+main 方法中执行
+```java
+ApplicationContext context = SpringApplication.run(DataSpringBootApplication.class, args);
+OrderRepository repository = context.getBean(OrderRepository.class);
+Order order = repository.findById(2).get();
+System.out.println(order.getName());
+System.out.println(order.getCustomer().getName());
+```
+结果：可以看到执行的 SQL 是左外连接
+```sql
+select
+    order0_.id as id1_2_0_,
+    order0_.customer_id as customer3_2_0_,
+    order0_.name as name2_2_0_,
+    customer1_.id as id1_1_1_,
+    customer1_.email as email2_1_1_,
+    customer1_.name as name3_1_1_ 
+from
+    tb_order order0_ 
+left outer join
+    tb_customer customer1_ 
+        on order0_.customer_id=customer1_.id 
+where
+    order0_.id=?
+
+
+订单1
+ss
 ```
 
 
-## 4.7. 自定义 Spring Boot 场景启动器
+### 3.7.4. Repository 接口
+
+查看 Repository 的定义发现这是一个空接口
+```java
+package org.springframework.data.repository;
+import org.springframework.stereotype.Indexed;
+/**
+ * General purpose is to hold type information as well as being able to discover interfaces that extend this one during classpath scanning for easy Spring bean creation.
+ * 一般目的是保存类型信息；并能够在类路径扫描期间发现扩展类型信息的接口，以便轻松创建Spring bean。
+ * 类型参数:
+ *   <T> – the domain type the repository manages
+ *   <ID> – the type of the id of the entity the repository manages
+ */
+@Indexed
+public interface Repository<T, ID> {}
+```
+当我们的接口继承这个接口后，Spring Data 便会为我们的接口提供一个代理类，并放入 IOC 容器中，方法的实现根据方法名来确定。
+
+另外还有注解的写法：两种写法等价
+```java
+import org.springframework.data.repository.RepositoryDefinition;
+import priv.abadstring.dataspringboot.entity.Person;
+@RepositoryDefinition(domainClass = Person.class, idClass = Integer.class)
+public interface PersonRepository {
+    Person getById(Integer id);
+}
+```
+
+Repository 接口还有一些列的子接口
+```
+Repository
+|-- CrudRepository 增加了一组 CRUD 相关的方法 
+    |-- PagingAndSortingRepository 增加了分页排序相关的方法 
+        |-- JpaRepository 增加了一组 JPA 规范相关的方法 
+```
+
+#### 3.7.4.1. 方法定义规范
+**查询**
+- 查询方法以 find、read、get 开头
+- 涉及条件查询时，条件的属性用条件关键字连接。条件属性以首字母大写。 
+- 条件的属性名称与个数要与参数的位置与个数一一对应 
+
+例如：
+- `Person getById(Integer id)` 根据 id 查询
+- `Person findByNameAndId(String name, Integer id)` 根据 name 和 id 查询
+
+**条件关键字**
+
+| 条件关键字 | 例子 | JPQL snippet
+|:-:|:-:|:-:|
+| And | findByLastnameAndFirstname | ... where x.lastname = ?1 and x.firstname = ?2 |
+| or | findByLastnameOrFirstname | ... where x.lastname = ?1 or x.firstname = ?2 |
+| Between | findByStartDateBetween | ... where x.startDate between 1? and ?2 |
+| LessThan | findByAgeLessThan | ... where x.age < ?1 |
+| GreaterThan | findByAgeGreaterThan | ... where x.age > ?1 |
+| After | findByStartDateAfter | ... where x.startDate > ?1 |
+| Before | findByStartDateBefore | ... where x.startDate < ?1 |
+| lsNull | findByAgelsNull | ... where x.age is null |
+| lsNotNull,NotNull | findByAge(ls)NotNull | ... where x.age not null |
+| Like | findByFirstnameLike | ... where x.firstname like ?1 |
+| NotLike | findByFirstnameNotLike | ... where x.firstname not like ?1 |
+| StartingWith | findByFirstnameStartingWith | ... where x.firstname like ? 1 (parameter bound with appended %) |
+| EndingWith | findByFirstnameEndingWith | ... where x.firstname like ?1 (parameter bound with prepended %) |
+| Containing | findByFirstnameContaining | ... where x.firstname like ?1 (parameter bound wrapped in %) |
+| OrderBy | findByAgeOrderByLastnameDesc | ... where x.age = ?1 order by x.lastname desc |
+| Not | findByLastnameNot | ... where x.lastname c> ?1 |
+| In | findByAgeln(CollectionsAge> ages) | ... where x.age in ?1 |
+| NotIn | findByAgeNotIn(Collection<Age> age) | ... where x.age not in ?1 |
+| TRUE | findByActiveTrue) | ... where x.active = true |
+| FALSE | findByActiveFalseo | ... where x.active = false |
+
+#### 3.7.4.2. CrudRepository 接口
+
+```java
+package org.springframework.data.repository;
+import java.util.Optional;
+
+@NoRepositoryBean
+public interface CrudRepository<T, ID> extends Repository<T, ID> {
+    // 保存/更新一个
+    <S extends T> S save(S entity);
+    // 批量保存/更新
+    <S extends T> Iterable<S> saveAll(Iterable<S> entities);
+    
+    // 通过 id 查询
+    Optional<T> findById(ID id);
+    // 是否存在这个 id 的记录
+    boolean existsById(ID id);
+    // 查询全部
+    Iterable<T> findAll();
+    // 批量 id 查询
+    Iterable<T> findAllById(Iterable<ID> ids);
+    // 返回记录条数
+    long count();
+
+    // 根据 id 删除
+    void deleteById(ID id);
+    void delete(T entity);
+    // 批量删除
+    void deleteAll(Iterable<? extends T> entities);
+    // 全部删除
+    void deleteAll();
+}
+```
+
+批量保存
+```java
+ApplicationContext context = SpringApplication.run(DataSpringBootApplication.class, args);
+PersonRepository repository = context.getBean(PersonRepository.class);
+
+List<Person> people = new ArrayList<>(26);
+for (int i = 'a'; i <= 'z'; i++) {
+    Person person = new Person((i - 'a' + 1), ((char) i + "" + (char) i), new Date());
+    people.add(person);
+}
+repository.saveAll(people);
+```
+
+#### 3.7.4.3. PagingAndSortingRepository 接口
+
+```java
+package org.springframework.data.repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+@NoRepositoryBean
+public interface PagingAndSortingRepository<T, ID> extends CrudRepository<T, ID> {
+    // 返回按给定选项排序的所​​有实体。
+    Iterable<T> findAll(Sort sort);
+    // 返回满足 Pageable 对象中提供的分页限制的实体的 Page。
+    Page<T> findAll(Pageable pageable);
+}
+```
+
+分页查询
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
+import priv.abadstring.dataspringboot.entity.Person;
+import priv.abadstring.dataspringboot.repository.PersonRepository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+
+ApplicationContext context = SpringApplication.run(DataSpringBootApplication.class, args);
+PersonRepository repository = context.getBean(PersonRepository.class);
+
+// 按 id 升序 name 降序
+Sort.Order idOrder = new Sort.Order(Sort.Direction.DESC, "id");
+Sort.Order nameOrder = new Sort.Order(Sort.Direction.ASC, "name");
+Sort sort = Sort.by(idOrder, nameOrder);
+// 使用排序参数创建一个新的PageRequest。
+//     page –从零开始的页面索引，不能为负。
+//     size –要返回的页面大小，必须大于0。
+//     sort –不能为null，请改用 Sort.unsorted()。
+// Sort.unsorted() 表示根本没有排序设置。
+Pageable p = PageRequest.of(3-1, 5, sort);
+Page<Person> personPage = repository.findAll(p);
+System.out.println("记录总条数: " + personPage.getTotalElements());
+System.out.println("总页数: " + personPage.getTotalPages());
+System.out.println("当前页记录数: " + personPage.getNumberOfElements());
+System.out.println("当前页码: " + (personPage.getNumber()+1));
+System.out.println("当前页内容: " + personPage.getContent());
+
+// Hibernate: select person0_.id as id1_0_, person0_.birthday as birthday2_0_, person0_.name as name3_0_ from person person0_
+//   order by person0_.id desc, person0_.name asc
+//   limit ?, ?
+// Hibernate: select count(person0_.id) as col_0_0_ from person person0_
+
+// 记录总条数: 26
+// 总页数: 6
+// 当前页记录数: 5
+// 当前页码: 3
+/* 当前页内容: 
+[
+    Person{id=16, name='pp', birthday=2021-01-31 15:56:39.131}, 
+    Person{id=15, name='oo', birthday=2021-01-31 15:56:39.131}, 
+    Person{id=14, name='nn', birthday=2021-01-31 15:56:39.131}, 
+    Person{id=13, name='mm', birthday=2021-01-31 15:56:39.131}, 
+    Person{id=12, name='ll', birthday=2021-01-31 15:56:39.131}
+]
+*/
+```
+
+### 3.7.5. @Query JPQL 查询
+
+@Query 注解可以自定义 JPQL 语句，以便更灵活的执行查询。所以一般推荐使用 @Query 而不是方法定义规范。
+
+```java
+import org.springframework.data.jpa.repository.Query;
+
+/** 获取年龄最大的人 */
+@Query("select p from Person p where p.birthday = (select min(birthday) from Person)")
+Person getMaxAgePerson();
+```
+- `select p from Person p` 是 JPQL 方言。
+
+输出结果：
+```sql
+Hibernate: select person0_.id as id1_0_, person0_.birthday as birthday2_0_, person0_.name as name3_0_ from person person0_ where person0_.birthday=(select min(person1_.birthday) from person person1_)
+Person{id=1, name='aBadString', birthday=2021-01-31 08:00:00.0}
+```
+
+**传递参数**
+占位符
+```java
+@Query("select p from Person p where p.id = ?1 and p.name = ?2")
+Person getPersonByName1(Integer id, String name);
+```
+命名参数
+```java
+import org.springframework.data.repository.query.Param;
+
+@Query("select p from Person p where p.id = :id and p.name = :userName")
+Person getPersonByName2(@Param("userName") String name, Integer id);
+```
+
+**原生 SQL**
+@Query 注解中定义的是 JPQL 语句，不能直接写 SQL。
+但将 nativeQuery 设为 true，就可以写 SQL
+```java
+@Query(value = "select count(*) from Person", nativeQuery = true)
+Integer count();
+```
+看输出的语句可以发现是直接执行我们写的 SQL，不再经 Hibernate 转义。
+```sql
+Hibernate: select count(*) from Person
+1
+```
+
+### 3.7.6. @Modifying JPQL 修改/删除
+
+```java
+import javax.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
+
+@Transactional // nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query
+@Modifying // Not supported for DML operations
+@Query("update Person set name = :name where id = :id")
+int updata(Integer id, String name);
+```
+- JPQL 仅支持 update/delete 不支持 insert
+- 方法的返回值应该是 int，表示更新语句所影响的行数
+- 必须显示开启事务，没有事务不能正常执行
+- 默认情况下，Spring Data 的 Repository 方法中都有一个只读事务，不能完成修改操作。
+
+## 3.8. 自定义 Spring Boot 场景启动器
 
 文件结构
 ```

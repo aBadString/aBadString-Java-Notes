@@ -196,7 +196,7 @@
     - [25.1.2. Lambda 表达式](#2512-lambda-表达式)
     - [25.1.3. 方法引用](#2513-方法引用)
     - [25.1.4. 接口实现类 - 匿名内部类 - Lambda表达式 - 方法引用](#2514-接口实现类-匿名内部类-lambda表达式-方法引用)
-    - [25.1.5. 默认方法](#2515-默认方法)
+    - [25.1.5. 接口中的默认方法与静态方法](#2515-接口中的默认方法与静态方法)
     - [25.1.6. Stream API](#2516-stream-api)
       - [25.1.6.1. 创建流](#25161-创建流)
       - [25.1.6.2. 流的操作](#25162-流的操作)
@@ -7185,6 +7185,29 @@ interface GreetingService {
     void sayMessage(String message);
 }
 ```
+四大内置核心函数式接口
+```java
+/** 消费型接口 */
+@FunctionalInterface
+public interface Consumer<T> {
+    void accept(T t);
+}
+/** 供给型接口 */
+@FunctionalInterface
+public interface Supplier<T> {
+    T get();
+}
+/** 函数型接口 */
+@FunctionalInterface
+public interface Function<T, R> {
+    R apply(T t);
+}
+/** 断定型接口 */
+@FunctionalInterface
+public interface Predicate<T> {
+    boolean test(T t);
+}
+```
 
 ### 25.1.2. Lambda 表达式 
 Lambda 表达式，也可称为闭包。允许把函数作为一个方法的参数（函数作为参数传递到方法中）。
@@ -7427,7 +7450,7 @@ public class GreetingMain {
 
 
 
-### 25.1.5. 默认方法
+### 25.1.5. 接口中的默认方法与静态方法
 Java 8 新增了接口的默认方法。默认方法就是一个在接口里面有了一个实现的方法。
 ```java
 public interface Vehicle {
@@ -7795,7 +7818,6 @@ T orElseGet(Supplier<? extends T> other)
 // 15、返回一个Optional的非空字符串，用来调试
 String toString()
 ```
-
 
 ### 25.1.9. 新工具
 新的编译工具，如：Nashorn引擎 jjs、 类依赖分析器jdeps。
