@@ -3360,6 +3360,25 @@ where
 ss
 ```
 
+**去除外键约束, 但保留虚拟外键**
+```java
+/**
+ * 虚拟外键
+ *  - @ManyToOne  1 : n 的关系, 外键建立在 n 的这一边
+ *  - @JoinColumn  标注外键
+ *    - name = "customer_id"  外键字段名
+ *    - foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT)
+ *      - name 外键约束名
+ *      - value = ConstraintMode.NO_CONSTRAINT 不设置外键约束
+ */
+@ManyToOne
+@JoinColumn(
+    name = "customer_id",
+    foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT)
+)
+private Customer customer;
+```
+
 
 ### 3.7.4. Repository 接口
 

@@ -5860,9 +5860,36 @@ https://zhuanlan.zhihu.com/p/23488863
 步骤 6: 关闭连接
 ```java
 public class JDBCDemo {
+    // 直接实例化 Driver, 再通过 Driver 的实例对象获取 Connection 对象, 不推荐
+    // 这四个参数可以从配置文件读取
+    //     driver=com.mysql.jdbc.Driver
+    //     url=jdbc:mysql://192.168.1.100:3306/HotelManagementSystem
+    //     username=root
+    //     password=123456
+    private void getConnect(String driver, String url, String user, String password) {
+        // 这个 Driver 实现类来自 mysql-jdbc 的驱动 jar 包
+        // Driver driver = new com.mysql.jdbc.Driver();
+        // 不推荐向上面这样直接 new, 应该通过反射创建不同驱动的实例对象
+        Driver driver = (Driver) Class.forName(driver).newINstance();
+
+        Properties info = new Properties();
+        info.put("user", user);
+        info.put("password", password);
+        Connection conn = driver.connect(url, info);
+        return conn;
+    }
+
+    // 推荐使用 DriverManager 来获取 Connection 对象
     public static void main(String[] args) throws Exception{
         // 1.注册驱动
         // DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+        // 本应该使用上面语句去注册驱动的
+        // 但是 com.mysql.jdbc.Driver 类中有一个静态代码块, 当类被加载时执行, 内容如下: 
+        //     static {
+        //         try {
+        //             java.sql.DriverManager.registerDriver(new Driver());
+        //         }
+        //     }
         Class.forName("com.mysql.jdbc.Driver");
 
         // 2.获取连接
