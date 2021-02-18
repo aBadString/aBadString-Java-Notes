@@ -2263,7 +2263,7 @@ public Constructor<?>[] getConstructors()
 
 // 获得某个类的所有的公共（public）的字段，包括父类中的字段
 public Field[] getFields() 
-// 获得某个类的所有声明的字段，即包括public、private和proteced，但是不包括父类的申明字段。
+// 获得某个类的所有声明的字段，即包括public、private 和 protected，但是不包括父类的申明字段。
 public Field[] getDeclaredFields()
 
 // 获取某个类的所有 public 方法，包括继承自父类的
