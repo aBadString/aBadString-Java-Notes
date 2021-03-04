@@ -11,6 +11,10 @@
   - [1.2. 常用标签](#12-常用标签)
   - [1.3. HTML 字符实体（转义字符）](#13-html-字符实体转义字符)
 - [2. CSS （Cascading Style Sheets 层叠样式表）](#2-css-cascading-style-sheets-层叠样式表)
+  - [2.1. 选择器](#21-选择器)
+    - [2.1.1. 基本选择器](#211-基本选择器)
+    - [2.1.2. 复合选择器](#212-复合选择器)
+    - [2.1.3. 组合器](#213-组合器)
 - [3. 网页布局](#3-网页布局)
 
 <!-- /code_chunk_output -->
@@ -195,17 +199,205 @@ CSS 注释：
 /* 这是 CSS 的注释 */
 ```
 
-CSS 语法
+CSS 语法：
+由选择器和声明块构成；声明块由一个一个的声明构成，每个声明是一个键值对。
 ```css
 选择器 {  /* 声明块 */
-  键1: 值1; /* 声明1 */
+  键1: 值1; /* 声明1: 样式名: 样式值 */
   键2: 值2; /* 声明2 */
 }
 ```
 
-选择器
-1. 标签选择器 `标签名`
-2. 类选择器   `.类名`
-3. ID选择器   `#ID`
+## 2.1. 选择器
+
+### 2.1.1. 基本选择器
+1. 标签选择器 `标签名`：选中所有标签元素
+2. 类选择器 `.类名`：选中一类元素，同一个元素可以指定多个类
+3. ID选择器 `#ID`：选中唯一一个元素，因为 id 唯一
+4. 通配选择器 `*`
+5. 属性选择器 `[属性名]`：
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    p {
+        color: grey;
+    }
+    #title {
+        font-family: 'Times New Roman', Times, serif;
+    }
+    .sub-title {
+        font-size: 24px;
+    }
+    .content {
+        color: lightsteelblue;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">MD - Repo</h1>
+  <h2 class="sub-title content">Markdown 格式的开发文档仓库</h2>
+  <p>基于 Markdown 格式的文档更方便撰写和阅读。</p>
+  <p>内嵌图床服务解决图片插入的烦恼。</p>
+  <p>历史版本保证文档安全。</p>
+  <p class="content">一键部署使文档阅读更加方便。</p>
+</body>
+</html>
+```
+
+### 2.1.2. 复合选择器
+1. 交集选择器 `选择器1选择器2...`： 选中同时复合多个条件的元素
+  - 中间没有空格
+  - 如果有元素选择器，必须以元素选择器开头
+2. 并集选择器 `选择器1,选择器2,...`： 选中复合其中一个条件的元素
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    #title {
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    h2.sub-title.content {
+        font-size: 24px;
+        color: lightsteelblue;
+    }
+    p, span {
+        color: grey;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">MD - Repo</h1>
+  <h2 class="sub-title content">Markdown 格式的开发文档仓库</h2>
+  <p>基于 Markdown 格式的文档更方便撰写和阅读。</p>
+  <p>内嵌图床服务解决图片插入的烦恼。</p>
+  <p>历史版本保证文档安全。</p>
+  <p class="content">一键部署使文档阅读更加方便。</p>
+  <span>发起讨论，让交流更加顺畅。</span>
+</body>
+</html>
+```
+
+### 2.1.3. 组合器
+1. 直接子代组合器 `父元素 > 子元素`：选中父元素的直接子代
+2. 后代组合器 `父元素 后代元素`：选中父元素的所有后代
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    div > span {
+      color: blue;
+    }
+    div span {
+      background-color: gray;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    DIV
+    <p>
+      DIV->P
+      <span>DIV->P->SPAN</span>
+    </p>
+    <span>DIV->SPAN</span>
+  </div>
+  <span>SPAN</span>
+</body>
+</html>
+```
+
+3. 紧邻兄弟组合器 `A + B`：选中 A 元素**后面****紧邻**的元素
+4. 紧邻兄弟组合器 `A ~ B`：选中 A 元素**后面**所有的元素
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #A + p {
+        color: blue;
+    }
+    #A ~ p {
+        background-color: gray;
+    }
+  </style>
+</head>
+<body>
+  <p>X</p>
+  <p id="A">A</p>
+  <p>B</p>
+  <p>C</p>
+</body>
+</html>
+```
+
+### 伪选择器（Pseudo）
+1. 伪类选择器 `:`
+2. 伪元素选择器 `::`
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    /* ul 直接子代的 li 中第一个 */
+    ul > li:first-child {
+      color: blue;
+    }
+    /* ul 直接子代的 li 中最后一个 */
+    ul > li:last-child {
+      color: red;
+    }
+    /* ul 直接子代的 li 中第 n 个 
+      :nth-child(n) 则全部选中
+      :nth-child(2n) 则全部选中第偶数个 （even）
+      :nth-child(2n+1) 则全部选中第奇数个 （odd）
+    */
+    ul > li:nth-child(3) {
+      color: orange;
+    }
+  </style>
+</head>
+<body>
+  <ul>
+    <li>A</li>
+    <li>B</li>
+    <li>C</li>
+    <li>D</li>
+    <li>E</li>
+  </ul>
+</body>
+</html>
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    p::before {
+      content: '【';
+    }
+    p::after {
+      content: '】';
+    }
+  </style>
+</head>
+<body>
+  <p>基于 Markdown 格式的文档更方便撰写和阅读。内嵌图床服务解决图片插入的烦恼。历史版本保证文档安全。一键部署使文档阅读更加方便。发起讨论，让交流更加顺畅。<p>
+</body>
+</html>
+```
 
 # 3. 网页布局
