@@ -5845,9 +5845,182 @@ public class RandomAccessFileStream {
 ## 18.9. NIO
 
 Non-blocking I/O 是一种同步非阻塞的I/O模型，也是I/O多路复用的基础，已经被越来越多地应用到大型应用服务器，成为解决高并发与大量连接、I/O处理问题的有效方式。
-
 https://zhuanlan.zhihu.com/p/23488863
 
+- IO 面向流；NIO 面向缓冲区
+- IO 是阻塞的；NIO 是非阻塞的
+
+Java NIO 系统的核心在于：**通道(Channel)和缓冲区(Buffer)**，Channel　负责传输，Buffer　负责存储。
+
+### 缓冲区 Buffer
+
+Buffer 是缓冲区的抽象基类，位于 java.nio 包下；
+根据数据类型不同，提供了相应类型的缓冲区子类（boolean 除外）
+```
+ByteBuffer
+CharBuffer
+ShortBuffer
+IntBuffer
+LongBuffer
+FloatBuffer
+DoubleBuffer
+```
+
+四个核心属性：
+分别有对应的同名方法来获取其值
+```java
+package java.nio;
+public abstract class Buffer {
+    // Invariants: mark <= position <= limit <= capacity
+
+    // 容量，表示缓冲区中最大存储数据的容量。一旦声明不能改变。
+    private int capacity;
+
+    // 界限，表示缓冲区中可以操作数据的大小。limit 后数据不能进行读写。
+    private int limit;
+
+    // 位置，表示缓冲区中正在操作数据的位置。
+    private int position = 0;
+
+    // 标记，表示记录当前 position 的位置。可以通过 reset() 恢复到 mark 的位置
+    private int mark = -1;
+}
+```
+
+基本操作：
+- allocate(): 获取缓冲区
+    - 非直接缓冲区：通过 allocate() 方法分配缓冲区，将缓冲区建立在 JVM 的内存中
+    - 直接缓冲区：通过 allocateDirect() 方法分配直接缓冲区，将缓冲区建立在物理内存中，可以提高效率
+- put(): 存入数据到缓冲区中
+- get(): 获取缓冲区中的数据
+- flip(): 切换到读取模式
+- rewind(): 可重复读, 从头开始读
+- mark(): 标记此时 position 的值
+- reset(): 恢复到 mark 的位置
+- hasRemaining(): 判断缓冲区中是否还有剩余数据
+- remaining(): 获取缓冲区剩余可读元素数量
+- clear(): 清空缓冲区, 但缓冲区中的数据依然存在
+```java
+public class BufferDemo {
+    private static void print(ByteBuffer buf, String s) {
+        System.out.println("--------"  +s + "--------");
+        System.out.println(buf.position());
+        System.out.println(buf.limit());
+        System.out.println(buf.capacity());
+    }
+    public static void main(String[] args) {
+        String str = "abcde";
+
+        // 1. 分配一个指定大小的缓冲区
+        ByteBuffer buf = ByteBuffer.allocate(10);
+        print(buf, "allocate()");
+        // 0 10 10
+        // buf: [x,x,x,x,x,x,x,x,x,x]
+
+        // 2. 利用 put() 存入数据到缓冲区中
+        buf.put(str.getBytes());
+        print(buf, "put()");
+        // 5 10 10
+        // buf: ['a','b','c','d','e',x,x,x,x,x]
+
+        // 3. 切换读取数据模式
+        buf.flip();
+        print(buf, "flip()");
+        // 0 5 10
+        // buf: ['a','b','c','d','e',x,x,x,x,x]
+        /*
+        public final Buffer flip() {
+            limit = position; // 表示后面的元素是不可读的
+            position = 0;     // 从 0 开始读
+            mark = -1;
+            return this;
+        }*/
+
+        // 4. 利用 get() 读取缓冲区中的数据
+        byte[] dst = new byte[buf.limit()];
+        buf.get(dst);
+        System.out.println(new String(dst, 0, dst.length));
+        // abcde
+        print(buf, "get()");
+        // 5 5 10
+        // buf: ['a','b','c','d','e',x,x,x,x,x]
+
+        // 5. rewind(): 可重复读, 从头开始读
+        buf.rewind();
+        print(buf, "rewind()");
+        // 0 5 10
+        // buf: ['a','b','c','d','e',x,x,x,x,x]
+        /*
+        public final Buffer rewind() {
+            position = 0;
+            mark = -1;
+            return this;
+        }*/
+
+        // 6.1 get() 读取部分数据
+        buf.get(dst, 0, 2);
+        System.out.println(new String(dst, 0, 2));
+        // ab
+        // 6.2 mark() 标记此时 position 的值
+        buf.mark();
+        print(buf, "mark()");
+        // 2, 5, 10
+        // buf: ['a','b','c','d','e',x,x,x,x,x]
+        /*
+        public final Buffer mark() {
+            mark = position;
+            return this;
+        }*/
+
+        // 6.3 继续读取
+        buf.get(dst, 0, 3);
+        System.out.println(new String(dst, 0, 3));
+        // cde
+        print(buf, "get(dst,0,3)");
+        // 5, 5, 10
+        // buf: ['a','b','c','d','e',x,x,x,x,x]
+
+        // 6.4 reset() : 恢复到 mark 的位置
+        buf.reset();
+        print(buf, "reset()");
+        // 2, 5, 10
+        // buf: ['a','b','c','d','e',x,x,x,x,x]
+        /*
+        public final Buffer reset() {
+            int m = mark;
+            if (m < 0)
+                throw new InvalidMarkException();
+            position = m;
+            return this;
+        }*/
+
+        // 7. 判断缓冲区中是否还有剩余数据
+        if(buf.hasRemaining()){
+            // 获取缓冲区剩余可读元素数量
+            System.out.println("缓冲区剩余可读元素数量" + buf.remaining());
+            // 3
+        }
+        /*
+        public final boolean hasRemaining() {
+            return position < limit;
+        }
+        public final int remaining() {
+            return limit - position;
+        }*/
+
+        // 8. clear() : 清空缓冲区. 但是缓冲区中的数据依然存在
+        buf.clear();
+        print(buf, "clear()");
+        // 0 10 10
+        // buf: ['a','b','c','d','e',x,x,x,x,x]
+
+        byte[] all = new byte[buf.limit()];
+        buf.get(all);
+        System.out.println(Arrays.toString(all));
+        // [97, 98, 99, 100, 101, 0, 0, 0, 0, 0]
+    }
+}
+```
 
 # 19. JDBC
 
