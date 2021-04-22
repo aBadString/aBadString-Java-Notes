@@ -15,7 +15,8 @@
     - [2.1.1. 基本选择器](#211-基本选择器)
     - [2.1.2. 复合选择器](#212-复合选择器)
     - [2.1.3. 组合器](#213-组合器)
-- [3. 网页布局](#3-网页布局)
+    - [2.1.4. 伪选择器（Pseudo）](#214-伪选择器pseudo)
+- [3. CSS 常用属性一览表](#3-css-常用属性一览表)
 
 <!-- /code_chunk_output -->
 
@@ -341,7 +342,7 @@ CSS 语法：
 </html>
 ```
 
-### 伪选择器（Pseudo）
+### 2.1.4. 伪选择器（Pseudo）
 1. 伪类选择器 `:`
 2. 伪元素选择器 `::`
 ```html
@@ -400,4 +401,58 @@ CSS 语法：
 </html>
 ```
 
-# 3. 网页布局
+# 3. CSS 常用属性一览表
+```css
+body {
+  width:100px;/*宽度*/
+  min-width:1000px;/*最小宽度*/
+  height :100px;/*高度*/
+  line-height:100px;/*行高*/
+
+  font-family:SimSun,"Microsoft YaHei";/*字体*/
+  font-size :16px;/*字体大小*/
+  font-style :italic;/*字体风格*/
+  font:16px/26px "微软雅黑";/*字号/行高  字体*/
+  color:#ccc;/*字体颜色*/
+
+  border-width:10px;/*四边边框粗细*/
+  border-style:solid;/*四边边框的风格*/
+  border-color:red;/*四边边框的颜色*/
+  border:10px solid red;/*border-width,border-style,border-color的简写*/
+  border-top-width:10px;/*上边框的粗细*/
+  border-top-style:dashed;/*上边框的风格*/
+  border-top-color:red;/*上边框的颜色*/
+  border-top:10px solid red;/*上面三个简写*/
+  border-radius:2px;/*边框圆角*/
+
+  text-align:center;/*left,center,right,justify 水平方向居中*/
+  letter-spacing:10px;/*字间距*/
+  word-spacing:10px;/*单词之间的间距*/
+  text-indent:10px;/*首行缩进*/
+  
+  margin-top:10px;/*上外边距*/
+  margin:10px;/*四边外边距*/
+  padding-top:10px;/*上内边距*/
+  padding :10px;/*可以设置一,二,三,四种值.内边距*/
+  
+  float:left;/*right  左浮动,右浮动*/
+  clear :both;/*清除浮动,,清除左浮动或者右浮动*/
+  position:relative;/*相对定位*/
+  position:absolute;/*绝对定位*/
+  position:fixed;/*固定定位*/
+
+  z-index:1;/*设置层叠元素的上下位置*/
+  
+  background-color:#ddd;/*背景颜色*/
+  background-image:url("");/*背景图片*/
+  
+  overflow:hidden;/*溢出部分隐藏*/
+  visibility:hidden;/*隐藏,占位置*/
+  display:block;/*设为块状元素 块级元素自带的属性*/
+  display:inline;/*设为行内元素*/
+  display:inline-block;/*非块状元素的块状盒子*/
+  display:none;/*隐藏，不占位置*/
+  opacity:0.5;/*透明度 兼容ie9以上的浏览器*/
+  filter:alpha(opacity=50)/*设置透明度 兼容i6~ie8*/
+}
+```
